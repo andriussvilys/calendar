@@ -3,31 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/main.css">
     <title>Calendar Clone</title>
 </head>
 <body>
     <header class="container">
-        <div class="logo"></div>
+        <div class="logo">
+            <h1>Calendar</h1>
+        </div>
 
-        <div class="container">
-            <button class="button today"></button>
-            <div class="container container-nextPrev">
-                <button class="prev"></button>
-                <button class="next"></button>
+        <div class="container controls">
+            <button class="button today">Today</button>
+            <div class="container nextPrev">
+                <button class="button button-controls prev">
+                    <img src="./images/arrow_back_ios_FILL0_wght400_GRAD0_opsz48.svg" alt="arrow left">
+                </button>
+                <button class="button button-controls next">
+                    <img src="./images/arrow_forward_ios_FILL0_wght400_GRAD0_opsz48.svg" alt="arrow right">
+                </button>
+            </div>
+            <div class="date">
+                <span>Month</span>
+                <span>Year</span>
             </div>
         </div>
 
-        <div>
-            <span>Month</span>
-            <span>Year</span>
-        </div>
 
 
     </header>
 
     <main>
         <aside>
-            <button>Create</button>
+            <button class="button create">Create</button>
             <div class="monthView"></div>
         </aside>
         <section class="weekView-wrapper">
