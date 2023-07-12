@@ -1,0 +1,53 @@
+.weekView-wrapper{
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    border: 1px solid red;
+}
+
+.weekView-container{
+    height: 100%;
+    display: flex;
+    overflow: scroll;
+}
+
+.calendar-column{
+    flex-grow: 1;
+    display: grid;
+    grid-template-rows: 4em 1em repeat(24, 4em);
+}
+.hours{
+    flex-grow: 0;
+}
+.hour{
+    display: flex;
+}
+.hour:first-of-type{
+    grid-row: 2;
+}
+.hour-labelContainer{
+    position: relative;
+    width: 2em;
+}
+.hour-labelContent{
+    position: absolute;
+    font-size: 0.6em;
+    top: -0.5em;
+    left: 1em;
+}
+.hour-span{
+    width: 1em;
+    border-bottom: 1px solid  var(--grey_light);
+}
+.day-label{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.day-spanner{
+    height: 1em;
+}
+.day-cell{
+    border-left: 1px solid  var(--grey_light);
+    border-bottom: 1px solid  var(--grey_light);
+}
