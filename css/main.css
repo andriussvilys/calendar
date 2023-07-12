@@ -38,6 +38,7 @@ html,body{
 html{
     color: var(--grey_dark);
     font-size: 15px;
+    overflow: hidden;
 }
 
 body{
