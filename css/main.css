@@ -25,6 +25,10 @@ button{
     align-items: center;
 }
 
+button:hover{
+    background-color: var(--grey_light);
+}
+
 html,body{
     width: 100%;
     height: 100%;
@@ -51,8 +55,12 @@ header{
     border-bottom: 1px solid var(--grey_light);
     justify-content: left;
 }
-.button-controls{
-    font-size: 3em;
+.controls-button{
+    border-radius: 999px;
+    width: 2em;
+}
+.controls-button > img{
+    width: 100%;
 }
 
 .logo{
@@ -65,12 +73,29 @@ header{
 }
 
 .today, .nextPrev{
-    margin-right: 2.5em;
+    margin-right: 1em;
 }
-.prev > img, .next > img{
-    height: 0.4em;
-    width: 0.4em;
-}
+
 .prev{
-    margin-right: 0.5em;
+    margin-right: 0.2em;
+}
+
+/* SIDE MENU */
+
+.sideMenu{
+    width: 15em;
+    padding: 2em;
+    align-items: start;
+    border-right: 1px solid var(--grey_light);
+}
+
+.create{
+    border: 1px solid var(--grey_light);
+    padding: 1em 2em;
+    border-radius: 999px;
+}
+
+body{
+    display: grid;
+    grid-template-rows: auto 1fr;
 }

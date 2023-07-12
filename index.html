@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/weekView.css">
     <title>Calendar Clone</title>
 </head>
 <body>
@@ -15,11 +16,11 @@
         <div class="container controls">
             <button class="button today">Today</button>
             <div class="container nextPrev">
-                <button class="button button-controls prev">
-                    <img src="./images/arrow_back_ios_FILL0_wght400_GRAD0_opsz48.svg" alt="arrow left">
+                <button class="button controls-button prev">
+                    <img src="./images/chevron_left_FILL0_wght400_GRAD0_opsz48.svg" alt="arrow left">
                 </button>
-                <button class="button button-controls next">
-                    <img src="./images/arrow_forward_ios_FILL0_wght400_GRAD0_opsz48.svg" alt="arrow right">
+                <button class="button controls-button next">
+                    <img src="./images/chevron_right_FILL0_wght400_GRAD0_opsz48.svg" alt="arrow right">
                 </button>
             </div>
             <div class="date">
@@ -33,13 +34,123 @@
     </header>
 
     <main>
-        <aside>
-            <button class="button create">Create</button>
-            <div class="monthView"></div>
+        <aside class="container sideMenu">
+            <button class="button create">Create Event</button>
+            <div class="monthView">
+
+            </div>
         </aside>
+
         <section class="weekView-wrapper">
 
+            <div class="weekView-container">
+    
+                <div class="calendar-column hours">
+                    <div></div>
+                    <div class="hour">
+                        <div class="hour-labelContainer">
+                            <div class="hour-labelContent">
+                                <span>1</span><span>AM</span>
+                            </div>
+                        </div>
+                        <div class="hour-span"></div>
+                    </div>
+                    <div class="hour">
+                        <div class="hour-labelContainer">
+                            <div class="hour-labelContent">
+                                <span>12</span><span>AM</span>
+                            </div>
+                        </div>
+                        <div class="hour-span"></div>
+                    </div>
+                </div>
+    
+                <div class="calendar-column day">
+                    <div class="container day-label">
+                        <span class="day-label_weekDay">Mon</span>
+                        <button><span class="day-label_monthDay">10</span></button>
+                    </div>
+                    <div class="day-cell day-spanner"></div>
+                    <div class="day-cell"></div>
+                    <div class="day-cell"></div>
+                    <div class="day-cell"></div>
+                    <div class="day-cell"></div>
+                    <div class="day-cell"></div>
+                    <div class="day-cell"></div>
+                    <div class="day-cell"></div>
+                    <div class="day-cell"></div>
+                    <div class="day-cell"></div>
+                    <div class="day-cell"></div>
+                </div>
+    
+                <div class="calendar-column day">
+                    <div class="container day-label">
+                        <span class="day-label_weekDay">Tue</span>
+                        <span class="day-label_monthDay">11</span>
+                    </div>
+                    <div class="day-cell day-spanner"></div>
+                    <div class="day-cell"></div>
+                    <div class="day-cell"></div>
+                    <div class="day-cell"></div>
+                    <div class="day-cell"></div>
+                    <div class="day-cell"></div>
+                    <div class="day-cell"></div>
+                    <div class="day-cell"></div>
+                    <div class="day-cell"></div>
+                    <div class="day-cell"></div>
+                    <div class="day-cell"></div>
+                </div>
+    
+                <div class="calendar-column day">
+                    <div class="container day-label">
+                        <span class="day-label_weekDay">Wed</span>
+                        <span class="day-label_monthDay">12</span>
+                    </div>
+                    <div class="day-spanner"></div>
+                    <div class="day-cell"></div>
+                </div>
+    
+                <div class="calendar-column day">
+                    <div class="container day-label">
+                        <span class="day-label_weekDay">Thu</span>
+                        <span class="day-label_monthDay">13</span>
+                    </div>
+                    <div class="day-spanner"></div>
+                    <div class="day-cell"></div>
+                </div>
+    
+                <div class="calendar-column day">
+                    <div class="container day-label">
+                        <span class="day-label_weekDay">Fri</span>
+                        <span class="day-label_monthDay">14</span>
+                    </div>
+                    <div class="day-spanner"></div>
+                    <div class="day-cell"></div>
+                </div>
+    
+                <div class="calendar-column day">
+                    <div class="container day-label">
+                        <span class="day-label_weekDay">Sat</span>
+                        <span class="day-label_monthDay">15</span>
+                    </div>
+                    <div class="day-spanner"></div>
+                    <div class="day-cell"></div>
+                </div>
+    
+                <div class="calendar-column day">
+                    <div class="container day-label">
+                        <span class="day-label_weekDay">Sun</span>
+                        <span class="day-label_monthDay">16</span>
+                    </div>
+                    <div class="day-spanner"></div>
+                    <div class="day-cell"></div>
+                </div>
+
+
+            </div>
+            
         </section>
+
     </main>
 </body>
 </html>
