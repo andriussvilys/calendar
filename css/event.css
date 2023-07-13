@@ -8,6 +8,7 @@
 .event-input{
     background-color: rgba(255, 255, 255, 0);
     border: none;
+    font-family: Arial, Helvetica, sans-serif;
 }
 .event-title{
     width: 100%;
@@ -17,6 +18,10 @@
     border-bottom: 1px solid var(--grey_light);
     width: 100%;
 }
+.event-container > div{
+    margin-top: 1em;
+}
+
 .event-controls{
     justify-content: right;
 }
@@ -43,4 +48,14 @@
 }
 .event-textarea{
     width: 100%;
+}
+.button-cancel{
+    margin-right: 1em;
+}
+.button-save{
+    background-color: var(--primary);
+    color: white;
+}
+.button-save:hover{
+    background-color: var(--primary-dark);
 }
