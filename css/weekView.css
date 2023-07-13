@@ -12,9 +12,15 @@
     overflow: hidden;
 }
 
-.calendar-main, .calendar-days{
+.calendar-main{
+    display: grid;
+    grid-template-columns: 3em repeat(7, 1fr);
+    overflow: scroll;
     height: 100%;
 }
+/* .calendar-main, .calendar-days{
+    height: 100%;
+} */
 
 .calendar-column{
     flex-grow: 1;
