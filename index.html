@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./css/event.css">
     <link rel="stylesheet" href="./css/weekView.css">
     <script defer src="./js/weekView.js"></script>
+    <script defer src="./js/event.js"></script>
     <title>Calendar Clone</title>
 </head>
 <body>
@@ -478,20 +479,35 @@
             
         </section>
 
-        <div class="event-wrapper">
+        <div id="eventModal" class="event-wrapper display-none">
             <form class="event-container">
+
                 <div class="container event-title">
-                    <input class="event-titleInput" type="text" placeholder="Add title">
+                    <div class="event-left"></div>
+                    <div class="event-right">
+                        <input class="event-titleInput" type="text" placeholder="Add title">
+                    </div>
                 </div>
     
                 <div class="container event-timeAndDate">
-                    <input type="date">
-                    <input type="time">
-                    <input type="time">
+                    <div class="event-left"></div>
+
+                    <div class="event-right">
+                        <input type="date">
+                        <div class="event-time">
+                            <input class="event-time-input" type="time">
+                            <span>—</span>
+                            <input class="event-time-input" type="time">
+                        </div>
+                    </div>
                 </div>
 
-                <div class="event-description">
-                    <textarea></textarea>
+                <div class="container event-description">
+                    <div class="event-left"></div>
+
+                    <div class="event-right">
+                        <textarea></textarea>
+                    </div>
                 </div>
     
                 <div class="container event-controls">

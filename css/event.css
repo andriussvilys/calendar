@@ -18,3 +18,14 @@
 .event-controls{
     justify-content: right;
 }
+.display-none{
+    display: none;
+}
+
+.event-left{
+    width: 4em;
+    border: 1px solid black;
+}
+.event-right{
+    display: flex;
+}
