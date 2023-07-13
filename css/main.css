@@ -3,6 +3,8 @@
     --grey_medium: rgb(118, 118, 118);
     --grey_light: rgb(220, 220, 220);
     --button-bg: rgb(255, 255, 255);
+    --primary: rgb(26,115,232);
+    --primary-dark: rgb(25,103,210);
 }
 
 *{
