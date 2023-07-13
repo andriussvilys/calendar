@@ -485,34 +485,38 @@
                 <div class="container event-title">
                     <div class="event-left"></div>
                     <div class="event-right">
-                        <input class="event-titleInput" type="text" placeholder="Add title">
+                        <input class="event-input event-titleInput" type="text" placeholder="Add title">
                     </div>
                 </div>
     
                 <div class="container event-timeAndDate">
-                    <div class="event-left"></div>
+                    <div class="event-left">
+                        <img src="./images/schedule_FILL0_wght400_GRAD0_opsz48.svg" alt="clock icon">
+                    </div>
 
                     <div class="event-right">
-                        <input type="date">
+                        <input class="event-input" type="date">
                         <div class="event-time">
-                            <input class="event-time-input" type="time">
+                            <input class="event-input event-time-input" type="time">
                             <span>—</span>
-                            <input class="event-time-input" type="time">
+                            <input class="event-input event-time-input" type="time">
                         </div>
                     </div>
                 </div>
 
                 <div class="container event-description">
-                    <div class="event-left"></div>
+                    <div class="event-left">
+                        <img src="./images/notes_FILL0_wght400_GRAD0_opsz48.svg" alt="notebook icon">
+                    </div>
 
                     <div class="event-right">
-                        <textarea></textarea>
+                        <textarea class="event-input event-textarea" placeholder="Description"></textarea>
                     </div>
                 </div>
     
                 <div class="container event-controls">
-                    <button>Cancel</button>
-                    <button>Save</button>
+                    <button class="button_secondary" id="event-cancel">Cancel</button>
+                    <button class="button_secondary" id="event-save">Save</button>
                 </div>
             </form>
         </div>

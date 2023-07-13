@@ -1,12 +1,13 @@
 .event-wrapper{
     padding: 4em;
     border: 2px solid black;
-    border-radius: 1em;
+    border-radius: 5px;
     position: absolute;
     background-color: white;
 }
-.event-wrapper input{
-    width: inherit;
+.event-input{
+    background-color: rgba(255, 255, 255, 0);
+    border: none;
 }
 .event-title{
     width: 100%;
@@ -14,18 +15,32 @@
 .event-titleInput{
     border: none;
     border-bottom: 1px solid var(--grey_light);
+    width: 100%;
 }
 .event-controls{
     justify-content: right;
 }
 .display-none{
-    display: none;
+    /* display: none; */
 }
 
 .event-left{
-    width: 4em;
-    border: 1px solid black;
+    width: 1.6em;
+    margin-right: 1em;
+}
+.event-left > img{
+    width: 100%;
+    opacity: 0.5;
 }
 .event-right{
     display: flex;
+    flex-grow: 1;
+    border-radius: 4px;
+    padding: 0.3em;
+}
+.event-right:hover{
+    background-color: var(--grey_light);
+}
+.event-textarea{
+    width: 100%;
 }
