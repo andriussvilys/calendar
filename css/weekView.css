@@ -10,7 +10,10 @@
 .weekView-container{
     height: 100%;
     overflow: hidden;
-    display: grid;
+}
+
+.calendar-main, .calendar-days{
+    height: 100%;
 }
 
 .calendar-column{
@@ -27,23 +30,25 @@
 }
 .header-cell{
     flex-direction: column;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background-color: white;
+}
+.header-cell > .hour-span{
+    position: absolute;
+    bottom: 0;
+    right: 0;
 }
 .header-spanner{
     height: 2em;
     width: 100%;
 }
-.calendar-main{
-    overflow: scroll;
-    grid-column: span 2;
-    display: grid;
-}
-
-.weekView-container, .calendar-main{
-    grid-template-columns: 3em 7fr;
-}
 .calendar-days{
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns:3em repeat(7, 1fr);
+    overflow: scroll;
+    grid-row-start: 2;
 }
 .hour{
     display: flex;
@@ -59,10 +64,14 @@
     font-size: 0.6em;
     bottom: -0.5em;
     right: 0;
+    z-index: -1;
 }
 .hour-span{
     width: 1em;
     border-bottom: 1px solid  var(--grey_light);
+}
+.day{
+    position: relative;
 }
 .day-label{
     display: flex;
