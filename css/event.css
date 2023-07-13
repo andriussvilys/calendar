@@ -1,0 +1,19 @@
+.event-wrapper{
+    padding: 4em;
+    border: 2px solid black;
+    border-radius: 1em;
+    position: absolute;
+}
+.event-wrapper input{
+    width: inherit;
+}
+.event-title{
+    width: 100%;
+}
+.event-titleInput{
+    border: none;
+    border-bottom: 1px solid var(--grey_light);
+}
+.event-controls{
+    justify-content: right;
+}
