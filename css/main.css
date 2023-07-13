@@ -64,6 +64,13 @@ main{
     display: flex;
 }
 
+.sideBar{
+    width: 15em;
+    padding: 3em 1em;
+    flex-direction: column;
+    border-right: 1px solid var(--grey_light);
+}
+
 header{
     height: 4em;
     border-bottom: 1px solid var(--grey_light);
