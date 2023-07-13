@@ -89,8 +89,10 @@ header{
     border-radius: 999px;
 }
 .button-controls{
-    font-size: 3em;
-    padding: 0.1em;
+    width: 2em;
+}
+.button-controls img{
+    width: 100%;
 }
 
 .logo{
