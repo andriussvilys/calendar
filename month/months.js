@@ -1,3 +1,34 @@
+const today = new Date(Date.now())
+let currentMonth = today.getMonth()
+let currentYear = today.getFullYear()
+
+document.querySelector("#months-next").addEventListener('click', () => {
+    incrementMonth(1)
+    fillMonth(currentYear, currentMonth)
+})
+document.querySelector("#months-prev").addEventListener('click', () => {
+    incrementMonth(-1)
+    fillMonth(currentYear, currentMonth)
+})
+
+function updateLabel(){
+    const monthViewLabelMonth = document.querySelector("#monthView-label-month")
+    const monthViewLabelYear = document.querySelector("#monthView-label-year")
+    monthViewLabelMonth.innerHTML = new Date(currentYear, currentMonth).toLocaleDateString('us-US', {month: 'long'})
+    monthViewLabelYear.innerHTML = currentYear
+}
+
+function incrementMonth(value){
+    currentMonth += value
+    if(currentMonth > 11){
+        currentMonth = currentMonth%12
+        currentYear++
+    }
+    if(currentMonth < 0){
+        currentMonth += 12
+        currentYear--
+    }
+}
 
 function putInContainer(element){
     return `<div class="container monthView-cell">${element}</div>`
@@ -14,9 +45,9 @@ function generateCell(content){
     return putInContainer(element)
 }
 
-function fillMonth( date ){
+function fillMonth( year, month ){
     // const today = new Date(Date.now());
-    const monthView = getMonthArray(date.getFullYear(), date.getMonth());
+    const monthView = getMonthArray(year, month);
     let html = ''
     monthView.forEach(elem => {
         html += generateCell(elem)
@@ -24,6 +55,8 @@ function fillMonth( date ){
 
     const months = document.querySelector("#month")
     months.innerHTML = html
+
+    updateLabel()
 }
 
 function getMonthArray(year, month){
@@ -56,4 +89,4 @@ function getMonthArray(year, month){
     return result
 }
 
-fillMonth(new Date(Date.now()))
+fillMonth(currentYear, currentMonth)
