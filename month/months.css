@@ -18,15 +18,21 @@
 
 .monthView-days{
     display: grid;
-    grid-template-columns: repeat(7, minmax(1em, max-content));
-    grid-template-rows: repeat(6, minmax(1em, max-content));
+    grid-template-columns: repeat(7, max-content);
+    grid-template-rows: repeat(6, max-content);
     margin-top: 1em;
 }
-.monthView-button{
+.monthView-cell{
     width: 2em;
     height: 2em;
+    justify-content: center;
+    margin: 0.6em;
+}
+.monthView-button{
     font-size: inherit;
     color: var(--grey_medium);
+    width: 100%;
+    height: 100%;
 }
 .monthView-button[data-currentmonth="true"]{
     color: var(--grey_dark);
@@ -37,9 +43,6 @@
 }
 .monthView-weekDayNames{
     width: 100%;
-}
-.monthView-cell{
-    margin: 0.3em;
 }
 .centered{
     justify-content: space-around;
