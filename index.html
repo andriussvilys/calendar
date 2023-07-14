@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/event.css">
     <link rel="stylesheet" href="./css/weekView.css">
     <script defer src="./js/weekView.js"></script>
+    <script defer src="./js/event.js"></script>
     <title>Calendar Clone</title>
 </head>
 <body>
@@ -15,12 +17,12 @@
         </div>
 
         <div class="container controls">
-            <button class="button today">Today</button>
+            <button class="button button_secondary today">Today</button>
             <div class="container nextPrev">
-                <button class="button controls-button prev">
+                <button class="button button-round button-controls prev">
                     <img src="./images/chevron_left_FILL0_wght400_GRAD0_opsz48.svg" alt="arrow left">
                 </button>
-                <button class="button controls-button next">
+                <button class="button button-round button-controls next">
                     <img src="./images/chevron_right_FILL0_wght400_GRAD0_opsz48.svg" alt="arrow right">
                 </button>
             </div>
@@ -32,14 +34,13 @@
 
 
 
+
     </header>
 
     <main>
-        <aside class="container sideMenu">
-            <button class="button create">Create Event</button>
-            <div class="monthView">
-
-            </div>
+        <aside class="container sideBar">
+            <button class="button button-primary create">Create Event</button>
+            <div class="monthView"></div>
         </aside>
 
         <section class="weekView-wrapper">
@@ -477,6 +478,48 @@
             </div>
             
         </section>
+
+        <div id="eventModal" class="event-wrapper display-none">
+            <form class="event-container">
+
+                <div class="container event-title">
+                    <div class="event-left"></div>
+                    <div class="event-right">
+                        <input class="event-input event-titleInput" type="text" placeholder="Add title">
+                    </div>
+                </div>
+    
+                <div class="container event-timeAndDate">
+                    <div class="event-left">
+                        <img src="./images/schedule_FILL0_wght400_GRAD0_opsz48.svg" alt="clock icon">
+                    </div>
+
+                    <div class="event-right">
+                        <input class="event-input" type="date">
+                        <div class="event-time">
+                            <input class="event-input event-time-input" type="time">
+                            <span>—</span>
+                            <input class="event-input event-time-input" type="time">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container event-description">
+                    <div class="event-left">
+                        <img src="./images/notes_FILL0_wght400_GRAD0_opsz48.svg" alt="notebook icon">
+                    </div>
+
+                    <div class="event-right">
+                        <textarea class="event-input event-textarea" placeholder="Description"></textarea>
+                    </div>
+                </div>
+    
+                <div class="container event-controls">
+                    <button class="button button_secondary button-cancel" id="event-cancel">Cancel</button>
+                    <button class="button button_secondary button-save" id="event-save">Save</button>
+                </div>
+            </form>
+        </div>
 
     </main>
 </body>

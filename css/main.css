@@ -3,12 +3,15 @@
     --grey_medium: rgb(118, 118, 118);
     --grey_light: rgb(220, 220, 220);
     --button-bg: rgb(255, 255, 255);
+    --primary: rgb(26,115,232);
+    --primary-dark: rgb(25,103,210);
 }
 
 *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    outline-width: 0;
 }
 
 .container{
@@ -18,11 +21,33 @@
 }
 
 button{
-    background-color: var(--button-bg);
     border: none;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
+    background-color: white;
+}
+
+.button_secondary{
+    padding: 0.6em 1.2em;
+    border-radius: 5px;
+}
+.button-primary{
+    padding: 1em 2em;
+    border: 1px solid var(--grey_light);
+    border-radius: 20px;
+}
+
+.button:hover{
+    background-color: var(--grey_light);
+}
+.button:active{
+    background-color: var(--grey_medium);
+}
+
+button:hover{
+    background-color: var(--grey_light);
 }
 
 button:hover{
@@ -51,17 +76,26 @@ main{
     display: flex;
 }
 
+.sideBar{
+    width: 15em;
+    padding: 3em 1em;
+    flex-direction: column;
+    border-right: 1px solid var(--grey_light);
+}
+
 header{
     height: 4em;
     border-bottom: 1px solid var(--grey_light);
     justify-content: left;
     flex-shrink: 0;
 }
-.controls-button{
+.button-round{
     border-radius: 999px;
+}
+.button-controls{
     width: 2em;
 }
-.controls-button > img{
+.button-controls img{
     width: 100%;
 }
 
@@ -69,8 +103,6 @@ header{
     margin: 0 4em 0 2em;
 }
 .today{
-    padding: 0.6em 1.2em;
-    border-radius: 5px;
     border: 1px solid var(--grey_light);
 }
 
