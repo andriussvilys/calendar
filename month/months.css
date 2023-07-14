@@ -1,0 +1,45 @@
+.monthView{
+    margin-top: 1em;
+    padding: 1em;
+    border: 1px solid var(--grey_light);
+    font-size: 10px;
+}
+.monthView-header{
+    justify-content: space-between;
+}
+.monthView-label{
+    margin-right: 2em;
+}
+.monthView-main{
+    margin-top: 1em;
+    border: 1px solid var(--grey_light);
+    padding: 1em;
+}
+
+.monthView-days{
+    display: grid;
+    grid-template-columns: repeat(7, minmax(1em, max-content));
+    grid-template-rows: repeat(6, minmax(1em, max-content));
+    margin-top: 1em;
+}
+.monthView-button{
+    width: 2em;
+    height: 2em;
+    font-size: inherit;
+    color: var(--grey_medium);
+}
+.monthView-button[data-currentmonth="true"]{
+    color: var(--grey_dark);
+}
+.monthView-weekDayNames{
+    width: 100%;
+}
+.monthView-cell{
+    margin: 0.3em;
+}
+.centered{
+    justify-content: space-around;
+}
+.sideBar{
+    width: auto;
+}
