@@ -31,6 +31,10 @@
 .monthView-button[data-currentmonth="true"]{
     color: var(--grey_dark);
 }
+.monthView-button[data-currentday="true"]{
+    color: white;
+    background-color: var(--primary);
+}
 .monthView-weekDayNames{
     width: 100%;
 }
