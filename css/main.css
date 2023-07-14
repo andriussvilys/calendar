@@ -81,6 +81,7 @@ main{
     padding: 3em 1em;
     flex-direction: column;
     border-right: 1px solid var(--grey_light);
+    align-items: start;
 }
 
 header{
