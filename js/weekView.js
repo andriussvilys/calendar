@@ -13,7 +13,15 @@ weekView.addEventListener('click', (e) => {
 })
 
 document.querySelector('#month').addEventListener('click', (e) => {
-    console.log(e.target)
+
+    // console.log( (e.target.dataset.timestamp) )
+    // console.log( new Date(e.target.dataset.timestamp)  )
+    // console.log( (e.target.dataset.date)  )
+    // console.log( new Date(e.target.dataset.date)  )
+
+    generateWeekView( new Date(e.target.dataset.date) )
+
+
 })
 
 const createColumn = (date) => {
@@ -56,6 +64,69 @@ const createColumn = (date) => {
 
 }
 
+const createHourCell = (hour, meridiam) => {
+
+    const container = document.createElement('div')
+    container.classList = "hour"
+
+    const labelContainer = document.createElement('div')
+    labelContainer.classList = "hour-labelContainer"
+
+    const labelContent = document.createElement('div')
+    labelContent.classList = 'hour-labelContent'
+
+    const hourSpan = document.createElement('span')
+    hourSpan.innerHTML = hour
+
+    const spaceSpan = document.createElement('span')
+    spaceSpan.innerHTML = " "
+
+    const meridiamSpan = document.createElement('span')
+    meridiamSpan.innerHTML = meridiam
+
+    labelContent.appendChild(hourSpan)
+    labelContent.appendChild(spaceSpan)
+    labelContent.appendChild(meridiamSpan)
+
+    labelContainer.appendChild(labelContent)
+
+    const hourSeparator = document.createElement('div')
+    hourSeparator.classList = 'hour-separator'
+
+    container.appendChild(labelContainer)
+    container.appendChild(hourSeparator)
+
+    return container
+
+}
+
+const createHours = () => {
+
+    const container = document.createElement('div')
+    container.classList = "weekView-column hours"
+
+    const headerCell = document.createElement('div')
+    headerCell.classList = "hour header-cell"
+
+    const hourSeparator = document.createElement('div')
+    hourSeparator.classList = "hour-separator"
+
+    headerCell.appendChild(hourSeparator)
+
+    container.appendChild(headerCell)
+
+    for (let index = 1; index < ((ROW_COUNT-1)/2)+1; index++) {
+        const cell = createHourCell(index, 'AM')
+        container.appendChild(cell)
+    }
+    for (let index = 1; index < (ROW_COUNT-1)/2; index++) {
+        const cell = createHourCell(index, 'PM')
+        container.appendChild(cell)
+    }
+
+    return container
+}
+
 const getWeekDates = (date) => {
 
     if(!date){
@@ -76,6 +147,10 @@ const getWeekDates = (date) => {
 }
 
 const generateWeekView = (date) => {
+
+    weekView.innerHTML = ''
+
+    weekView.appendChild( createHours() )
 
     const weekDates = getWeekDates(date)
 

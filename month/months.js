@@ -40,10 +40,12 @@ function generateDayCell(content){
     `<div class="container monthView-cell">
         <button 
             class="button button-round monthView-button"
-            data-currentmonth=${content.currentMonth}
-            data-currentday=${content.currentDay}
+            data-date='${content.date.string}' 
+            data-timestamp=${content.date.timestamp}
+            data-currentmonth=${content.currentMonth} 
+            data-currentday=${content.isToday} 
             >
-            ${content.date}
+            ${ new Date(content.date.string).getDate()}
         </button>
     </div>
     `
@@ -73,23 +75,33 @@ function getMonthViewDays(year, month){
     //get the day before the first day of current month, ie previous month length
     const prevMonthLength = new Date(year, month, 0).getDate();
 
+    // const dateProp = (year, month, index) => { return Date.parse( new Date(year, month, index) ) }
+    const getDateObj = (year, month, index) => { 
+        const obj = {
+            string: new Date(year, month, index).toString(),
+            timestamp: new Date(year, month, index).valueOf()
+        }
+        return obj
+     }
+
     //days before current month
     for (let index = ((prevMonthLength - 7) + 1) + ((7 - firstMonthDay) + 1); index < prevMonthLength+1; index++) {
-        result.push({date: index, currentMonth: false, currentDay: false})
+        result.push({date: getDateObj(year, month-1, index), currentMonth: false, isToday: false})
     }
 
     //current Month
     const monthLength = new Date(year, month+1, 0).getDate()
+
     for (let index = 1; index < monthLength+1; index++) {
         const isToday = isSameDate(today, new Date(currentYear, currentMonth, index))
-        result.push({date: index, currentMonth: true, currentDay: isToday})
+        result.push({date: getDateObj(year, month, index), currentMonth: true, isToday: isToday})
     }
 
     const remainder = (DAYS_IN_WEEK * CALENDAR_ROWS) - result.length
 
     //days after current month
     for (let index = 1; index < remainder+1; index++) {
-        result.push({date: index, currentMonth: false, currentDay: false})
+        result.push({date: getDateObj(year, month+1, index), currentMonth: false, isToday: false})
     }
 
     return result
