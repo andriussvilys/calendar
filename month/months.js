@@ -52,7 +52,7 @@ function generateDayCell(content){
 
 function fillMonth( year, month ){
     // const today = new Date(Date.now());
-    const monthView = getDaysInMonth(year, month);
+    const monthView = getMonthViewDays(year, month);
     let html = ''
     monthView.forEach(elem => {
         html += generateDayCell(elem)
@@ -64,7 +64,7 @@ function fillMonth( year, month ){
     updateLabel()
 }
 
-function getDaysInMonth(year, month){
+function getMonthViewDays(year, month){
 
     const result = []
     
