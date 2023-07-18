@@ -2,37 +2,21 @@
     overflow: hidden;
     width: 100%;
     height: 100%;
-    /* border: 1px solid red; */
     padding-top: 1em;
     padding-right: 1em;
 }
 
-.weekView-container{
-    height: 100%;
-    overflow: hidden;
-}
-
-.calendar-main{
+.weekView-main{
     display: grid;
     grid-template-columns: 3em repeat(7, 1fr);
     overflow: scroll;
     height: 100%;
 }
-/* .calendar-main, .calendar-days{
-    height: 100%;
-} */
 
-.calendar-column{
+.weekView-column{
     flex-grow: 1;
     display: grid;
-    grid-template-rows: repeat(25, 4em);
-}
-.calendar-columns{
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-}
-.calendar-header{
-    grid-column: 2;
+    grid-template-rows: auto repeat(24, 4em);
 }
 .header-cell{
     flex-direction: column;
@@ -41,20 +25,14 @@
     width: 100%;
     background-color: white;
 }
-.header-cell > .hour-span{
+.header-cell > .hour-separator{
     position: absolute;
     bottom: 0;
     right: 0;
 }
-.header-spanner{
-    height: 2em;
+.eventCell_header{
+    min-height: 1.5em;
     width: 100%;
-}
-.calendar-days{
-    display: grid;
-    grid-template-columns:3em repeat(7, 1fr);
-    overflow: scroll;
-    grid-row-start: 2;
 }
 .hour{
     display: flex;
@@ -72,22 +50,16 @@
     right: 0;
     z-index: -1;
 }
-.hour-span{
+.hour-separator{
     width: 1em;
     border-bottom: 1px solid  var(--grey_light);
-}
-.day{
-    position: relative;
 }
 .day-label{
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
-.day-spanner{
-    height: 1em;
-}
-.day-cell{
+.day-border{
     border-left: 1px solid  var(--grey_light);
     border-bottom: 1px solid  var(--grey_light);
 }

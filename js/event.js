@@ -1,3 +1,4 @@
+"use strict"
 
 const eventButtons_create = document.querySelectorAll('.create');
 const eventModal = document.querySelector("#eventModal")

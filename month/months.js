@@ -47,7 +47,7 @@ function generateDayCell(content){
         </button>
     </div>
     `
-    return putInContainer(element)
+    return element
 }
 
 function fillMonth( year, month ){

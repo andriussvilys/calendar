@@ -1,5 +1,9 @@
-const calendarDays = document.querySelector('.calendar-days')
+"use strict"
+
+const calendarDays = document.querySelector('.weekView-main')
 
 calendarDays.addEventListener('click', (e) => {
-    e.target.style.background = 'black';
+    if(e.target.classList.contains('day-border')){
+        e.target.style.background = 'black';
+    }
 })

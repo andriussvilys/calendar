@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/main.css">
-    <link rel="stylesheet" href="./css/event.css">
     <link rel="stylesheet" href="./css/weekView.css">
+    <link rel="stylesheet" href="./css/event.css">ß
+    <link rel="stylesheet" href="./month/months.css">
     <script defer src="./js/weekView.js"></script>
     <script defer src="./js/event.js"></script>
-    <link rel="stylesheet" href="./month/months.css">
     <script defer src="./month/months.js"></script>
     <title>Calendar Clone</title>
 </head>
@@ -69,6 +69,7 @@
                         <span>S</span>
                         <span>S</span>
                     </div>
+                    <!-- #month is generated with months.js -->
                     <div id="month" class="monthView-days"></div>
                 </div>
             </div>
@@ -76,13 +77,11 @@
 
         <section class="weekView-wrapper">
     
-                <div class="calendar-main">
-                    
-                    <!-- <div class="calendar-days"> -->
-    
-                        <div class="calendar-column hours">
+                <div class="weekView-main">
+
+                        <div class="weekView-column hours">
                             <div class="hour header-cell">
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -90,7 +89,7 @@
                                         <span>1</span><span> </span><span>AM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -98,7 +97,7 @@
                                         <span>2</span><span> </span><span>AM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -106,7 +105,7 @@
                                         <span>3</span><span> </span><span>AM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -114,7 +113,7 @@
                                         <span>4</span><span> </span><span>AM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -122,7 +121,7 @@
                                         <span>5</span><span> </span><span>AM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -130,7 +129,7 @@
                                         <span>6</span><span> </span><span>AM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -138,7 +137,7 @@
                                         <span>7</span><span> </span><span>AM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -146,7 +145,7 @@
                                         <span>8</span><span> </span><span>AM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -154,7 +153,7 @@
                                         <span>9</span><span> </span><span>AM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -162,7 +161,7 @@
                                         <span>10</span><span> </span><span>AM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -170,7 +169,7 @@
                                         <span>11</span><span> </span><span>AM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -178,7 +177,7 @@
                                         <span>12</span><span> </span><span>PM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -186,7 +185,7 @@
                                         <span>1</span><span> </span><span>PM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -194,7 +193,7 @@
                                         <span>2</span><span> </span><span>PM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -202,7 +201,7 @@
                                         <span>3</span><span> </span><span>PM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -210,7 +209,7 @@
                                         <span>4</span><span> </span><span>PM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -218,7 +217,7 @@
                                         <span>5</span><span> </span><span>PM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -226,7 +225,7 @@
                                         <span>6</span><span> </span><span>PM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -234,7 +233,7 @@
                                         <span>7</span><span> </span><span>PM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -242,7 +241,7 @@
                                         <span>8</span><span> </span><span>PM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -250,7 +249,7 @@
                                         <span>9</span><span> </span><span>PM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -258,7 +257,7 @@
                                         <span>10</span><span> </span><span>PM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                             <div class="hour">
                                 <div class="hour-labelContainer">
@@ -266,242 +265,242 @@
                                         <span>11</span><span> </span><span>PM</span>	
                                     </div>
                                 </div>
-                                <div class="hour-span"></div>
+                                <div class="hour-separator"></div>
                             </div>
                         </div>
                         
-                        <div class="calendar-column day">
+                        <div class="weekView-column ">
                             <div class="container header-cell">
                                 <div class="container day-label">
                                     <span class="day-label_weekDay">Mon</span>
                                     <button><span class="day-label_monthDay">10</span></button>
                                 </div>
-                                <div class="day-cell header-spanner"></div>
+                                <div class="day-border eventCell_header"></div>
                             </div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
                         </div>
-                        <div class="calendar-column day">
+                        <div class="weekView-column ">
                             <div class="container header-cell">
                                 <div class="container day-label">
                                     <span class="day-label_weekDay">Mon</span>
                                     <button><span class="day-label_monthDay">10</span></button>
                                 </div>
-                                <div class="day-cell header-spanner"></div>
+                                <div class="day-border eventCell_header"></div>
                             </div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
                         </div>
-                        <div class="calendar-column day">
+                        <div class="weekView-column ">
                             <div class="container header-cell">
                                 <div class="container day-label">
                                     <span class="day-label_weekDay">Mon</span>
                                     <button><span class="day-label_monthDay">10</span></button>
                                 </div>
-                                <div class="day-cell header-spanner"></div>
+                                <div class="day-border eventCell_header"></div>
                             </div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
                         </div>
-                        <div class="calendar-column day">
+                        <div class="weekView-column ">
                             <div class="container header-cell">
                                 <div class="container day-label">
                                     <span class="day-label_weekDay">Mon</span>
                                     <button><span class="day-label_monthDay">10</span></button>
                                 </div>
-                                <div class="day-cell header-spanner"></div>
+                                <div class="day-border eventCell_header"></div>
                             </div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
                         </div>
-                        <div class="calendar-column day">
+                        <div class="weekView-column ">
                             <div class="container header-cell">
                                 <div class="container day-label">
                                     <span class="day-label_weekDay">Mon</span>
                                     <button><span class="day-label_monthDay">10</span></button>
                                 </div>
-                                <div class="day-cell header-spanner"></div>
+                                <div class="day-border eventCell_header"></div>
                             </div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
                         </div>
-                        <div class="calendar-column day">
+                        <div class="weekView-column ">
                             <div class="container header-cell">
                                 <div class="container day-label">
                                     <span class="day-label_weekDay">Mon</span>
                                     <button><span class="day-label_monthDay">10</span></button>
                                 </div>
-                                <div class="day-cell header-spanner"></div>
+                                <div class="day-border eventCell_header"></div>
                             </div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
                         </div>
-                        <div class="calendar-column day">
+                        <div class="weekView-column ">
                             <div class="container header-cell">
                                 <div class="container day-label">
                                     <span class="day-label_weekDay">Mon</span>
                                     <button><span class="day-label_monthDay">10</span></button>
                                 </div>
-                                <div class="day-cell header-spanner"></div>
+                                <div class="day-border eventCell_header"></div>
                             </div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
-                            <div class="day-cell"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
+                            <div class="day-border"></div>
                         </div>
-                    <!-- </div> -->
+                        
                 </div>
                 
     
