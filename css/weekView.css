@@ -1,0 +1,65 @@
+.weekView-wrapper{
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    padding-top: 1em;
+    padding-right: 1em;
+}
+
+.weekView-main{
+    display: grid;
+    grid-template-columns: 3em repeat(7, 1fr);
+    overflow: scroll;
+    height: 100%;
+}
+
+.weekView-column{
+    flex-grow: 1;
+    display: grid;
+    grid-template-rows: auto repeat(24, 4em);
+}
+.header-cell{
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background-color: white;
+}
+.header-cell > .hour-separator{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+.eventCell_header{
+    min-height: 1.5em;
+    width: 100%;
+}
+.hour{
+    display: flex;
+    justify-content: right;
+}
+.hour-labelContainer{
+    position: relative;
+    width: 2em;
+    margin-right: 0.3em;
+}
+.hour-labelContent{
+    position: absolute;
+    font-size: 0.6em;
+    bottom: -0.5em;
+    right: 0;
+    z-index: -1;
+}
+.hour-separator{
+    width: 1em;
+    border-bottom: 1px solid  var(--grey_light);
+}
+.day-label{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.day-border{
+    border-left: 1px solid  var(--grey_light);
+    border-bottom: 1px solid  var(--grey_light);
+}
