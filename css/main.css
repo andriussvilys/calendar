@@ -20,6 +20,23 @@
     align-items: center;
 }
 
+html,body{
+    width: 100%;
+    height: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+html{
+    color: var(--grey_dark);
+    font-size: 15px;
+    overflow: hidden;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+}
+
 button{
     border: none;
     display: flex;
@@ -46,29 +63,11 @@ button{
     background-color: var(--grey_medium);
 }
 
-button:hover{
-    background-color: var(--grey_light);
-}
-
-button:hover{
-    background-color: var(--grey_light);
-}
-
-html,body{
-    width: 100%;
-    height: 100%;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-html{
-    color: var(--grey_dark);
-    font-size: 15px;
-    overflow: hidden;
-}
-
-body{
-    display: flex;
-    flex-direction: column;
+header{
+    height: 4em;
+    border-bottom: 1px solid var(--grey_light);
+    justify-content: left;
+    flex-shrink: 0;
 }
 
 main{
@@ -76,28 +75,15 @@ main{
     display: flex;
 }
 
-.sideBar{
-    width: 15em;
-    padding: 3em 1em;
-    flex-direction: column;
-    border-right: 1px solid var(--grey_light);
-    align-items: start;
-}
-
-header{
-    height: 4em;
-    border-bottom: 1px solid var(--grey_light);
-    justify-content: left;
-    flex-shrink: 0;
-}
-.button-round{
-    border-radius: 999px;
-}
 .button-controls{
     width: 2em;
 }
 .button-controls img{
     width: 100%;
+}
+
+.button-round{
+    border-radius: 999px;
 }
 
 .logo{
@@ -115,13 +101,14 @@ header{
     margin-right: 0.2em;
 }
 
-/* SIDE MENU */
+/* aside / side menu */
 
-.sideMenu{
+.sideBar{
     width: 15em;
-    padding: 2em;
-    align-items: start;
+    padding: 3em 1em;
+    flex-direction: column;
     border-right: 1px solid var(--grey_light);
+    align-items: start;
 }
 
 .create{
