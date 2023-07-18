@@ -1,3 +1,8 @@
+"use strict"
+
+const CALENDAR_ROWS = 6
+const DAYS_IN_WEEK = 7
+
 const today = new Date(Date.now())
 let currentMonth = today.getMonth()
 let currentYear = today.getFullYear()
@@ -30,28 +35,27 @@ function incrementMonth(value){
     }
 }
 
-function putInContainer(element){
-    return `<div class="container monthView-cell">${element}</div>`
-}
-
-function generateCell(content){
+function generateDayCell(content){
     const element = 
-    `<button 
-        class="button button-round monthView-button"
-        data-currentmonth=${content.currentMonth}
-        data-currentday=${content.currentDay}
-        >
-        ${content.date}
-    </button>`
+    `<div class="container monthView-cell">
+        <button 
+            class="button button-round monthView-button"
+            data-currentmonth=${content.currentMonth}
+            data-currentday=${content.currentDay}
+            >
+            ${content.date}
+        </button>
+    </div>
+    `
     return putInContainer(element)
 }
 
 function fillMonth( year, month ){
     // const today = new Date(Date.now());
-    const monthView = getMonthArray(year, month);
+    const monthView = getDaysInMonth(year, month);
     let html = ''
     monthView.forEach(elem => {
-        html += generateCell(elem)
+        html += generateDayCell(elem)
     })
 
     const months = document.querySelector("#month")
@@ -60,13 +64,13 @@ function fillMonth( year, month ){
     updateLabel()
 }
 
-function getMonthArray(year, month){
+function getDaysInMonth(year, month){
 
     const result = []
     
     const firstMonthDay = new Date(year, month).getDay()
 
-    //get the previous day of the first day of current month, ie previous month legth
+    //get the day before the first day of current month, ie previous month length
     const prevMonthLength = new Date(year, month, 0).getDate();
 
     //days before current month
@@ -77,11 +81,11 @@ function getMonthArray(year, month){
     //current Month
     const monthLength = new Date(year, month+1, 0).getDate()
     for (let index = 1; index < monthLength+1; index++) {
-        const isToday = compareDates(today, new Date(currentYear, currentMonth, index))
+        const isToday = isSameDate(today, new Date(currentYear, currentMonth, index))
         result.push({date: index, currentMonth: true, currentDay: isToday})
     }
 
-    const remainder = (7*6) - result.length
+    const remainder = (DAYS_IN_WEEK * CALENDAR_ROWS) - result.length
 
     //days after current month
     for (let index = 1; index < remainder+1; index++) {
@@ -91,7 +95,7 @@ function getMonthArray(year, month){
     return result
 }
 
-function compareDates(date1, date2){
+function isSameDate(date1, date2){
     const year = date1.getFullYear() === date2.getFullYear() ? true : false 
     const month = date1.getMonth() === date2.getMonth() ? true : false 
     const date = date1.getDate() === date2.getDate() ? true : false 
