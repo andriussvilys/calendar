@@ -1,47 +1,7 @@
-"use strict"
+import { isSameDate, isSameWeek, getWeekDates, selectedDate } from "../js/dateManipulation.js"
 
 const ROW_COUNT = 25
-const WEEKDAYS = 7
 const LOCALE = 'us-US'
-
-let selectedDate = null
-
-// const weekView = document.querySelector('.weekView-main')
-
-// weekView.addEventListener('click', (e) => {
-//     if(e.target.classList.contains('day-border')){
-//         e.target.style.background = 'black';
-//     }
-// })
-
-const button_today = document.querySelector("#button_today")
-const headerControls_prev = document.querySelector("#headerControls_prev")
-const headerControls_next = document.querySelector("#headerControls_next")
-
-button_today.addEventListener('click', () => {
-    switchWeekView( new Date(Date.now()) )
-})
-
-headerControls_prev.addEventListener('click', () => {
-    switchWeekView( new Date( selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() - 7 ) )
-})
-headerControls_next.addEventListener('click', () => {
-    switchWeekView( new Date( selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() + 7 ) )
-})
-
-document.querySelector('#month').addEventListener('click', (e) => {
-
-    if(e.target.dataset.date){
-        // console.log( (e.target.dataset.timestamp) )
-        // console.log( new Date(e.target.dataset.timestamp)  )
-        // console.log( (e.target.dataset.date)  )
-        // console.log( new Date(e.target.dataset.date)  )
-    
-        switchWeekView( new Date(e.target.dataset.date) )
-    }
-
-
-})
 
 const createDayColumn = (date) => {
 
@@ -154,25 +114,6 @@ const createHoursColumn = () => {
     return container
 }
 
-const getWeekDates = (date) => {
-
-    if(!date){
-        date = new Date(Date.now())
-    }
-
-    const weekDay = date.getDay()
-    const diffToMonday = (weekDay-1+7)%7
-    const monday = new Date(date.getFullYear(), date.getMonth(), (date.getDate() - diffToMonday))
-    const weekDays = []
-
-    for (let index = 0; index < WEEKDAYS; index++) {
-        weekDays.push(new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + index))
-    }
-
-    return weekDays
-
-}
-
 const generateWeekView = (date) => {
 
     const weekView = document.createElement('div')
@@ -191,16 +132,15 @@ const generateWeekView = (date) => {
 
 }
 
-const switchWeekView = (date) => {
+export const switchWeekView = (newDate) => {
 
-    if(!isSameWeek(selectedDate, date)){
-    const wrapper = document.querySelector('.weekView-wrapper')
-    const weekView_current = document.querySelector('.weekView-main')
-    const weekView_new = generateWeekView(date)
-    
-    wrapper.appendChild(weekView_new)
+    if(!isSameWeek(selectedDate, newDate)){
 
-    isSameWeek(selectedDate, date)
+        const wrapper = document.querySelector('.weekView-wrapper')
+        const weekView_current = document.querySelector('.weekView-main')
+        const weekView_new = generateWeekView(newDate)
+        
+        wrapper.appendChild(weekView_new)
 
         weekView_current.classList.remove("slideIn")
         weekView_new.classList.add("slideIn")
@@ -208,30 +148,12 @@ const switchWeekView = (date) => {
         setTimeout(() => {
             weekView_current.remove()
         }, 200);
+
     }
-        
-    selectedDate = date;
 
 }
 
-const isSameWeek = (date1, date2) => {
-    const week = getWeekDates(date1)
-    const result =  week.filter(item => isSameDate(item, date2))
-    if( result.length > 0){
-        return true
-    }
-    return false
-}
-
-function isSameDate(date1, date2){
-    const year = date1.getFullYear() === date2.getFullYear() ? true : false 
-    const month = date1.getMonth() === date2.getMonth() ? true : false 
-    const date = date1.getDate() === date2.getDate() ? true : false 
-
-    return year && month && date
-}
-
-selectedDate = new Date(Date.now())
+const today = new Date(Date.now())
 const wrapper = document.querySelector('.weekView-wrapper')
-const newWeekView = generateWeekView( selectedDate )
+const newWeekView = generateWeekView( today )
 wrapper.appendChild(newWeekView)
