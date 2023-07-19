@@ -35,6 +35,15 @@ function incrementMonth(value){
     }
 }
 
+function toggleSelectedDate(element){
+    const buttons = document.querySelectorAll('#month button')
+    console.log(buttons)
+    buttons.forEach(elem => {
+        elem.classList.remove('button_selectedDay')
+    })
+    element.classList.add('button_selectedDay')
+}
+
 function generateDayCell(content){
     const container = document.createElement('div')
     container.classList = `container monthView-cell`
@@ -46,6 +55,9 @@ function generateDayCell(content){
     button.dataset.timestamp = content.date.timestamp
     button.dataset.currentMonth = content.currentMonth
     button.dataset.currentDay = content.isToday
+    button.addEventListener('click', (e) => {
+        toggleSelectedDate(e.target)
+    })
 
     container.appendChild(button)
 
@@ -54,7 +66,7 @@ function generateDayCell(content){
 }
 
 function fillMonth( year, month ){
-    
+
     const months = document.querySelector("#month")
     months.innerHTML = ''
     const monthView = getMonthViewDays(year, month);
