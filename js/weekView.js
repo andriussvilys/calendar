@@ -14,12 +14,14 @@ weekView.addEventListener('click', (e) => {
 
 document.querySelector('#month').addEventListener('click', (e) => {
 
-    // console.log( (e.target.dataset.timestamp) )
-    // console.log( new Date(e.target.dataset.timestamp)  )
-    // console.log( (e.target.dataset.date)  )
-    // console.log( new Date(e.target.dataset.date)  )
-
-    generateWeekView( new Date(e.target.dataset.date) )
+    if(e.target.dataset.date){
+        // console.log( (e.target.dataset.timestamp) )
+        // console.log( new Date(e.target.dataset.timestamp)  )
+        // console.log( (e.target.dataset.date)  )
+        // console.log( new Date(e.target.dataset.date)  )
+    
+        generateWeekView( new Date(e.target.dataset.date) )
+    }
 
 
 })
@@ -100,7 +102,7 @@ const createHourCell = (hour, meridiam) => {
 
 }
 
-const createHours = () => {
+const createHoursColumn = () => {
 
     const container = document.createElement('div')
     container.classList = "weekView-column hours"
@@ -115,11 +117,14 @@ const createHours = () => {
 
     container.appendChild(headerCell)
 
-    for (let index = 1; index < ((ROW_COUNT-1)/2)+1; index++) {
+    for (let index = 1; index < 12; index++) {
         const cell = createHourCell(index, 'AM')
         container.appendChild(cell)
     }
-    for (let index = 1; index < (ROW_COUNT-1)/2; index++) {
+    const cell = createHourCell(12, 'PM')
+    container.appendChild(cell)
+
+    for (let index = 1; index < 12; index++) {
         const cell = createHourCell(index, 'PM')
         container.appendChild(cell)
     }
@@ -150,7 +155,7 @@ const generateWeekView = (date) => {
 
     weekView.innerHTML = ''
 
-    weekView.appendChild( createHours() )
+    weekView.appendChild( createHoursColumn() )
 
     const weekDates = getWeekDates(date)
 
