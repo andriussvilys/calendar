@@ -68,10 +68,6 @@ button{
 .button:active{
     background-color: var(--grey_medium);
 }
-.button_selectedDay{
-    background-color: var(--secondary-variant);
-    color: var(--on-secondary-variant);
-}
 
 header{
     height: 4em;

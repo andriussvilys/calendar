@@ -36,32 +36,32 @@ function incrementMonth(value){
 }
 
 function generateDayCell(content){
-    const element = 
-    `<div class="container monthView-cell">
-        <button 
-            class="button button_round monthView-button ${content.isToday ? 'button_today' : ''} ${content.currentMonth ? 'selectedMonth' : ''}"
-            data-date='${content.date.string}' 
-            data-timestamp=${content.date.timestamp}
-            data-currentmonth=${content.currentMonth} 
-            data-currentday=${content.isToday} 
-            >
-            ${ new Date(content.date.string).getDate()}
-        </button>
-    </div>
-    `
-    return element
+    const container = document.createElement('div')
+    container.classList = `container monthView-cell`
+
+    const button = document.createElement('button')
+    button.classList = `button button_round monthView-button ${content.isToday ? 'button_today' : ''} ${content.currentMonth ? 'selectedMonth' : ''}`
+    button.innerHTML = `${ new Date(content.date.string).getDate()}`
+    button.dataset.date = content.date.string
+    button.dataset.timestamp = content.date.timestamp
+    button.dataset.currentMonth = content.currentMonth
+    button.dataset.currentDay = content.isToday
+
+    container.appendChild(button)
+
+    return container
+
 }
 
 function fillMonth( year, month ){
-    // const today = new Date(Date.now());
-    const monthView = getMonthViewDays(year, month);
-    let html = ''
-    monthView.forEach(elem => {
-        html += generateDayCell(elem)
-    })
-
+    
     const months = document.querySelector("#month")
-    months.innerHTML = html
+    months.innerHTML = ''
+    const monthView = getMonthViewDays(year, month);
+
+    monthView.forEach(date => {
+        months.appendChild( generateDayCell(date) )
+    })
 
     updateLabel()
 }

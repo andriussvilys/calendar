@@ -49,11 +49,11 @@
     width: auto;
 }
 
-
+.button_selectedDay{
+    background-color: var(--secondary-variant);
+    color: var(--on-secondary-variant);
+}
 .button_today{
     color: white;
     background-color: var(--primary);
-}
-.date_today{
-    color: var(--primary);
 }

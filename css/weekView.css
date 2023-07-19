@@ -68,3 +68,6 @@
     font-size: 1.4em;
     padding: 0.4em;
 }
+.date_today{
+    color: var(--primary);
+}
