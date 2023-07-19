@@ -12,13 +12,15 @@ const ROW_COUNT = 25
 const WEEKDAYS = 7
 const LOCALE = 'us-US'
 
-const weekView = document.querySelector('.weekView-main')
+let selectedDate = null
 
-weekView.addEventListener('click', (e) => {
-    if(e.target.classList.contains('day-border')){
-        e.target.style.background = 'black';
-    }
-})
+// const weekView = document.querySelector('.weekView-main')
+
+// weekView.addEventListener('click', (e) => {
+//     if(e.target.classList.contains('day-border')){
+//         e.target.style.background = 'black';
+//     }
+// })
 
 document.querySelector('#month').addEventListener('click', (e) => {
 
@@ -28,7 +30,7 @@ document.querySelector('#month').addEventListener('click', (e) => {
         // console.log( (e.target.dataset.date)  )
         // console.log( new Date(e.target.dataset.date)  )
     
-        generateWeekView( new Date(e.target.dataset.date) )
+        appendNewWeekView( new Date(e.target.dataset.date) )
     }
 
 
@@ -166,7 +168,8 @@ const getWeekDates = (date) => {
 
 const generateWeekView = (date) => {
 
-    weekView.innerHTML = ''
+    const weekView = document.createElement('div')
+    weekView.classList = "weekView-main"
 
     weekView.appendChild( createHoursColumn() )
 
@@ -177,6 +180,43 @@ const generateWeekView = (date) => {
         weekView.appendChild(column)
     }
 
+    return weekView
+
 }
 
-generateWeekView()
+const appendNewWeekView = (date) => {
+
+    if(!isSameWeek(selectedDate, date)){
+    const wrapper = document.querySelector('.weekView-wrapper')
+    const weekView_current = document.querySelector('.weekView-main')
+    const weekView_new = generateWeekView(date)
+    
+    wrapper.appendChild(weekView_new)
+
+    isSameWeek(selectedDate, date)
+
+        weekView_current.classList.remove("slideIn")
+        weekView_new.classList.add("slideIn")
+        
+        setTimeout(() => {
+            weekView_current.remove()
+        }, 200);
+    }
+        
+    selectedDate = date;
+
+}
+
+const isSameWeek = (date1, date2) => {
+    const week = getWeekDates(date1)
+    const result =  week.filter(item => isSameDate(item, date2))
+    if( result.length > 0){
+        return true
+    }
+    return false
+}
+
+selectedDate = new Date(Date.now())
+const wrapper = document.querySelector('.weekView-wrapper')
+const newWeekView = generateWeekView( selectedDate )
+wrapper.appendChild(newWeekView)

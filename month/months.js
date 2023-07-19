@@ -37,7 +37,6 @@ function incrementMonth(value){
 
 function toggleSelectedDate(element){
     const buttons = document.querySelectorAll('#month button')
-    console.log(buttons)
     buttons.forEach(elem => {
         elem.classList.remove('button_selectedDay')
     })

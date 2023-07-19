@@ -4,6 +4,9 @@
     height: 100%;
     padding-top: 1em;
     padding-right: 1em;
+    flex: 1;
+    position: relative;
+    display: flex;
 }
 
 .weekView-main{
@@ -11,6 +14,8 @@
     grid-template-columns: 3em repeat(7, 1fr);
     overflow: scroll;
     height: 100%;
+    position: absolute;
+    width: 100%;
 }
 
 .weekView-column{
@@ -70,4 +75,22 @@
 }
 .date_today{
     color: var(--primary);
+}
+@keyframes slideIn {
+    0% {
+      transform: translateX(-5%);
+      opacity: 0;
+    }
+  
+    70% {
+      transform: translateX(0%);
+    }
+    100%{
+        opacity: 1;
+    }
+  }
+.slideIn{
+    animation-name: slideIn;
+    animation-duration: 0.2s;
+    animation-timing-function: ease-in;
 }

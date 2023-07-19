@@ -79,10 +79,12 @@ header{
 main{
     overflow: hidden;
     display: flex;
+    flex: 1;
 }
 
 .button-controls{
     width: 2em;
+    opacity: 0.6;
 }
 .button-controls img{
     width: 100%;
