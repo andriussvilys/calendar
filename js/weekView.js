@@ -1,13 +1,5 @@
 "use strict"
 
-function isSameDate(date1, date2){
-    const year = date1.getFullYear() === date2.getFullYear() ? true : false 
-    const month = date1.getMonth() === date2.getMonth() ? true : false 
-    const date = date1.getDate() === date2.getDate() ? true : false 
-
-    return year && month && date
-}
-
 const ROW_COUNT = 25
 const WEEKDAYS = 7
 const LOCALE = 'us-US'
@@ -22,6 +14,21 @@ let selectedDate = null
 //     }
 // })
 
+const button_today = document.querySelector("#button_today")
+const headerControls_prev = document.querySelector("#headerControls_prev")
+const headerControls_next = document.querySelector("#headerControls_next")
+
+button_today.addEventListener('click', () => {
+    switchWeekView( new Date(Date.now()) )
+})
+
+headerControls_prev.addEventListener('click', () => {
+    switchWeekView( new Date( selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() - 7 ) )
+})
+headerControls_next.addEventListener('click', () => {
+    switchWeekView( new Date( selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() + 7 ) )
+})
+
 document.querySelector('#month').addEventListener('click', (e) => {
 
     if(e.target.dataset.date){
@@ -30,7 +37,7 @@ document.querySelector('#month').addEventListener('click', (e) => {
         // console.log( (e.target.dataset.date)  )
         // console.log( new Date(e.target.dataset.date)  )
     
-        appendNewWeekView( new Date(e.target.dataset.date) )
+        switchWeekView( new Date(e.target.dataset.date) )
     }
 
 
@@ -184,7 +191,7 @@ const generateWeekView = (date) => {
 
 }
 
-const appendNewWeekView = (date) => {
+const switchWeekView = (date) => {
 
     if(!isSameWeek(selectedDate, date)){
     const wrapper = document.querySelector('.weekView-wrapper')
@@ -214,6 +221,14 @@ const isSameWeek = (date1, date2) => {
         return true
     }
     return false
+}
+
+function isSameDate(date1, date2){
+    const year = date1.getFullYear() === date2.getFullYear() ? true : false 
+    const month = date1.getMonth() === date2.getMonth() ? true : false 
+    const date = date1.getDate() === date2.getDate() ? true : false 
+
+    return year && month && date
 }
 
 selectedDate = new Date(Date.now())
