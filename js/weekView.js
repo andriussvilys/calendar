@@ -1,5 +1,13 @@
 "use strict"
 
+function isSameDate(date1, date2){
+    const year = date1.getFullYear() === date2.getFullYear() ? true : false 
+    const month = date1.getMonth() === date2.getMonth() ? true : false 
+    const date = date1.getDate() === date2.getDate() ? true : false 
+
+    return year && month && date
+}
+
 const ROW_COUNT = 25
 const WEEKDAYS = 7
 const LOCALE = 'us-US'
@@ -26,24 +34,29 @@ document.querySelector('#month').addEventListener('click', (e) => {
 
 })
 
-const createColumn = (date) => {
+const createDayColumn = (date) => {
+
+    const today = new Date(Date.now())
 
     const columnContainer = document.createElement('div')
     columnContainer.classList.add('weekView-column')
 
     const headerCell = document.createElement('div')
-    headerCell.classList = 'container header-cell'
+    headerCell.classList = `container header-cell`
 
     const headerLabel = document.createElement('div')
     headerLabel.classList = 'container day-label'
 
     const weekday = document.createElement('span')
+    weekday.classList = `${isSameDate(date, today) ? 'date_today' : '' }`
     weekday.innerHTML = date.toLocaleDateString(LOCALE, { weekday: 'short'}).toUpperCase()
 
     const button_content = document.createElement('span')
     button_content.innerHTML = date.toLocaleDateString(LOCALE, { day: 'numeric'})
     const button = document.createElement('button')
-    button.appendChild(button_content)
+    button.innerHTML = date.toLocaleDateString(LOCALE, { day: 'numeric'})
+    button.classList = `button button_weekView button_round ${isSameDate(date, today) ? 'button_today' : ''}`
+    // button.appendChild(button_content)
 
     const eventCell = document.createElement('div')
     eventCell.classList = 'day-border eventCell_header'
@@ -160,7 +173,7 @@ const generateWeekView = (date) => {
     const weekDates = getWeekDates(date)
 
     for (const date of weekDates) {
-        const column = createColumn( date )
+        const column = createDayColumn( date )
         weekView.appendChild(column)
     }
 

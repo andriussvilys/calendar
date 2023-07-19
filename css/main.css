@@ -4,7 +4,9 @@
     --grey_light: rgb(220, 220, 220);
     --button-bg: rgb(255, 255, 255);
     --primary: rgb(26,115,232);
-    --primary-dark: rgb(25,103,210);
+    /* --primary-dark: rgb(25,103,210); */
+    --secondary-variant: rgb(210,227,252);
+    --on-secondary-variant: rgb(24,90,188);
 }
 
 *{
@@ -35,6 +37,8 @@ html{
 body{
     display: flex;
     flex-direction: column;
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
 }
 
 button{
@@ -44,6 +48,7 @@ button{
     align-items: center;
     cursor: pointer;
     background-color: white;
+    text-align: center;
 }
 
 .button_secondary{
@@ -58,9 +63,14 @@ button{
 
 .button:hover{
     background-color: var(--grey_light);
+    color: var(--grey_dark);
 }
 .button:active{
     background-color: var(--grey_medium);
+}
+.button_selectedDay{
+    background-color: var(--secondary-variant);
+    color: var(--on-secondary-variant);
 }
 
 header{
@@ -82,7 +92,7 @@ main{
     width: 100%;
 }
 
-.button-round{
+.button_round{
     border-radius: 999px;
 }
 

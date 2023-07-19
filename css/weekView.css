@@ -63,3 +63,8 @@
     border-left: 1px solid  var(--grey_light);
     border-bottom: 1px solid  var(--grey_light);
 }
+.button_weekView{
+    margin-top: 0.3em;
+    font-size: 1.4em;
+    padding: 0.4em;
+}

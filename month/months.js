@@ -39,7 +39,7 @@ function generateDayCell(content){
     const element = 
     `<div class="container monthView-cell">
         <button 
-            class="button button-round monthView-button"
+            class="button button_round monthView-button ${content.isToday ? 'button_today' : ''} ${content.currentMonth ? 'selectedMonth' : ''}"
             data-date='${content.date.string}' 
             data-timestamp=${content.date.timestamp}
             data-currentmonth=${content.currentMonth} 
