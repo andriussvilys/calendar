@@ -11,7 +11,7 @@ export const isSameWeek = (date1, date2) => {
     return result ? true : false
 }
 
-export function isSameDate(date1, date2){
+export const isSameDate = (date1, date2) => {
     const year = date1.getFullYear() === date2.getFullYear() ? true : false 
     const month = date1.getMonth() === date2.getMonth() ? true : false 
     const date = date1.getDate() === date2.getDate() ? true : false 
@@ -43,5 +43,13 @@ export const incrementDay = (date, incrValue) => {
 }
 
 export const incrementMonth = (date, incrValue) => {
-    return new Date(date.getFullYear(), date.getMonth() + incrValue, date.getDate())
+    return new Date(date.getFullYear(), date.getMonth() + incrValue, 15)
+}
+
+export const updateCalendarLabels = ( parentElem, date ) => {    
+    const monthLabel = parentElem.querySelector("[data-calendarLabel='month']")
+    const yearLabel = parentElem.querySelector("[data-calendarLabel='year']")
+
+    monthLabel.innerHTML = date.toLocaleDateString('us-US', {month: 'long'})
+    yearLabel.innerHTML = date.getFullYear()
 }

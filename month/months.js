@@ -1,4 +1,4 @@
-import { isSameDate, setSelectedDate, selectedDate, getToday, WEEKDAYS, incrementMonth } from "../js/dateManipulation.js"
+import { isSameDate, setSelectedDate, selectedDate, getToday, WEEKDAYS, incrementMonth, updateCalendarLabels } from "../js/dateManipulation.js"
 import { switchWeekView } from "../js/weekView.js"
 
 
@@ -8,31 +8,23 @@ const today = getToday()
 let selectedMonth = selectedDate
 
 document.querySelector("#months-next").addEventListener('click', () => {
-    const nextDate = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 1)
-    switchMonth( nextDate )
+    const nextDate = incrementMonth(selectedMonth, +1)
     selectedMonth = nextDate
-    updateLabel(selectedMonth)
+    switchMonth( nextDate )
 })
 document.querySelector("#months-prev").addEventListener('click', () => {
-    const nextDate = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() - 1, 1)
-    switchMonth( nextDate )
+    const nextDate = incrementMonth(selectedMonth, -1)
     selectedMonth = nextDate
-    updateLabel(selectedMonth)
+    switchMonth( nextDate )
 })
 
-function updateLabel( date ){    
-    const monthViewLabelMonth = document.querySelector("#monthView-label-month")
-    const monthViewLabelYear = document.querySelector("#monthView-label-year")
-    monthViewLabelMonth.innerHTML = date.toLocaleDateString('us-US', {month: 'long'})
-    monthViewLabelYear.innerHTML = date.getFullYear()
-}
-
-export function toggleSelectedSecondary( monthViewButton ){
+export function toggleSelectedSecondary( date ){
     const buttons = document.querySelectorAll('.monthView-button')
     buttons.forEach(elem => {
         elem.classList.remove('selected_secondary')
     })
-    monthViewButton.classList.add('selected_secondary')
+    document.querySelector(`[data-date='${date.toString()}']`)?.classList.add('selected_secondary')
+    // monthViewButton.classList.add('selected_secondary')
 }
 
 export function findMonthButtonByDate( date ){
@@ -49,17 +41,24 @@ function generateDayCell(content){
 
     const button = document.createElement('button')
     button.classList = `button button_round monthView-button ${content.isToday ? 'button_today' : ''} ${content.currentMonth ? 'selectedMonth' : ''}`
-    button.innerHTML = `${ new Date(content.date.string).getDate()}`
-    button.dataset.date = content.date.string
-    button.dataset.timestamp = content.date.timestamp
+
+    button.innerHTML = `${ new Date(content.date).getDate()}`
+
+    button.dataset.date = content.date.toString()
+    button.dataset.timestamp = content.date.valueOf()
     button.dataset.currentMonth = content.currentMonth
     button.dataset.currentDay = content.isToday
+
     button.addEventListener('click', (e) => {
         const newDate = new Date(e.target.dataset.date)
-        toggleSelectedSecondary(e.target)
         switchWeekView( newDate )
+        if(selectedDate.getMonth() != newDate.getMonth()){
+            switchMonth(newDate)
+        }
+        toggleSelectedSecondary(newDate)
         setSelectedDate( newDate )
-        updateLabel(selectedDate)
+        updateCalendarLabels( document.querySelector(".monthView-header"), newDate)
+        updateCalendarLabels( document.querySelector("header"), newDate)
     })
 
     container.appendChild(button)
@@ -68,7 +67,7 @@ function generateDayCell(content){
 
 }
 
-export function switchMonth( newDate ){
+export const switchMonth = ( newDate ) => {
 
     const months = document.querySelector("#month")
     months.innerHTML = ''
@@ -78,10 +77,12 @@ export function switchMonth( newDate ){
         months.appendChild( generateDayCell(date) )
     })
 
-    updateLabel( selectedDate )
+    selectedMonth = newDate
+    updateCalendarLabels( document.querySelector(".monthView-header"), selectedMonth)
+
 }
 
-function getMonthViewDays(newDate){
+const getMonthViewDays = (newDate) => {
 
     const year = newDate.getFullYear()
     const month = newDate.getMonth()
@@ -93,17 +94,9 @@ function getMonthViewDays(newDate){
     //get the day before the first day of current month, ie previous month length
     const prevMonthLength = new Date(year, month, 0).getDate();
 
-    const getDateObj = (year, month, index) => { 
-        const obj = {
-            string: new Date(year, month, index).toString(),
-            timestamp: new Date(year, month, index).valueOf()
-        }
-        return obj
-     }
-
     //days before current month
     for (let index = ((prevMonthLength - 7) + 1) + ((7 - firstMonthDay) + 1); index < prevMonthLength+1; index++) {
-        result.push({date: getDateObj(year, month-1, index), currentMonth: false, isToday: false})
+        result.push({date: new Date(year, month-1, index), currentMonth: false, isToday: false})
     }
 
     //current Month
@@ -111,14 +104,14 @@ function getMonthViewDays(newDate){
 
     for (let index = 1; index < monthLength+1; index++) {
         const isToday = isSameDate(today, new Date(newDate.getFullYear(), newDate.getMonth(), index))
-        result.push({date: getDateObj(year, month, index), currentMonth: true, isToday: isToday})
+        result.push({date: new Date(year, month, index), currentMonth: true, isToday: isToday})
     }
 
     const remainder = (WEEKDAYS * CALENDAR_ROWS) - result.length
 
     //days after current month
     for (let index = 1; index < remainder+1; index++) {
-        result.push({date: getDateObj(year, month+1, index), currentMonth: false, isToday: false})
+        result.push({date: new Date(year, month+1, index), currentMonth: false, isToday: false})
     }
 
     return result

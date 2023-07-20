@@ -1,6 +1,6 @@
 import { switchMonth, findMonthButtonByDate, toggleSelectedSecondary } from "../month/months.js"
 import {switchWeekView} from "./weekView.js"
-import { selectedDate, setSelectedDate, getToday, WEEKDAYS } from "./dateManipulation.js"
+import { selectedDate, setSelectedDate, getToday, WEEKDAYS, updateCalendarLabels } from "./dateManipulation.js"
 
 const button_today = document.querySelector("#button_today")
 const headerControls_prev = document.querySelector("#headerControls_prev")
@@ -11,11 +11,11 @@ button_today.addEventListener('click', () => {
     switchWeekView( today )
     switchMonth( today )
     setSelectedDate( today )
+    updateCalendarLabels(document.querySelector('header'), selectedDate)
 })
 
 headerControls_prev.addEventListener('click', () => {
     handleNextPrevClick(-1)
-
 })
 
 headerControls_next.addEventListener('click', () => {
@@ -26,9 +26,9 @@ const handleNextPrevClick = (direction) => {
     const newDate = new Date( selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate() + WEEKDAYS*direction ) 
     switchWeekView( newDate )
     switchMonth (newDate)
-    const monthButton = findMonthButtonByDate(newDate)
-    if(monthButton){
-        toggleSelectedSecondary(monthButton)
-    }
+    toggleSelectedSecondary(newDate)
     setSelectedDate( newDate )
+    updateCalendarLabels(document.querySelector('header'), selectedDate)
 }
+
+updateCalendarLabels(document.querySelector('header'), selectedDate)

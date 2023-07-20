@@ -78,7 +78,8 @@
 .weekView-button{
     margin-top: 0.3em;
     font-size: 1.4em;
-    padding: 0.4em;
+    width: 2em;
+    height: 2em;
 }
 .date_today{
     color: var(--primary);
