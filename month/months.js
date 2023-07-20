@@ -19,12 +19,11 @@ document.querySelector("#months-prev").addEventListener('click', () => {
 })
 
 export function toggleSelectedSecondary( date ){
-    const buttons = document.querySelectorAll('.monthView-button')
+    const buttons = document.querySelectorAll('.monthView-button.selected_secondary')
     buttons.forEach(elem => {
         elem.classList.remove('selected_secondary')
     })
-    document.querySelector(`[data-date='${date.toString()}']`)?.classList.add('selected_secondary')
-    // monthViewButton.classList.add('selected_secondary')
+    document.querySelector(`[data-timestamp='${date.valueOf()}']`)?.classList.add('selected_secondary')
 }
 
 export function findMonthButtonByDate( date ){
@@ -44,13 +43,12 @@ function generateDayCell(content){
 
     button.innerHTML = `${ new Date(content.date).getDate()}`
 
-    button.dataset.date = content.date.toString()
     button.dataset.timestamp = content.date.valueOf()
     button.dataset.currentMonth = content.currentMonth
     button.dataset.currentDay = content.isToday
 
     button.addEventListener('click', (e) => {
-        const newDate = new Date(e.target.dataset.date)
+        const newDate = new Date(+e.target.dataset.timestamp)
         switchWeekView( newDate )
         if(selectedDate.getMonth() != newDate.getMonth()){
             switchMonth(newDate)
