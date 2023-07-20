@@ -1,14 +1,14 @@
 export const WEEKDAYS = 7
+export const HOUR_COUNT = 24
 
-export let selectedDate = new Date( Date.now() )
+export const getToday = () => new Date(Date.now())
+
+export let selectedDate = getToday()
 
 export const isSameWeek = (date1, date2) => {
     const week = getWeekDates(date1)
-    const result =  week.filter(item => isSameDate(item, date2))
-    if( result.length > 0){
-        return true
-    }
-    return false
+    const result = week.find(item => isSameDate(item, date2))
+    return result ? true : false
 }
 
 export function isSameDate(date1, date2){
@@ -21,17 +21,13 @@ export function isSameDate(date1, date2){
 
 export const getWeekDates = (date) => {
 
-    if(!date){
-        date = new Date(Date.now())
-    }
-
     const weekDay = date.getDay()
-    const diffToMonday = (weekDay-1+7)%7
-    const monday = new Date(date.getFullYear(), date.getMonth(), (date.getDate() - diffToMonday))
+    const diffToMonday = ( weekDay - 1 + WEEKDAYS ) % WEEKDAYS
+    const monday = incrementDay(date, -diffToMonday)
     const weekDays = []
 
     for (let index = 0; index < WEEKDAYS; index++) {
-        weekDays.push(new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + index))
+        weekDays.push( incrementDay(monday, index ) )
     }
 
     return weekDays
@@ -40,4 +36,12 @@ export const getWeekDates = (date) => {
 
 export const setSelectedDate = (date) => {
     selectedDate = date
+}
+
+export const incrementDay = (date, incrValue) => {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate() + incrValue)
+}
+
+export const incrementMonth = (date, incrValue) => {
+    return new Date(date.getFullYear(), date.getMonth() + incrValue, date.getDate())
 }

@@ -1,11 +1,11 @@
-import { isSameDate, isSameWeek, getWeekDates, selectedDate } from "../js/dateManipulation.js"
+import { isSameDate, isSameWeek, getWeekDates, selectedDate, getToday, HOUR_COUNT } from "../js/dateManipulation.js"
 
 const ROW_COUNT = 25
 const LOCALE = 'us-US'
 
 const createDayColumn = (date) => {
 
-    const today = new Date(Date.now())
+    const today = getToday()
 
     const columnContainer = document.createElement('div')
     columnContainer.classList.add('weekView-column')
@@ -20,12 +20,9 @@ const createDayColumn = (date) => {
     weekday.classList = `${isSameDate(date, today) ? 'date_today' : '' }`
     weekday.innerHTML = date.toLocaleDateString(LOCALE, { weekday: 'short'}).toUpperCase()
 
-    const button_content = document.createElement('span')
-    button_content.innerHTML = date.toLocaleDateString(LOCALE, { day: 'numeric'})
     const button = document.createElement('button')
     button.innerHTML = date.toLocaleDateString(LOCALE, { day: 'numeric'})
-    button.classList = `button button_weekView button_round ${isSameDate(date, today) ? 'button_today' : ''}`
-    // button.appendChild(button_content)
+    button.classList = `button weekView-button button_round ${isSameDate(date, today) ? 'button_today' : ''}`
 
     const eventCell = document.createElement('div')
     eventCell.classList = 'day-border eventCell_header'
@@ -48,7 +45,10 @@ const createDayColumn = (date) => {
 
 }
 
-const createHourCell = (hour, meridiam) => {
+const createHourCell = (date) => {
+
+    let hour = (date.getHours())%12 || 12
+    let meridiam = Math.floor(date.getHours() / 12) == 0 ? 'AM' : 'PM';
 
     const container = document.createElement('div')
     container.classList = "hour"
@@ -99,15 +99,8 @@ const createHoursColumn = () => {
 
     container.appendChild(headerCell)
 
-    for (let index = 1; index < 12; index++) {
-        const cell = createHourCell(index, 'AM')
-        container.appendChild(cell)
-    }
-    const cell = createHourCell(12, 'PM')
-    container.appendChild(cell)
-
-    for (let index = 1; index < 12; index++) {
-        const cell = createHourCell(index, 'PM')
+    for (let index = 1; index < HOUR_COUNT; index++) {
+        const cell = createHourCell(new Date(0, 0, 0, 0 + index))
         container.appendChild(cell)
     }
 
@@ -142,8 +135,9 @@ export const switchWeekView = (newDate) => {
         
         wrapper.appendChild(weekView_new)
 
-        weekView_current.classList.remove("slideIn")
-        weekView_new.classList.add("slideIn")
+        const slideInClass = newDate > selectedDate ? 'slideIn_ltr' : 'slideIn_rtl'
+
+        weekView_new.classList.add(slideInClass)
         
         setTimeout(() => {
             weekView_current.remove()
@@ -153,7 +147,7 @@ export const switchWeekView = (newDate) => {
 
 }
 
-const today = new Date(Date.now())
+const today = getToday()
 const wrapper = document.querySelector('.weekView-wrapper')
 const newWeekView = generateWeekView( today )
 wrapper.appendChild(newWeekView)

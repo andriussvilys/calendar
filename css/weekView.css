@@ -2,8 +2,9 @@
     overflow: hidden;
     width: 100%;
     height: 100%;
-    padding-top: 1em;
-    padding-right: 1em;
+    /* padding-top: 1em;
+    padding-right: 1em; */
+    margin: 0 1em 1em 1em;
     flex: 1;
     position: relative;
     display: flex;
@@ -16,6 +17,7 @@
     height: 100%;
     position: absolute;
     width: 100%;
+    padding-right: 12px;
 }
 
 .weekView-column{
@@ -29,6 +31,12 @@
     top: 0;
     width: 100%;
     background-color: white;
+}
+.day-label{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 2em 1em 0 1em;
 }
 .header-cell > .hour-separator{
     position: absolute;
@@ -59,16 +67,15 @@
     width: 1em;
     border-bottom: 1px solid  var(--grey_light);
 }
-.day-label{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
 .day-border{
     border-left: 1px solid  var(--grey_light);
     border-bottom: 1px solid  var(--grey_light);
 }
-.button_weekView{
+.weekView-column > .day-border:last-of-type{
+    border-bottom: none;
+}
+
+.weekView-button{
     margin-top: 0.3em;
     font-size: 1.4em;
     padding: 0.4em;
@@ -76,7 +83,7 @@
 .date_today{
     color: var(--primary);
 }
-@keyframes slideIn {
+@keyframes slideIn_ltr {
     0% {
       transform: translateX(-5%);
       opacity: 0;
@@ -89,8 +96,28 @@
         opacity: 1;
     }
   }
-.slideIn{
-    animation-name: slideIn;
+.slideIn_ltr{
+    animation-name: slideIn_ltr;
     animation-duration: 0.2s;
     animation-timing-function: ease-in;
 }
+
+@keyframes slideIn_rtl {
+    0% {
+      transform: translateX(5%);
+      opacity: 0;
+    }
+  
+    70% {
+      transform: translateX(0%);
+    }
+    100%{
+        opacity: 1;
+    }
+  }
+.slideIn_rtl{
+    animation-name: slideIn_rtl;
+    animation-duration: 0.2s;
+    animation-timing-function: ease-in;
+}
+

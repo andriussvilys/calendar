@@ -50,14 +50,14 @@
     width: auto;
 }
 
-.button_selectedDay{
-    background-color: var(--secondary-variant);
-    color: var(--on-secondary-variant);
+.selected_secondary{
+    background-color: var(--secondary-bg);
+    color: var(--secondary-font);
 }
 
-.button_selectedDay:hover{
+.selected_secondary:hover{
     background-color: rgb(174,203,250);
-    color: var(--on-secondary-variant);
+    color: var(--secondary-font);
 }
 .button_today{
     color: white;
@@ -65,5 +65,5 @@
 }
 .button_today:hover{
     color: white;
-    background-color: var(--primary-dark);
+    background-color: var(--primary_dark);
 }

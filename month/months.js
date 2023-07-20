@@ -1,23 +1,23 @@
-import { isSameDate, setSelectedDate, selectedDate, WEEKDAYS } from "../js/dateManipulation.js"
+import { isSameDate, setSelectedDate, selectedDate, getToday, WEEKDAYS, incrementMonth } from "../js/dateManipulation.js"
 import { switchWeekView } from "../js/weekView.js"
 
 
 const CALENDAR_ROWS = 6
 
-const today = new Date(Date.now())
-let selectedDate_month = selectedDate
+const today = getToday()
+let selectedMonth = selectedDate
 
 document.querySelector("#months-next").addEventListener('click', () => {
-    const nextDate = new Date(selectedDate_month.getFullYear(), selectedDate_month.getMonth() + 1, 1)
+    const nextDate = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 1)
     switchMonth( nextDate )
-    selectedDate_month = nextDate
-    updateLabel(selectedDate_month)
+    selectedMonth = nextDate
+    updateLabel(selectedMonth)
 })
 document.querySelector("#months-prev").addEventListener('click', () => {
-    const nextDate = new Date(selectedDate_month.getFullYear(), selectedDate_month.getMonth() - 1, 1)
+    const nextDate = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() - 1, 1)
     switchMonth( nextDate )
-    selectedDate_month = nextDate
-    updateLabel(selectedDate_month)
+    selectedMonth = nextDate
+    updateLabel(selectedMonth)
 })
 
 function updateLabel( date ){    
@@ -27,18 +27,17 @@ function updateLabel( date ){
     monthViewLabelYear.innerHTML = date.getFullYear()
 }
 
-export function toggleSelectedDate(element){
-    const buttons = document.querySelectorAll('#month button')
+export function toggleSelectedSecondary( monthViewButton ){
+    const buttons = document.querySelectorAll('.monthView-button')
     buttons.forEach(elem => {
-        elem.classList.remove('button_selectedDay')
+        elem.classList.remove('selected_secondary')
     })
-    element.classList.add('button_selectedDay')
+    monthViewButton.classList.add('selected_secondary')
 }
 
-export function findElemByDate( date ){
+export function findMonthButtonByDate( date ){
 
-    const buttons = Array.from( document.querySelectorAll("#month button") )
-    const button = buttons.find( elem =>  isSameDate( new Date(elem.dataset.date), date) )
+    const button = document.querySelector(`[data-date="${date.toString()}"]`)
 
     return button
 
@@ -57,7 +56,7 @@ function generateDayCell(content){
     button.dataset.currentDay = content.isToday
     button.addEventListener('click', (e) => {
         const newDate = new Date(e.target.dataset.date)
-        toggleSelectedDate(e.target)
+        toggleSelectedSecondary(e.target)
         switchWeekView( newDate )
         setSelectedDate( newDate )
         updateLabel(selectedDate)
@@ -78,8 +77,6 @@ export function switchMonth( newDate ){
     monthView.forEach(date => {
         months.appendChild( generateDayCell(date) )
     })
-
-    // setSelectedDate(newDate)
 
     updateLabel( selectedDate )
 }
