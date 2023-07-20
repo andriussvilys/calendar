@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./month/months.css">
     <link rel="stylesheet" href="./css/weekView.css">
     <link rel="stylesheet" href="./css/event.css">
-    <link rel="stylesheet" href="./month/months.css">
-    <script defer src="./js/weekView.js"></script>
+    
+    <script defer type="module" src="./js/dateManipulation.js"></script>
+    <script defer type="module" src="./js/weekView.js"></script>
     <script defer src="./js/event.js"></script>
-    <script defer src="./month/months.js"></script>
+    <script defer type="module" src="./month/months.js"></script>
+    <script defer type="module" src="./js/header.js"></script>
+
     <title>Calendar Clone</title>
 </head>
 <body>
@@ -19,18 +23,18 @@
         </div>
 
         <div class="container controls">
-            <button class="button button_secondary today">Today</button>
+            <button id="button_today" class="button button_secondary today">Today</button>
             <div class="container nextPrev">
-                <button class="button button-round button-controls prev">
+                <button id="headerControls_prev" class="button button_round button-controls prev">
                     <img src="./images/chevron_left_FILL0_wght400_GRAD0_opsz48.svg" alt="arrow left">
                 </button>
-                <button class="button button-round button-controls next">
+                <button id="headerControls_next" class="button button_round button-controls next">
                     <img src="./images/chevron_right_FILL0_wght400_GRAD0_opsz48.svg" alt="arrow right">
                 </button>
             </div>
             <div class="date">
-                <span>Month</span>
-                <span>Year</span>
+                <span data-calendarLabel="month">Month</span>
+                <span data-calendarLabel="year">Year</span>
             </div>
         </div>
 
@@ -43,15 +47,15 @@
             <div class="monthView">
                 <div class="container monthView-header">
                     <div class="monthView-label">
-                        <span id="monthView-label-month">Month</span>
+                        <span data-calendarLabel="month" id="monthView-label-month">Month</span>
                         <span> </span>
-                        <span id="monthView-label-year">Year</span>
+                        <span data-calendarLabel="year" id="monthView-label-year">Year</span>
                     </div>
                         <div class="container">
-                            <button id="months-prev" class="button button-round button-controls prev">
+                            <button id="months-prev" class="button button_round button-controls prev">
                                 <img src="./images/chevron_left_FILL0_wght400_GRAD0_opsz48.svg" alt="arrow left">
                             </button>
-                            <button id="months-next" class="button button-round button-controls next">
+                            <button id="months-next" class="button button_round button-controls next">
                                 <img src="./images/chevron_right_FILL0_wght400_GRAD0_opsz48.svg" alt="arrow right">
                             </button>
                         </div>
@@ -73,436 +77,6 @@
         </aside>
 
         <section class="weekView-wrapper">
-    
-                <div class="weekView-main">
-
-                        <div class="weekView-column hours">
-                            <div class="hour header-cell">
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>1</span><span> </span><span>AM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>2</span><span> </span><span>AM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>3</span><span> </span><span>AM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>4</span><span> </span><span>AM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>5</span><span> </span><span>AM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>6</span><span> </span><span>AM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>7</span><span> </span><span>AM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>8</span><span> </span><span>AM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>9</span><span> </span><span>AM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>10</span><span> </span><span>AM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>11</span><span> </span><span>AM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>12</span><span> </span><span>PM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>1</span><span> </span><span>PM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>2</span><span> </span><span>PM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>3</span><span> </span><span>PM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>4</span><span> </span><span>PM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>5</span><span> </span><span>PM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>6</span><span> </span><span>PM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>7</span><span> </span><span>PM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>8</span><span> </span><span>PM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>9</span><span> </span><span>PM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>10</span><span> </span><span>PM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                            <div class="hour">
-                                <div class="hour-labelContainer">
-                                    <div class="hour-labelContent">
-                                        <span>11</span><span> </span><span>PM</span>	
-                                    </div>
-                                </div>
-                                <div class="hour-separator"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="weekView-column ">
-                            <div class="container header-cell">
-                                <div class="container day-label">
-                                    <span class="day-label_weekDay">Mon</span>
-                                    <button><span class="day-label_monthDay">10</span></button>
-                                </div>
-                                <div class="day-border eventCell_header"></div>
-                            </div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                        </div>
-                        <div class="weekView-column ">
-                            <div class="container header-cell">
-                                <div class="container day-label">
-                                    <span class="day-label_weekDay">Mon</span>
-                                    <button><span class="day-label_monthDay">10</span></button>
-                                </div>
-                                <div class="day-border eventCell_header"></div>
-                            </div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                        </div>
-                        <div class="weekView-column ">
-                            <div class="container header-cell">
-                                <div class="container day-label">
-                                    <span class="day-label_weekDay">Mon</span>
-                                    <button><span class="day-label_monthDay">10</span></button>
-                                </div>
-                                <div class="day-border eventCell_header"></div>
-                            </div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                        </div>
-                        <div class="weekView-column ">
-                            <div class="container header-cell">
-                                <div class="container day-label">
-                                    <span class="day-label_weekDay">Mon</span>
-                                    <button><span class="day-label_monthDay">10</span></button>
-                                </div>
-                                <div class="day-border eventCell_header"></div>
-                            </div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                        </div>
-                        <div class="weekView-column ">
-                            <div class="container header-cell">
-                                <div class="container day-label">
-                                    <span class="day-label_weekDay">Mon</span>
-                                    <button><span class="day-label_monthDay">10</span></button>
-                                </div>
-                                <div class="day-border eventCell_header"></div>
-                            </div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                        </div>
-                        <div class="weekView-column ">
-                            <div class="container header-cell">
-                                <div class="container day-label">
-                                    <span class="day-label_weekDay">Mon</span>
-                                    <button><span class="day-label_monthDay">10</span></button>
-                                </div>
-                                <div class="day-border eventCell_header"></div>
-                            </div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                        </div>
-                        <div class="weekView-column ">
-                            <div class="container header-cell">
-                                <div class="container day-label">
-                                    <span class="day-label_weekDay">Mon</span>
-                                    <button><span class="day-label_monthDay">10</span></button>
-                                </div>
-                                <div class="day-border eventCell_header"></div>
-                            </div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                            <div class="day-border"></div>
-                        </div>
-                        
-                </div>
-                
-    
-
-            </div>
             
         </section>
 

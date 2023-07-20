@@ -33,14 +33,13 @@
     color: var(--grey_medium);
     width: 100%;
     height: 100%;
+    font-weight: 600;
 }
-.monthView-button[data-currentmonth="true"]{
+
+.selectedMonth{
     color: var(--grey_dark);
 }
-.monthView-button[data-currentday="true"]{
-    color: white;
-    background-color: var(--primary);
-}
+
 .monthView-weekDayNames{
     width: 100%;
 }
@@ -49,4 +48,22 @@
 }
 .sideBar{
     width: auto;
+}
+
+.selected_secondary{
+    background-color: var(--secondary-bg);
+    color: var(--secondary-font);
+}
+
+.selected_secondary:hover{
+    background-color: rgb(174,203,250);
+    color: var(--secondary-font);
+}
+.button_today{
+    color: white;
+    background-color: var(--primary);
+}
+.button_today:hover{
+    color: white;
+    background-color: var(--primary_dark);
 }

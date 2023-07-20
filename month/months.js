@@ -1,70 +1,89 @@
-"use strict"
+import { isSameDate, setSelectedDate, selectedDate, getToday, WEEKDAYS, incrementMonth, updateCalendarLabels } from "../js/dateManipulation.js"
+import { switchWeekView } from "../js/weekView.js"
+
 
 const CALENDAR_ROWS = 6
-const DAYS_IN_WEEK = 7
 
-const today = new Date(Date.now())
-let currentMonth = today.getMonth()
-let currentYear = today.getFullYear()
+const today = getToday()
+let selectedMonth = selectedDate
 
 document.querySelector("#months-next").addEventListener('click', () => {
-    incrementMonth(1)
-    fillMonth(currentYear, currentMonth)
+    const nextDate = incrementMonth(selectedMonth, +1)
+    selectedMonth = nextDate
+    switchMonth( nextDate )
 })
 document.querySelector("#months-prev").addEventListener('click', () => {
-    incrementMonth(-1)
-    fillMonth(currentYear, currentMonth)
+    const nextDate = incrementMonth(selectedMonth, -1)
+    selectedMonth = nextDate
+    switchMonth( nextDate )
 })
 
-function updateLabel(){
-    const monthViewLabelMonth = document.querySelector("#monthView-label-month")
-    const monthViewLabelYear = document.querySelector("#monthView-label-year")
-    monthViewLabelMonth.innerHTML = new Date(currentYear, currentMonth).toLocaleDateString('us-US', {month: 'long'})
-    monthViewLabelYear.innerHTML = currentYear
+export function toggleSelectedSecondary( date ){
+    const buttons = document.querySelectorAll('.monthView-button.selected_secondary')
+    buttons.forEach(elem => {
+        elem.classList.remove('selected_secondary')
+    })
+    document.querySelector(`[data-timestamp='${date.valueOf()}']`)?.classList.add('selected_secondary')
 }
 
-function incrementMonth(value){
-    currentMonth += value
-    if(currentMonth > 11){
-        currentMonth = currentMonth%12
-        currentYear++
-    }
-    if(currentMonth < 0){
-        currentMonth += 12
-        currentYear--
-    }
+export function findMonthButtonByDate( date ){
+
+    const button = document.querySelector(`[data-date="${date.toString()}"]`)
+
+    return button
+
 }
 
 function generateDayCell(content){
-    const element = 
-    `<div class="container monthView-cell">
-        <button 
-            class="button button-round monthView-button"
-            data-currentmonth=${content.currentMonth}
-            data-currentday=${content.currentDay}
-            >
-            ${content.date}
-        </button>
-    </div>
-    `
-    return element
-}
+    const container = document.createElement('div')
+    container.classList = `container monthView-cell`
 
-function fillMonth( year, month ){
-    // const today = new Date(Date.now());
-    const monthView = getMonthViewDays(year, month);
-    let html = ''
-    monthView.forEach(elem => {
-        html += generateDayCell(elem)
+    const button = document.createElement('button')
+    button.classList = `button button_round monthView-button ${content.isToday ? 'button_today' : ''} ${content.currentMonth ? 'selectedMonth' : ''}`
+
+    button.innerHTML = `${ new Date(content.date).getDate()}`
+
+    button.dataset.timestamp = content.date.valueOf()
+    button.dataset.currentMonth = content.currentMonth
+    button.dataset.currentDay = content.isToday
+
+    button.addEventListener('click', (e) => {
+        const newDate = new Date(+e.target.dataset.timestamp)
+        switchWeekView( newDate )
+        if(selectedDate.getMonth() != newDate.getMonth()){
+            switchMonth(newDate)
+        }
+        toggleSelectedSecondary(newDate)
+        setSelectedDate( newDate )
+        updateCalendarLabels( document.querySelector(".monthView-header"), newDate)
+        updateCalendarLabels( document.querySelector("header"), newDate)
     })
 
-    const months = document.querySelector("#month")
-    months.innerHTML = html
+    container.appendChild(button)
 
-    updateLabel()
+    return container
+
 }
 
-function getMonthViewDays(year, month){
+export const switchMonth = ( newDate ) => {
+
+    const months = document.querySelector("#month")
+    months.innerHTML = ''
+    const monthView = getMonthViewDays(newDate);
+
+    monthView.forEach(date => {
+        months.appendChild( generateDayCell(date) )
+    })
+
+    selectedMonth = newDate
+    updateCalendarLabels( document.querySelector(".monthView-header"), selectedMonth)
+
+}
+
+const getMonthViewDays = (newDate) => {
+
+    const year = newDate.getFullYear()
+    const month = newDate.getMonth()
 
     const result = []
     
@@ -75,32 +94,25 @@ function getMonthViewDays(year, month){
 
     //days before current month
     for (let index = ((prevMonthLength - 7) + 1) + ((7 - firstMonthDay) + 1); index < prevMonthLength+1; index++) {
-        result.push({date: index, currentMonth: false, currentDay: false})
+        result.push({date: new Date(year, month-1, index), currentMonth: false, isToday: false})
     }
 
     //current Month
     const monthLength = new Date(year, month+1, 0).getDate()
+
     for (let index = 1; index < monthLength+1; index++) {
-        const isToday = isSameDate(today, new Date(currentYear, currentMonth, index))
-        result.push({date: index, currentMonth: true, currentDay: isToday})
+        const isToday = isSameDate(today, new Date(newDate.getFullYear(), newDate.getMonth(), index))
+        result.push({date: new Date(year, month, index), currentMonth: true, isToday: isToday})
     }
 
-    const remainder = (DAYS_IN_WEEK * CALENDAR_ROWS) - result.length
+    const remainder = (WEEKDAYS * CALENDAR_ROWS) - result.length
 
     //days after current month
     for (let index = 1; index < remainder+1; index++) {
-        result.push({date: index, currentMonth: false, currentDay: false})
+        result.push({date: new Date(year, month+1, index), currentMonth: false, isToday: false})
     }
 
     return result
 }
 
-function isSameDate(date1, date2){
-    const year = date1.getFullYear() === date2.getFullYear() ? true : false 
-    const month = date1.getMonth() === date2.getMonth() ? true : false 
-    const date = date1.getDate() === date2.getDate() ? true : false 
-
-    return year && month && date
-}
-
-fillMonth(currentYear, currentMonth)
+switchMonth( selectedDate )
