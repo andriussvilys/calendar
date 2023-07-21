@@ -1,4 +1,5 @@
-import { isSameDate, isSameWeek, getWeekDates, selectedDate, getToday, HOUR_COUNT } from "../js/dateManipulation.js"
+import { isSameDate, isSameWeek, getWeekDates, getToday, HOUR_COUNT } from "../js/dateManipulation.js"
+import {selectedDate} from './state.js'
 
 const ROW_COUNT = 25
 const LOCALE = 'us-US'
@@ -127,7 +128,7 @@ const generateWeekView = (date) => {
 
 export const switchWeekView = (newDate) => {
 
-    if(!isSameWeek(selectedDate, newDate)){
+    if(!isSameWeek(selectedDate.value, selectedDate.prev)){
 
         const wrapper = document.querySelector('.weekView-wrapper')
         const weekView_current = document.querySelector('.weekView-main')
@@ -135,19 +136,16 @@ export const switchWeekView = (newDate) => {
         
         wrapper.appendChild(weekView_new)
 
-        const slideInClass = newDate > selectedDate ? 'slideIn_ltr' : 'slideIn_rtl'
+        const slideInClass = newDate > selectedDate.value ? 'slideIn_ltr' : 'slideIn_rtl'
 
         weekView_new.classList.add(slideInClass)
         
         setTimeout(() => {
-            weekView_current.remove()
+            weekView_current?.remove()
         }, 200);
 
     }
 
 }
 
-const today = getToday()
-const wrapper = document.querySelector('.weekView-wrapper')
-const newWeekView = generateWeekView( today )
-wrapper.appendChild(newWeekView)
+selectedDate.addListener( switchWeekView )

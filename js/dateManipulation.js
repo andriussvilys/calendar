@@ -6,6 +6,8 @@ export const getToday = () => new Date(Date.now())
 export let selectedDate = getToday()
 
 export const isSameWeek = (date1, date2) => {
+    if(!date1 || !date2) return false
+
     const week = getWeekDates(date1)
     const result = week.find(item => isSameDate(item, date2))
     return result ? true : false
@@ -44,12 +46,4 @@ export const incrementDay = (date, incrValue) => {
 
 export const incrementMonth = (date, incrValue) => {
     return new Date(date.getFullYear(), date.getMonth() + incrValue, 15)
-}
-
-export const updateCalendarLabels = ( parentElem, date ) => {    
-    const monthLabel = parentElem.querySelector("[data-calendarLabel='month']")
-    const yearLabel = parentElem.querySelector("[data-calendarLabel='year']")
-
-    monthLabel.innerHTML = date.toLocaleDateString('us-US', {month: 'long'})
-    yearLabel.innerHTML = date.getFullYear()
 }
