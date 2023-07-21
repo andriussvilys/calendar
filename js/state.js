@@ -1,7 +1,7 @@
 import { getToday } from "./dateManipulation.js"
 
-const State = function(  ){
-    this.value = null
+const State = function( data ){
+    this.value = data
     this.prev = null
 
     this.listeners = []
@@ -18,10 +18,5 @@ const State = function(  ){
 
 }
 
-export const selectedDate = new State()
-export const selectedMonth = new State()
-
-setTimeout(() => {
-    selectedDate.setState( getToday() )
-    selectedMonth.setState( selectedDate.value )
-}, 400);
+export const selectedDate = new State( getToday())
+export const selectedMonth = new State(getToday())

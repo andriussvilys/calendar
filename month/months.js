@@ -1,5 +1,4 @@
-import { isSameDate, getToday, WEEKDAYS, incrementMonth } from "../js/dateManipulation.js"
-import { switchWeekView } from "../js/weekView.js"
+import { isSameDate, getToday, WEEKDAYS, incrementMonth, LOCALE } from "../js/dateManipulation.js"
 import { selectedDate, selectedMonth } from '../js/state.js'
 
 const CALENDAR_ROWS = 6
@@ -66,7 +65,7 @@ const updateCalendarLabels = ( date ) => {
     const monthLabel = parentElem.querySelector("[data-calendarLabel='month']")
     const yearLabel = parentElem.querySelector("[data-calendarLabel='year']")
 
-    monthLabel.innerHTML = date.toLocaleDateString('us-US', {month: 'long'})
+    monthLabel.innerHTML = date.toLocaleDateString(LOCALE, {month: 'long'})
     yearLabel.innerHTML = date.getFullYear()
 }
 
@@ -105,7 +104,7 @@ const getMonthViewDays = (newDate) => {
     return result
 }
 
-// switchMonth( selectedDate.value )
+switchMonth( selectedDate.value )
 
 const onDateChange = ( date ) => {
     switchMonth( date )

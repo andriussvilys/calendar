@@ -1,9 +1,8 @@
 export const WEEKDAYS = 7
 export const HOUR_COUNT = 24
+export const LOCALE = 'us-US'
 
 export const getToday = () => new Date(Date.now())
-
-export let selectedDate = getToday()
 
 export const isSameWeek = (date1, date2) => {
     if(!date1 || !date2) return false
@@ -34,10 +33,6 @@ export const getWeekDates = (date) => {
 
     return weekDays
 
-}
-
-export const setSelectedDate = (date) => {
-    selectedDate = date
 }
 
 export const incrementDay = (date, incrValue) => {
