@@ -5,18 +5,19 @@ const State = function( data ){
     this.prev = null
 
     this.listeners = []
-
-    this.addListener = ( cb ) => {
-        this.listeners.push( cb )
-    }
-
-    this.setState = (value) => {
-        this.prev = this.value
-        this.value = value
-        this.listeners.forEach( callback => callback( this.value ))
-    }
-
 }
+
+State.prototype.addListener = function( cb ){
+    this.listeners.push( cb )
+}
+
+State.prototype.setState = function(value){
+    this.prev = this.value
+    this.value = value
+    this.listeners.forEach( callback => callback( this.value ))
+}
+
+console.log(State.prototype)
 
 export const selectedDate = new State( getToday())
 export const selectedMonth = new State(getToday())
