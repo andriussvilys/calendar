@@ -100,7 +100,7 @@ const createHoursColumn = () => {
     container.appendChild(headerCell)
 
     for (let index = 1; index < HOUR_COUNT; index++) {
-        const cell = createHourCell(new Date(0, 0, 0, 0 + index))
+        const cell = createHourCell( new Date(0, 0, 0, 0 + index) )
         container.appendChild(cell)
     }
 
@@ -125,32 +125,29 @@ const generateWeekView = (date) => {
 
 }
 
-export const switchWeekView = (newDate) => {
+export const switchWeekView = ( nextDate, prevDate ) => {
 
     const wrapper = document.querySelector('.weekView-wrapper')
     const weekView_current = document.querySelector('.weekView-main')
 
-    if(!isSameWeek(selectedDate.value, selectedDate.prev)){
+    
+    const weekView_new = generateWeekView(nextDate)
+    wrapper.appendChild(weekView_new)
+    
+    if(prevDate){
+        if(!isSameWeek(nextDate, prevDate)){
+                const slideInClass = nextDate > prevDate ? 'slideIn_ltr' : 'slideIn_rtl'
+                weekView_new.classList.add(slideInClass)
+            
+            setTimeout(() => {
+                weekView_current?.remove()
+            }, 200);
 
-        const weekView_new = generateWeekView(newDate)
-        wrapper.appendChild(weekView_new)
-
-        if(wrapper.dataset.loaded){
-            const slideInClass = selectedDate.value > selectedDate.prev ? 'slideIn_ltr' : 'slideIn_rtl'
-            weekView_new.classList.add(slideInClass)
         }
-        else{
-            wrapper.dataset.loaded = true
-        }
-        
-        setTimeout(() => {
-            weekView_current?.remove()
-        }, 200);
-
     }
 
 }
 
-switchWeekView(selectedDate.value)
+switchWeekView( selectedDate.value, selectedDate.prev )
 
 selectedDate.addListener( switchWeekView )

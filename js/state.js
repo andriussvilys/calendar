@@ -14,10 +14,8 @@ State.prototype.addListener = function( cb ){
 State.prototype.setState = function(value){
     this.prev = this.value
     this.value = value
-    this.listeners.forEach( callback => callback( this.value ))
+    this.listeners.forEach( callback => callback( this.value, this.prev ))
 }
-
-console.log(State.prototype)
 
 export const selectedDate = new State( getToday())
 export const selectedMonth = new State(getToday())

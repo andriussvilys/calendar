@@ -1,4 +1,4 @@
-import { getToday, WEEKDAYS, LOCALE } from "./dateManipulation.js"
+import { getToday, incrementDay, WEEKDAYS, LOCALE } from "./dateManipulation.js"
 import { selectedDate } from './state.js'
 
 const button_today = document.querySelector("#button_today")
@@ -18,11 +18,11 @@ headerControls_next.addEventListener('click', () => {
 })
 
 const handleNextPrevClick = (direction) => {
-    const newDate = new Date( selectedDate.value.getFullYear(), selectedDate.value.getMonth(), selectedDate.value.getDate() + WEEKDAYS*direction ) 
+    const newDate = incrementDay( selectedDate.value, WEEKDAYS*direction)
     selectedDate.setState( newDate )
 }
 
-const updateCalendarLabels = ( date ) => {
+const updateMonthYearLabels = ( date ) => {
     
     const parentElem = document.querySelector('header')
     const monthLabel = parentElem.querySelector("[data-calendarLabel='month']")
@@ -32,4 +32,4 @@ const updateCalendarLabels = ( date ) => {
     yearLabel.innerHTML = date.getFullYear()
 }
 
-selectedDate.addListener( updateCalendarLabels )
+selectedDate.addListener( updateMonthYearLabels )

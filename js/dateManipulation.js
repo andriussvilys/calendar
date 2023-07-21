@@ -5,8 +5,6 @@ export const LOCALE = 'us-US'
 export const getToday = () => new Date(Date.now())
 
 export const isSameWeek = (date1, date2) => {
-    if(!date1 || !date2) return false
-
     const week = getWeekDates(date1)
     const result = week.find(item => isSameDate(item, date2))
     return result ? true : false

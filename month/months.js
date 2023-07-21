@@ -32,13 +32,11 @@ const generateDayCell = (content) => {
     container.classList = `container monthView-cell`
 
     const button = document.createElement('button')
-    button.classList = `button button_round monthView-button ${content.isToday ? 'button_today' : ''} ${content.currentMonth ? 'selectedMonth' : ''}`
+    button.classList = `button button_round monthView-button ${content.isToday ? 'button_today' : ''}`
 
     button.innerHTML = `${ new Date(content.date).getDate()}`
 
     button.dataset.timestamp = content.date.valueOf()
-    button.dataset.currentMonth = content.currentMonth
-    button.dataset.currentDay = content.isToday
 
     button.addEventListener('click', onMonthButtonClick)
 
@@ -60,7 +58,7 @@ export const switchMonth = ( newDate ) => {
 
 }
 
-const updateCalendarLabels = ( date ) => {    
+const updateMonthYearLabels = ( date ) => {    
     const parentElem = document.querySelector('.monthView-label')
     const monthLabel = parentElem.querySelector("[data-calendarLabel='month']")
     const yearLabel = parentElem.querySelector("[data-calendarLabel='year']")
@@ -83,7 +81,7 @@ const getMonthViewDays = (newDate) => {
 
     //days before current month
     for (let index = ((prevMonthLength - 7) + 1) + ((7 - firstMonthDay) + 1); index < prevMonthLength+1; index++) {
-        result.push({date: new Date(year, month-1, index), currentMonth: false, isToday: false})
+        result.push({date: new Date(year, month-1, index), isToday: false})
     }
 
     //current Month
@@ -91,14 +89,14 @@ const getMonthViewDays = (newDate) => {
 
     for (let index = 1; index < monthLength+1; index++) {
         const isToday = isSameDate(today, new Date(newDate.getFullYear(), newDate.getMonth(), index))
-        result.push({date: new Date(year, month, index), currentMonth: true, isToday: isToday})
+        result.push({date: new Date(year, month, index), isToday: isToday})
     }
 
     const remainder = (WEEKDAYS * CALENDAR_ROWS) - result.length
 
     //days after current month
     for (let index = 1; index < remainder+1; index++) {
-        result.push({date: new Date(year, month+1, index), currentMonth: false, isToday: false})
+        result.push({date: new Date(year, month+1, index), isToday: false})
     }
 
     return result
@@ -109,12 +107,12 @@ switchMonth( selectedDate.value )
 const onDateChange = ( date ) => {
     switchMonth( date )
     toggleSelectedSecondary( date )
-    updateCalendarLabels( date)
+    updateMonthYearLabels( date)
 }
 
 const onMonthChange = (date) => {
     switchMonth( date )
-    updateCalendarLabels( date)
+    updateMonthYearLabels( date)
 }
 
 selectedDate.addListener( onDateChange )
