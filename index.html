@@ -11,7 +11,7 @@
     <script defer type="module" src="./js/dateManipulation.js"></script>
     <script defer type="module" src="./js/state.js"></script>
     <script defer type="module" src="./js/weekView.js"></script>
-    <script defer src="./js/event.js"></script>
+    <script defer type="module" src="./js/event.js"></script>
     <script defer type="module" src="./month/months.js"></script>
     <script defer type="module" src="./js/header.js"></script>
 
@@ -83,13 +83,14 @@
             
         </section>
 
-        <div id="eventModal" class="event-wrapper display-none">
+        <!-- <div id="eventModal" class="event-wrapper display-none"> -->
+        <div id="eventModal" class="event-wrapper">
             <form class="event-container">
 
                 <div class="container event-title">
                     <div class="event-left"></div>
                     <div class="event-right">
-                        <input class="event-input event-titleInput" type="text" placeholder="Add title">
+                        <input data-key="title" id="event-title" class="event-input event-titleInput" type="text" placeholder="Add title">
                     </div>
                 </div>
     
@@ -99,11 +100,11 @@
                     </div>
 
                     <div class="event-right">
-                        <input class="event-input" type="date">
+                        <input data-key="date" id="event-date" class="event-input" type="date">
                         <div class="event-time">
-                            <input class="event-input event-time-input" type="time">
+                            <input data-key="startTime" id="event-startTime" class="event-input event-time-input" type="time">
                             <span>—</span>
-                            <input class="event-input event-time-input" type="time">
+                            <input data-key="endTime" id="event-endTime" class="event-input event-time-input" type="time">
                         </div>
                     </div>
                 </div>
@@ -114,13 +115,13 @@
                     </div>
 
                     <div class="event-right">
-                        <textarea class="event-input event-textarea" placeholder="Description"></textarea>
+                        <textarea data-key="description" id="event-description" class="event-input event-textarea" placeholder="Description"></textarea>
                     </div>
                 </div>
     
                 <div class="container event-controls">
-                    <button class="button button_secondary button-cancel" id="event-cancel">Cancel</button>
-                    <button class="button button_secondary button-save" id="event-save">Save</button>
+                    <button class="button button_secondary button-cancel" id="event-cancel" type="reset">Cancel</button>
+                    <button class="button button_secondary button-save" id="event-save" type="submit">Save</button>
                 </div>
             </form>
         </div>
