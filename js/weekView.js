@@ -239,7 +239,9 @@ const generateWeekView = (date) => {
 
     weekView.addEventListener('click', e => {
         e.stopPropagation()
-        displayModal(e, new Date( parseInt(e.target.dataset.timestamp) ))
+        if(e.target.dataset.timestamp){
+            displayModal(e, new Date( parseInt(e.target.dataset.timestamp) ))
+        }
     })
 
     const weekDates = getWeekDates(date)
