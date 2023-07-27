@@ -53,11 +53,13 @@ const sortByKey = (objectArray, key) => {
 
 const createTimeslot = ( timeslotArray ) => {
 
+    //longest events should appear on left side of timeslot
     const sorted = sortByKey(timeslotArray, 'duration')
 
     const container = document.createElement('div')
     container.classList = 'timeslot'
 
+    // eventBubble width depends on the number of rightSiblingCount
     sorted.forEach((event, index) => {
 
         const rightSiblingCount = timeslotArray.slice(index, timeslotArray.left).length
@@ -98,6 +100,7 @@ const createDayCell = (timestamp) => {
         } )
 
 
+        // timeslot width depends on the size of surrounding timeslots
         timeSlotElements.forEach((elem, index) => {
             if(index > 0){
                 const prevTimeslotSize = timeSlots.slice(0, index).reduce((acc, prevArray) => {

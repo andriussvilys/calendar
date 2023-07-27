@@ -139,11 +139,10 @@
 }
 
 .eventBubble-container{
-    padding: 0.1em 0.6em;
+    padding: 0.05em 0.4em;
     background-color: var(--eventBubbleBlue);
     color: white;
-    font-size: 0.7em;
-    margin-bottom: 1px;
+    font-size: 0.8em;
     border-radius: 6px;
     overflow: hidden;
     position: absolute;
