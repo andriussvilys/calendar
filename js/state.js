@@ -3,7 +3,6 @@ import { getToday } from "./dateManipulation.js"
 const State = function( data ){
     this.value = data
     this.prev = null
-
     this.listeners = []
 }
 

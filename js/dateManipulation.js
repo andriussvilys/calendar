@@ -1,6 +1,7 @@
 export const WEEKDAYS = 7
 export const HOUR_COUNT = 24
 export const LOCALE = 'us-US'
+export const MILISECOND_HOUR = 60 * 60 * 1000
 
 export const getToday = () => new Date(Date.now())
 

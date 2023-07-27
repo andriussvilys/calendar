@@ -1,7 +1,123 @@
 import { isSameDate, isSameWeek, getWeekDates, getToday, HOUR_COUNT, LOCALE } from "../js/dateManipulation.js"
 import {selectedDate} from './state.js'
+import {findByHour} from './database.js'
 
-const ROW_COUNT = 25
+const EVENTBUBBLE_OFFSET = 25
+const EVENTBUBBLE_CONTAINER_OFFSET = 20
+
+const createEventCard = () => {
+    
+}
+
+const TimeSlot = () => {
+    this.offsetLeft = null,
+    this.parentWidth = 100 - this.offsetLeft
+}
+
+const DayCell = (events) => {
+    this.timeSlots = [[],[],[],[]]
+}
+
+const createEventBubble = (event) => {
+    const container = document.createElement('div')
+    container.classList.add('eventBubble-container')
+
+        const title = document.createElement('span')
+        title.classList.add('eventBubble-title')
+        title.innerHTML = event.title + ', '
+        container.append(title)
+
+    const time = document.createElement('span')
+    const startDate = new Date(event.startDate)
+    time.innerHTML = startDate.toTimeString().slice(0, 5)
+    time.innerHTML += '—'
+    const endDate = new Date(event.endDate)
+    time.innerHTML += endDate.toTimeString().slice(0, 5)
+
+    container.append(time)
+    return container
+}
+
+const sortByKey = (objectArray, key) => {
+    return objectArray.sort( (a,b) => {
+        if(a[key] < b[key]){
+            return 1
+        }
+        if(b[key] < a[key]){
+            return -1
+        }
+        return 0
+
+    })
+}
+
+const createTimeslot = ( timeslotArray ) => {
+
+    const sorted = sortByKey(timeslotArray, 'duration')
+
+    const container = document.createElement('div')
+    container.classList = 'timeslot'
+
+    sorted.forEach((event, index) => {
+        const eventBubble = createEventBubble(event)
+        eventBubble.style.height = `${event.duration * EVENTBUBBLE_OFFSET}%`
+        const offset = index * EVENTBUBBLE_OFFSET 
+
+        const hasNext = index < timeslotArray.length - 1 ? 1 : 0
+        const widthOffset = hasNext * 20
+        // const offset = (0) * EVENTBUBBLE_OFFSET 
+        
+        eventBubble.style.left = `${offset}%`
+        eventBubble.style.width = `${100 - offset - widthOffset}%`
+        container.append(eventBubble)
+    })
+
+    return container
+}
+
+const createDayCell = (timestamp) => {
+    const cell = document.createElement('div')
+    cell.classList = 'day-border dayCell'
+    cell.dataset.timestamp = timestamp.valueOf()
+    const events = findByHour(timestamp)
+
+    if(events.length > 0){
+
+        const sorted = sortByKey(events, 'startDate')
+        
+        const timeSlots = [[],[],[],[]]
+        sorted.forEach(event => {
+            timeSlots[event.timeSlot].push(event)
+        })
+
+        const timeSlotElements = timeSlots.map( timeslotArray => {
+            return createTimeslot(timeslotArray)
+        } )
+
+        console.log(timeSlots)
+
+        timeSlotElements.forEach((elem, index) => {
+            if(index > 0){
+                const prevTimeslotSize = timeSlots.slice(0, index).reduce((acc, prevArray) => {
+                    return Math.max(acc, prevArray.length)
+                }, 0)
+                const nextTimeSlotSize =  timeSlots.slice(index+1, 4).reduce((acc, nextArr) => {
+                    return Math.max(acc, nextArr.length-1)
+                }, 0)
+                // const prevTimeslotSize = 0
+                // const nextTimeSlotSize = 0
+                const offset = Math.max(prevTimeslotSize, nextTimeSlotSize)
+                elem.style.left = `${prevTimeslotSize * 20}%`
+                elem.style.width = `${100 -  offset * 20}%`
+                elem.style.top = `${index * EVENTBUBBLE_OFFSET}%`
+            }
+            cell.append(elem)
+        })
+
+    }
+
+    return cell
+}
 
 const createDayColumn = (date) => {
 
@@ -35,9 +151,10 @@ const createDayColumn = (date) => {
 
     columnContainer.appendChild(headerCell)
 
-    for (let index = 0; index < ROW_COUNT-1; index++) {
-        const cell = document.createElement('div')
-        cell.classList.add('day-border')
+    for (let index = 0; index < HOUR_COUNT; index++) {
+        const timestamp = new Date(date)
+        timestamp.setHours(index)
+        const cell = createDayCell(timestamp)
         columnContainer.appendChild(cell)
     }
 

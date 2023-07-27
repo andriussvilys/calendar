@@ -33,3 +33,4 @@ const updateMonthYearLabels = ( date ) => {
 }
 
 selectedDate.addListener( updateMonthYearLabels )
+updateMonthYearLabels(selectedDate.value)

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="./css/event.css">
     
     <script defer type="module" src="./js/dateManipulation.js"></script>
+    <script defer type="module" src="./js/database.js"></script>
     <script defer type="module" src="./js/state.js"></script>
     <script defer type="module" src="./js/weekView.js"></script>
     <script defer type="module" src="./js/event.js"></script>
@@ -85,12 +86,12 @@
 
         <!-- <div id="eventModal" class="event-wrapper display-none"> -->
         <div id="eventModal" class="event-wrapper">
-            <form class="event-container">
+            <form id="eventForm" class="event-container">
 
                 <div class="container event-title">
                     <div class="event-left"></div>
                     <div class="event-right">
-                        <input data-key="title" id="event-title" class="event-input event-titleInput" type="text" placeholder="Add title">
+                        <input data-key="title" id="event-title" class="event-input event-titleInput" type="text" placeholder="Add title" required>
                     </div>
                 </div>
     

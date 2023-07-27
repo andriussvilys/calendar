@@ -117,3 +117,5 @@ const onMonthChange = (date) => {
 
 selectedDate.addListener( onDateChange )
 selectedMonth.addListener( onMonthChange )
+
+updateMonthYearLabels(selectedDate.value)
