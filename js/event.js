@@ -44,12 +44,12 @@ const collectFormData = () => {
         formData.endDate = Date.parse(endDate)
 
         formData.duration = Math.ceil( (formData.endDate - formData.startDate) / (MILISECOND_HOUR/4) )
-        // console.log({startTime: formData.startDate, endTime: formData.endDate, diff: formData.endDate - formData.startDate, MILISECOND_HOUR, duration: formData.duration})
         formData.timeSlot = Math.floor( startTime.minutes /  TIMESLOT_LENGTH)
     }
 
     formData.setId()
     formData.createdAt = getToday().valueOf()
+    formData.description = inputData.description
 
     localStorage.setItem(formData.id, JSON.stringify(formData))
     

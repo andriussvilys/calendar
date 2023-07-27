@@ -4,29 +4,106 @@ import {findByHour} from './database.js'
 import { displayModal } from "./event.js"
 
 const EVENTBUBBLE_OFFSET = 25
-const EVENTBUBBLE_CONTAINER_OFFSET = 20
 
-const createEventCard = () => {
-    
+const craeteEventCardElement = () => {
+    const container = document.createElement('div')
+    container.classList = "container event-title"
+    const eventLeft = document.createElement('div')
+    eventLeft.classList = "event-left"
+    const eventRight = document.createElement('div')
+    eventRight.classList = "event-right"
 }
 
-const TimeSlot = () => {
-    this.offsetLeft = null,
-    this.parentWidth = 100 - this.offsetLeft
-}
+const createEventCard = (eventId, targetElem) => {
 
-const DayCell = (events) => {
-    this.timeSlots = [[],[],[],[]]
+    const event = JSON.parse(localStorage.getItem(eventId))
+    // console.log(eventId, targetElem)
+
+    const container = document.createElement('div')
+    container.classList = "container eventCard"
+
+    // console.log(DOMevent)
+    const DOMrect = targetElem.getBoundingClientRect()
+    const elemCenter = DOMrect.left + DOMrect.width / 2
+    const HTMLbodyWidth = document.querySelector('body').getBoundingClientRect().width
+
+    console.log({elemCenter, bodyCenter: HTMLbodyWidth/2})
+    if(elemCenter > (HTMLbodyWidth/2)){
+        container.classList.add("slideIn_ltr")
+        container.style.right = '100%'
+    }
+    else{
+        container.classList.add("slideIn_rtl")
+        container.style.left = '100%'
+    }
+
+
+    const controls = document.createElement('div')
+    controls.classList = ("container eventCard-controls")
+
+    const eventCardButtonClassList = "button button_round eventCard-button"
+    const deleteButton = document.createElement('button')
+    deleteButton.classList = eventCardButtonClassList
+    const deleteIcon = document.createElement('img')
+    deleteIcon.src = '../images/delete_FILL0_wght400_GRAD0_opsz48.svg'
+    deleteButton.append(deleteIcon)
+    deleteButton.addEventListener('click', () => {
+        localStorage.removeItem(eventId)
+        container.remove()
+    })
+    controls.append(deleteButton)
+
+    const closeButton = document.createElement('button')
+    closeButton.classList = eventCardButtonClassList
+    const closeIcon = document.createElement('img')
+    closeIcon.src = '../images/close_FILL0_wght400_GRAD0_opsz48.svg'
+    closeButton.append(closeIcon)
+    closeButton.addEventListener('click', () => {
+        container.remove()
+    })
+    controls.append(closeButton)
+
+    container.append(controls)
+
+    const eventCardData = document.createElement('div')
+    eventCardData.classList = "container eventCardData"
+
+    const title = document.createElement('h2')
+    title.innerHTML = event.title
+    eventCardData.append(title)
+
+    const date = document.createElement('p')
+
+    const startDate = new Date(event.startDate)
+    const dateString = startDate.toLocaleDateString(LOCALE, {weekday:'long', month: 'long', day: 'numeric'})
+
+    const timeString_start = startDate.toLocaleTimeString('us-US', {hour: 'numeric', minute: 'numeric', hour12: true})
+    const timeString_end = new Date(event.endDate).toLocaleTimeString('us-US', {hour: 'numeric', minute: 'numeric', hour12: true})
+
+    date.innerHTML = `<span>${dateString}</span><span> ⋅ </span><span>${timeString_start} — ${timeString_end}</span>`
+    eventCardData.append(date)
+
+    if(event.description){
+        const description = document.createElement('p')
+        description.classList = "eventCardData-description"
+        description.innerHTML = event.description
+        eventCardData.append(description)
+    }
+
+    container.append(eventCardData)
+
+    return container
 }
 
 const createEventBubble = (event) => {
     const container = document.createElement('div')
     container.classList.add('eventBubble-container')
+    container.dataset.eventId = event.id
 
-        const title = document.createElement('span')
-        title.classList.add('eventBubble-title')
-        title.innerHTML = event.title + ', '
-        container.append(title)
+    const title = document.createElement('span')
+    title.classList.add('eventBubble-title')
+    title.innerHTML = event.title + ', '
+    container.append(title)
 
     const time = document.createElement('span')
     const startDate = new Date(event.startDate)
@@ -241,6 +318,11 @@ const generateWeekView = (date) => {
         e.stopPropagation()
         if(e.target.dataset.timestamp){
             displayModal(e, new Date( parseInt(e.target.dataset.timestamp) ))
+        }
+        else if(e.target.dataset.eventId){
+            console.log(e.target.getBoundingClientRect())
+            const eventCard = createEventCard(e.target.dataset.eventId, e.target)
+            e.target.parentElement.append(eventCard)
         }
     })
 

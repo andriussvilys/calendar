@@ -86,9 +86,12 @@ main{
     width: 2em;
     opacity: 0.6;
 }
-.button-controls img{
+.button img{
     width: 100%;
 }
+/* .button-controls img{
+    width: 100%;
+} */
 
 .button_round{
     border-radius: 999px;
