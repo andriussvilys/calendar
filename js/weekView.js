@@ -59,16 +59,19 @@ const createTimeslot = ( timeslotArray ) => {
     container.classList = 'timeslot'
 
     sorted.forEach((event, index) => {
+
+        const rightSiblingCount = timeslotArray.slice(index, timeslotArray.left).length
         const eventBubble = createEventBubble(event)
         eventBubble.style.height = `${event.duration * EVENTBUBBLE_OFFSET}%`
         const offset = index * EVENTBUBBLE_OFFSET 
 
         const hasNext = index < timeslotArray.length - 1 ? 1 : 0
-        const widthOffset = hasNext * 20
-        // const offset = (0) * EVENTBUBBLE_OFFSET 
         
         eventBubble.style.left = `${offset}%`
-        eventBubble.style.width = `${100 - offset - widthOffset}%`
+        // const widthOffset = hasNext * 20
+        // eventBubble.style.width = `${100 - offset - widthOffset}%`
+        const rightWidthReduction = Math.max(0, rightSiblingCount-1) * EVENTBUBBLE_OFFSET
+        eventBubble.style.width = `${100 - offset -  rightWidthReduction}%`
         container.append(eventBubble)
     })
 
@@ -94,7 +97,6 @@ const createDayCell = (timestamp) => {
             return createTimeslot(timeslotArray)
         } )
 
-        console.log(timeSlots)
 
         timeSlotElements.forEach((elem, index) => {
             if(index > 0){
