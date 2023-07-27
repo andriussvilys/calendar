@@ -63,7 +63,7 @@ const eventButton_save = document.querySelector("#event-save")
 eventButton_save.addEventListener('click', e => {
     try{
         collectFormData()
-        toggleDisplay(e)
+        toggleDisplay()
         e.preventDefault()
     }
     catch(e){
@@ -76,23 +76,28 @@ const eventDate = document.querySelector('#event-date')
 const startTime = document.querySelector('#event-startTime')
 const endTime = document.querySelector('#event-endTime')
 
-const setDefaultInputValues = () => {
-    const now = getToday()
-    const time = now.toTimeString().slice(0, 5)
-    eventDate.value = now.toJSON().slice(0,10)
+const setFormInputValues = (date) => {
+    const time = date.toTimeString().slice(0, 5)
+    console.log({date, time})
+    eventDate.value = date.toJSON().slice(0,10)
     startTime.value = time
     endTime.value = time
 }
 
 eventButtons_create.forEach(btn => {
     btn.addEventListener('click', (e) => {
-        toggleDisplay(e)
-        setDefaultInputValues()
+        displayModal(e, getToday() )
     })
 })
 
+export const displayModal = (e, date) => {
+    e.preventDefault()
+    toggleDisplay()
+    setFormInputValues( date )
+}
+
 eventButton_cancel.addEventListener('click', (e) => {
-    toggleDisplay(e)
+    toggleDisplay()
 })
 
 const toggleDisplay = () => {

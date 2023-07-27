@@ -1,6 +1,7 @@
 import { isSameDate, isSameWeek, getWeekDates, getToday, HOUR_COUNT, LOCALE } from "../js/dateManipulation.js"
 import {selectedDate} from './state.js'
 import {findByHour} from './database.js'
+import { displayModal } from "./event.js"
 
 const EVENTBUBBLE_OFFSET = 25
 const EVENTBUBBLE_CONTAINER_OFFSET = 20
@@ -235,6 +236,11 @@ const generateWeekView = (date) => {
     weekView.classList = "weekView-main"
 
     weekView.appendChild( createHoursColumn() )
+
+    weekView.addEventListener('click', e => {
+        e.stopPropagation()
+        displayModal(e, new Date( parseInt(e.target.dataset.timestamp) ))
+    })
 
     const weekDates = getWeekDates(date)
 
