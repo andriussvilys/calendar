@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="./css/event.css">
     
     <script defer type="module" src="./js/dateManipulation.js"></script>
-    <script defer type="module" src="./js/database.js"></script>
+    <script type="module" src="./js/database.js"></script>
     <script defer type="module" src="./js/state.js"></script>
     <script defer type="module" src="./js/weekView.js"></script>
     <script defer type="module" src="./js/event.js"></script>
@@ -81,51 +81,51 @@
         </aside>
 
         <section class="weekView-wrapper" >
-            
+            <div id="eventModal" class="event-wrapper container display-none">
+                <form id="eventForm" class="event-container">
+    
+                    <div class="container event-title">
+                        <div class="event-left"></div>
+                        <div class="event-right">
+                            <input data-key="title" id="event-title" class="event-input event-titleInput" type="text" placeholder="Add title" required>
+                        </div>
+                    </div>
+        
+                    <div class="container event-timeAndDate">
+                        <div class="event-left">
+                            <img src="./images/schedule_FILL0_wght400_GRAD0_opsz48.svg" alt="clock icon">
+                        </div>
+    
+                        <div class="event-right">
+                            <input data-key="date" id="event-date" class="event-input" type="date">
+                            <div class="event-time">
+                                <input data-key="startTime" id="event-startTime" class="event-input event-time-input" type="time">
+                                <span>—</span>
+                                <input data-key="endTime" id="event-endTime" class="event-input event-time-input" type="time">
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="container event-description">
+                        <div class="event-left">
+                            <img src="./images/notes_FILL0_wght400_GRAD0_opsz48.svg" alt="notebook icon">
+                        </div>
+    
+                        <div class="event-right">
+                            <textarea data-key="description" id="event-description" class="event-input event-textarea" placeholder="Description"></textarea>
+                        </div>
+                    </div>
+        
+                    <div class="container event-controls">
+                        <button class="button button_secondary button-cancel" id="event-cancel" type="reset">Cancel</button>
+                        <button class="button button_secondary button-save" id="event-save" type="submit">Save</button>
+                    </div>
+                </form>
+            </div>
         </section>
 
         <!-- <div id="eventModal" class="event-wrapper display-none"> -->
-        <div id="eventModal" class="event-wrapper display-none">
-            <form id="eventForm" class="event-container">
 
-                <div class="container event-title">
-                    <div class="event-left"></div>
-                    <div class="event-right">
-                        <input data-key="title" id="event-title" class="event-input event-titleInput" type="text" placeholder="Add title" required>
-                    </div>
-                </div>
-    
-                <div class="container event-timeAndDate">
-                    <div class="event-left">
-                        <img src="./images/schedule_FILL0_wght400_GRAD0_opsz48.svg" alt="clock icon">
-                    </div>
-
-                    <div class="event-right">
-                        <input data-key="date" id="event-date" class="event-input" type="date">
-                        <div class="event-time">
-                            <input data-key="startTime" id="event-startTime" class="event-input event-time-input" type="time">
-                            <span>—</span>
-                            <input data-key="endTime" id="event-endTime" class="event-input event-time-input" type="time">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="container event-description">
-                    <div class="event-left">
-                        <img src="./images/notes_FILL0_wght400_GRAD0_opsz48.svg" alt="notebook icon">
-                    </div>
-
-                    <div class="event-right">
-                        <textarea data-key="description" id="event-description" class="event-input event-textarea" placeholder="Description"></textarea>
-                    </div>
-                </div>
-    
-                <div class="container event-controls">
-                    <button class="button button_secondary button-cancel" id="event-cancel" type="reset">Cancel</button>
-                    <button class="button button_secondary button-save" id="event-save" type="submit">Save</button>
-                </div>
-            </form>
-        </div>
 
     </main>
 </body>

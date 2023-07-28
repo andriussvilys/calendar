@@ -4,6 +4,15 @@ import { selectedDate, storageState } from "./state.js"
 
 const TIMESLOT_LENGTH = 15
 
+const eventModal = document.querySelector("#eventModal")
+const eventForm = document.querySelector("#eventForm")
+const eventButtons_create = document.querySelectorAll('.create');
+const eventButton_cancel = document.querySelector("#event-cancel")
+const eventButton_save = document.querySelector("#event-save")
+const eventDate = document.querySelector('#event-date')
+const startTime = document.querySelector('#event-startTime')
+const endTime = document.querySelector('#event-endTime')
+
 //takes in string in form of 'HH:MM'
 const parseTimeString = (string) => {
     const result = {}
@@ -46,6 +55,7 @@ const collectFormData = () => {
 
         formData.duration = Math.ceil( (formData.endDate - formData.startDate) / (MILISECOND_HOUR/4) )
         formData.timeSlot = Math.floor( startTime.minutes /  TIMESLOT_LENGTH)
+        formData.cellTimestamp = startDate.setMinutes(0).valueOf()
     }
 
     formData.setId()
@@ -53,14 +63,9 @@ const collectFormData = () => {
     formData.description = inputData.description
 
     localStorage.setItem(formData.id, JSON.stringify(formData))
-    storageState.setState( selectedDate )
+    storageState.setState( formData )
     
 }
-
-const eventButtons_create = document.querySelectorAll('.create');
-const eventModal = document.querySelector("#eventModal")
-const eventButton_cancel = document.querySelector("#event-cancel")
-const eventButton_save = document.querySelector("#event-save")
 
 eventButton_save.addEventListener('click', e => {
     try{
@@ -72,11 +77,6 @@ eventButton_save.addEventListener('click', e => {
         console.error(e)
     }
 })
-
-const title = document.querySelector('#event-title')
-const eventDate = document.querySelector('#event-date')
-const startTime = document.querySelector('#event-startTime')
-const endTime = document.querySelector('#event-endTime')
 
 const setFormInputValues = (date) => {
     const time = date.toTimeString().slice(0, 5)
@@ -94,7 +94,6 @@ eventButtons_create.forEach(btn => {
 })
 
 export const displayModal = (e, date) => {
-    e.preventDefault()
     toggleDisplay()
     setFormInputValues( date )
 }
@@ -105,8 +104,8 @@ eventButton_cancel.addEventListener('click', (e) => {
 
 const toggleDisplay = () => {
     resetForm()
-    const eventModal = document.querySelector("#eventModal")
     eventModal.classList.toggle('display-none')
+    eventForm.classList.add('slideIn_ltr')
 }
 
 const resetForm = () => {

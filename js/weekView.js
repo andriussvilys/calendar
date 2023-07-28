@@ -21,17 +21,14 @@ const sortByKey = (objectArray, key) => {
 const createEventCard = (eventId, targetElem) => {
 
     const event = JSON.parse(localStorage.getItem(eventId))
-    // console.log(eventId, targetElem)
 
     const container = document.createElement('div')
     container.classList = "container eventCard"
 
-    // console.log(DOMevent)
     const DOMrect = targetElem.getBoundingClientRect()
     const elemCenter = DOMrect.left + DOMrect.width / 2
     const HTMLbodyWidth = document.querySelector('body').getBoundingClientRect().width
 
-    console.log({elemCenter, bodyCenter: HTMLbodyWidth/2})
     if(elemCenter > (HTMLbodyWidth/2)){
         container.classList.add("slideIn_ltr")
         container.style.right = '100%'
@@ -40,7 +37,6 @@ const createEventCard = (eventId, targetElem) => {
         container.classList.add("slideIn_rtl")
         container.style.left = '100%'
     }
-
 
     const controls = document.createElement('div')
     controls.classList = ("container eventCard-controls")
@@ -53,6 +49,7 @@ const createEventCard = (eventId, targetElem) => {
     deleteButton.append(deleteIcon)
     deleteButton.addEventListener('click', () => {
         localStorage.removeItem(eventId)
+        storageState.setState( event )
         container.remove()
     })
     controls.append(deleteButton)
@@ -163,23 +160,41 @@ const createTimeslot = ( timeslotArray, index, timestamp) => {
     return container
 }
 
-const createDayCell = (timestamp) => {
+const updateDayCell = ( cellTimestamp, formData) => {
+    
+    if(formData.cellTimestamp === cellTimestamp){
+        const oldCell = document.querySelector(`.dayCell[data-timestamp="${cellTimestamp}"]`)
+        oldCell.innerHTML = ''
+        
+        const newCell = createDayCell(new Date(cellTimestamp))
+        newCell.querySelectorAll('.timeslot').forEach((timeslot) => {
+            oldCell.appendChild(timeslot);
+        })
+    }
+
+}
+
+const createDayCell = (date) => {
 
     const cell = document.createElement('div')
     cell.classList = 'day-border dayCell'
-    cell.dataset.timestamp = timestamp.valueOf()
+    cell.dataset.timestamp = date.valueOf()
 
-    const events = findByHour(timestamp)
+    const events = findByHour(date)
         
     const timeSlots = [[],[],[],[]]
-    
+
     events.forEach(event => {
         timeSlots[event.timeSlot].push(event)
     })
 
     timeSlots.forEach( (timeslotArray, index) => {
-        const timeslot = createTimeslot(timeSlots, index, timestamp)
+        const timeslot = createTimeslot(timeSlots, index, date)
         cell.append(timeslot)
+    } )
+
+    storageState.addListener( ( state, prev) => {
+        updateDayCell( date.valueOf(), state )
     } )
 
     return cell
@@ -220,7 +235,6 @@ const createDayColumn = (date) => {
     for (let index = 0; index < HOUR_COUNT; index++) {
         const timestamp = new Date(date)
         timestamp.setHours(index)
-        // console.log(timestamp)
         const cell = createDayCell(timestamp)
         columnContainer.appendChild(cell)
     }
@@ -303,7 +317,6 @@ const generateWeekView = (date) => {
             displayModal(e, new Date( parseInt(e.target.dataset.timestamp) ))
         }
         else if(e.target.dataset.eventId){
-            console.log(e.target.getBoundingClientRect())
             const eventCard = createEventCard(e.target.dataset.eventId, e.target)
             e.target.parentElement.append(eventCard)
         }
@@ -342,9 +355,11 @@ export const switchWeekView = ( nextDate, prevDate ) => {
         weekView_new.classList.add(slideInClass)
     }
         
-    prevWeekView =  weekView_current
+    prevWeekView = weekView_current
     prevTimeout = setTimeout(() => {
         weekView_current?.remove()
+        weekView_new.classList.remove('slideIn_ltr')
+        weekView_new.classList.remove('slideIn_rtl')
     }, 200);
 
 }
@@ -352,4 +367,4 @@ export const switchWeekView = ( nextDate, prevDate ) => {
 switchWeekView( selectedDate.value, selectedDate.prev )
 
 selectedDate.addListener( switchWeekView )
-storageState.addListener( switchWeekView )
+// storageState.addListener( switchWeekView )

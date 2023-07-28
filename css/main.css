@@ -115,7 +115,6 @@ main{
 /* aside / side menu */
 
 .sideBar{
-    width: 15em;
     padding: 3em 1em;
     flex-direction: column;
     border-right: 1px solid var(--grey_light);
