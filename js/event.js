@@ -99,7 +99,11 @@ export const displayModal = (e, date) => {
 }
 
 eventButton_cancel.addEventListener('click', (e) => {
-    toggleDisplay()
+    eventForm.classList.add('slideOut_rtl')
+    setTimeout(() => {
+        eventModal.classList.add('display-none')
+        eventForm.classList.remove('slideOut_rtl')
+    }, 200);
 })
 
 const toggleDisplay = () => {
