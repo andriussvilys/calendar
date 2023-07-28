@@ -99,7 +99,10 @@ const createEventCard = (eventId, targetElem) => {
     return container
 }
 
-const createEventBubble = (event) => {
+const createEventBubble = (timeslotEvents, index) => {
+
+    const event = timeslotEvents[index]
+
     const container = document.createElement('div')
     container.classList.add('eventBubble-container')
     container.dataset.eventId = event.id
@@ -116,73 +119,68 @@ const createEventBubble = (event) => {
     const endDate = new Date(event.endDate)
     time.innerHTML += endDate.toTimeString().slice(0, 5)
 
+    // eventBubble width depends on the number of rightSiblingCount
+    const rightSiblingCount = timeslotEvents.slice(index, timeslotEvents.length).length
+    const offset = index * EVENTBUBBLE_OFFSET 
+    const widthReduction = Math.max(0, rightSiblingCount-1) * EVENTBUBBLE_OFFSET
+    
+    container.style.height = `${event.duration * EVENTBUBBLE_OFFSET}%`
+    container.style.left = `${offset}%`
+    container.style.width = `${100 - offset -  widthReduction}%`
+
     container.append(time)
     return container
 }
 
-const createTimeslot = ( timeslotArray ) => {
+const createTimeslot = ( timeslotArray, index, timestamp) => {
 
+    const timeslotEvents = timeslotArray[index]
     //longest events should appear on left side of timeslot
-    const sorted = sortByKey(timeslotArray, 'duration')
+    const sorted = sortByKey(timeslotEvents, 'duration')
 
     const container = document.createElement('div')
     container.classList = 'timeslot'
 
-    // eventBubble width depends on the number of rightSiblingCount
     sorted.forEach((event, index) => {
-
-        const rightSiblingCount = timeslotArray.slice(index, timeslotArray.left).length
-        const eventBubble = createEventBubble(event)
-        eventBubble.style.height = `${event.duration * EVENTBUBBLE_OFFSET}%`
-        const offset = index * EVENTBUBBLE_OFFSET 
-        
-        eventBubble.style.left = `${offset}%`
-        const widthReduction = Math.max(0, rightSiblingCount-1) * EVENTBUBBLE_OFFSET
-        eventBubble.style.width = `${100 - offset -  widthReduction}%`
+        const eventBubble = createEventBubble(sorted, index)
         container.append(eventBubble)
     })
+
+    const prevTimeslotSize = timeslotArray.slice(0, index).reduce((acc, prevArray) => {
+        return Math.max(acc, prevArray.length)
+    }, 0)
+    const nextTimeSlotSize =  timeslotArray.slice(index+1, 4).reduce((acc, nextArr) => {
+        return Math.max(acc, nextArr.length-1)
+    }, 0)
+
+    const offset = Math.max(prevTimeslotSize, nextTimeSlotSize)
+
+    container.style.left = `${prevTimeslotSize * 20}%`
+    container.style.width = `${100 -  offset * 20}%`
+    container.style.top = `${index * EVENTBUBBLE_OFFSET}%`
+    container.dataset.timestamp = timestamp.valueOf()
 
     return container
 }
 
 const createDayCell = (timestamp) => {
+
     const cell = document.createElement('div')
     cell.classList = 'day-border dayCell'
     cell.dataset.timestamp = timestamp.valueOf()
+
     const events = findByHour(timestamp)
-
-    if(events.length > 0){
-
-        const sorted = sortByKey(events, 'startDate')
         
-        const timeSlots = [[],[],[],[]]
-        sorted.forEach(event => {
-            timeSlots[event.timeSlot].push(event)
-        })
+    const timeSlots = [[],[],[],[]]
+    
+    events.forEach(event => {
+        timeSlots[event.timeSlot].push(event)
+    })
 
-        const timeSlotElements = timeSlots.map( timeslotArray => {
-            return createTimeslot(timeslotArray)
-        } )
-
-        // timeslot width depends on the size of surrounding timeslots
-        timeSlotElements.forEach((elem, index) => {
-            if(index > 0){
-                const prevTimeslotSize = timeSlots.slice(0, index).reduce((acc, prevArray) => {
-                    return Math.max(acc, prevArray.length)
-                }, 0)
-                const nextTimeSlotSize =  timeSlots.slice(index+1, 4).reduce((acc, nextArr) => {
-                    return Math.max(acc, nextArr.length-1)
-                }, 0)
-                const offset = Math.max(prevTimeslotSize, nextTimeSlotSize)
-                elem.style.left = `${prevTimeslotSize * 20}%`
-                elem.style.width = `${100 -  offset * 20}%`
-                elem.style.top = `${index * EVENTBUBBLE_OFFSET}%`
-                elem.dataset.timestamp = timestamp.valueOf()
-            }
-            cell.append(elem)
-        })
-
-    }
+    timeSlots.forEach( (timeslotArray, index) => {
+        const timeslot = createTimeslot(timeSlots, index, timestamp)
+        cell.append(timeslot)
+    } )
 
     return cell
 }
