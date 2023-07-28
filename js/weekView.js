@@ -1,17 +1,21 @@
 import { isSameDate, isSameWeek, getWeekDates, getToday, HOUR_COUNT, LOCALE } from "../js/dateManipulation.js"
-import {selectedDate} from './state.js'
+import {selectedDate, storageState} from './state.js'
 import {findByHour} from './database.js'
 import { displayModal } from "./event.js"
 
 const EVENTBUBBLE_OFFSET = 25
 
-const craeteEventCardElement = () => {
-    const container = document.createElement('div')
-    container.classList = "container event-title"
-    const eventLeft = document.createElement('div')
-    eventLeft.classList = "event-left"
-    const eventRight = document.createElement('div')
-    eventRight.classList = "event-right"
+const sortByKey = (objectArray, key) => {
+    return objectArray.sort( (a,b) => {
+        if(a[key] < b[key]){
+            return 1
+        }
+        if(b[key] < a[key]){
+            return -1
+        }
+        return 0
+
+    })
 }
 
 const createEventCard = (eventId, targetElem) => {
@@ -116,19 +120,6 @@ const createEventBubble = (event) => {
     return container
 }
 
-const sortByKey = (objectArray, key) => {
-    return objectArray.sort( (a,b) => {
-        if(a[key] < b[key]){
-            return 1
-        }
-        if(b[key] < a[key]){
-            return -1
-        }
-        return 0
-
-    })
-}
-
 const createTimeslot = ( timeslotArray ) => {
 
     //longest events should appear on left side of timeslot
@@ -144,14 +135,10 @@ const createTimeslot = ( timeslotArray ) => {
         const eventBubble = createEventBubble(event)
         eventBubble.style.height = `${event.duration * EVENTBUBBLE_OFFSET}%`
         const offset = index * EVENTBUBBLE_OFFSET 
-
-        const hasNext = index < timeslotArray.length - 1 ? 1 : 0
         
         eventBubble.style.left = `${offset}%`
-        // const widthOffset = hasNext * 20
-        // eventBubble.style.width = `${100 - offset - widthOffset}%`
-        const rightWidthReduction = Math.max(0, rightSiblingCount-1) * EVENTBUBBLE_OFFSET
-        eventBubble.style.width = `${100 - offset -  rightWidthReduction}%`
+        const widthReduction = Math.max(0, rightSiblingCount-1) * EVENTBUBBLE_OFFSET
+        eventBubble.style.width = `${100 - offset -  widthReduction}%`
         container.append(eventBubble)
     })
 
@@ -177,7 +164,6 @@ const createDayCell = (timestamp) => {
             return createTimeslot(timeslotArray)
         } )
 
-
         // timeslot width depends on the size of surrounding timeslots
         timeSlotElements.forEach((elem, index) => {
             if(index > 0){
@@ -187,12 +173,11 @@ const createDayCell = (timestamp) => {
                 const nextTimeSlotSize =  timeSlots.slice(index+1, 4).reduce((acc, nextArr) => {
                     return Math.max(acc, nextArr.length-1)
                 }, 0)
-                // const prevTimeslotSize = 0
-                // const nextTimeSlotSize = 0
                 const offset = Math.max(prevTimeslotSize, nextTimeSlotSize)
                 elem.style.left = `${prevTimeslotSize * 20}%`
                 elem.style.width = `${100 -  offset * 20}%`
                 elem.style.top = `${index * EVENTBUBBLE_OFFSET}%`
+                elem.dataset.timestamp = timestamp.valueOf()
             }
             cell.append(elem)
         })
@@ -237,6 +222,7 @@ const createDayColumn = (date) => {
     for (let index = 0; index < HOUR_COUNT; index++) {
         const timestamp = new Date(date)
         timestamp.setHours(index)
+        // console.log(timestamp)
         const cell = createDayCell(timestamp)
         columnContainer.appendChild(cell)
     }
@@ -315,7 +301,6 @@ const generateWeekView = (date) => {
     weekView.appendChild( createHoursColumn() )
 
     weekView.addEventListener('click', e => {
-        e.stopPropagation()
         if(e.target.dataset.timestamp){
             displayModal(e, new Date( parseInt(e.target.dataset.timestamp) ))
         }
@@ -369,3 +354,4 @@ export const switchWeekView = ( nextDate, prevDate ) => {
 switchWeekView( selectedDate.value, selectedDate.prev )
 
 selectedDate.addListener( switchWeekView )
+storageState.addListener( switchWeekView )

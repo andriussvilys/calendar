@@ -1,5 +1,6 @@
 import { FormData } from "./database.js"
 import { MILISECOND_HOUR, getToday } from "./dateManipulation.js"
+import { selectedDate, storageState } from "./state.js"
 
 const TIMESLOT_LENGTH = 15
 
@@ -52,6 +53,7 @@ const collectFormData = () => {
     formData.description = inputData.description
 
     localStorage.setItem(formData.id, JSON.stringify(formData))
+    storageState.setState( selectedDate )
     
 }
 
@@ -78,8 +80,9 @@ const endTime = document.querySelector('#event-endTime')
 
 const setFormInputValues = (date) => {
     const time = date.toTimeString().slice(0, 5)
-    console.log({date, time})
-    eventDate.value = date.toJSON().slice(0,10)
+    //use 'lt-LT' as locale to correctly form date as YYYY-MM-DD
+    const YMDdate = date.toLocaleDateString('lt-LT', {year: 'numeric', month: 'numeric', day: 'numeric'})
+    eventDate.value = YMDdate
     startTime.value = time
     endTime.value = time
 }
