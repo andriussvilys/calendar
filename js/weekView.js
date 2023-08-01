@@ -1,7 +1,7 @@
-import { isSameDate, isSameWeek, getWeekDates, selectedDate, getToday, HOUR_COUNT } from "../js/dateManipulation.js"
+import { isSameDate, isSameWeek, getWeekDates, getToday, HOUR_COUNT, LOCALE } from "../js/dateManipulation.js"
+import {selectedDate} from './state.js'
 
 const ROW_COUNT = 25
-const LOCALE = 'us-US'
 
 const createDayColumn = (date) => {
 
@@ -100,7 +100,7 @@ const createHoursColumn = () => {
     container.appendChild(headerCell)
 
     for (let index = 1; index < HOUR_COUNT; index++) {
-        const cell = createHourCell(new Date(0, 0, 0, 0 + index))
+        const cell = createHourCell( new Date(0, 0, 0, index) )
         container.appendChild(cell)
     }
 
@@ -125,29 +125,35 @@ const generateWeekView = (date) => {
 
 }
 
-export const switchWeekView = (newDate) => {
+let prevWeekView
+let prevTimeout
 
-    if(!isSameWeek(selectedDate, newDate)){
+export const switchWeekView = ( nextDate, prevDate ) => {
 
-        const wrapper = document.querySelector('.weekView-wrapper')
-        const weekView_current = document.querySelector('.weekView-main')
-        const weekView_new = generateWeekView(newDate)
-        
-        wrapper.appendChild(weekView_new)
-
-        const slideInClass = newDate > selectedDate ? 'slideIn_ltr' : 'slideIn_rtl'
-
-        weekView_new.classList.add(slideInClass)
-        
-        setTimeout(() => {
-            weekView_current.remove()
-        }, 200);
-
+    if (prevWeekView) {
+        clearTimeout(prevTimeout)
+        prevWeekView?.remove()
+        prevWeekView = null
     }
+
+    const wrapper = document.querySelector('.weekView-wrapper')
+    const weekView_current = document.querySelector('.weekView-main')
+
+    const weekView_new = generateWeekView(nextDate)
+    wrapper.appendChild(weekView_new)
+    
+    if( prevDate && !isSameWeek(nextDate, prevDate) ){
+        const slideInClass = nextDate > prevDate ? 'slideIn_ltr' : 'slideIn_rtl'
+        weekView_new.classList.add(slideInClass)
+    }
+        
+    prevWeekView =  weekView_current
+    prevTimeout = setTimeout(() => {
+        weekView_current?.remove()
+    }, 200);
 
 }
 
-const today = getToday()
-const wrapper = document.querySelector('.weekView-wrapper')
-const newWeekView = generateWeekView( today )
-wrapper.appendChild(newWeekView)
+switchWeekView( selectedDate.value, selectedDate.prev )
+
+selectedDate.addListener( switchWeekView )
