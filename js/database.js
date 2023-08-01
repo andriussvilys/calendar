@@ -1,66 +1,81 @@
-import { getToday, incrementDay, isSameDate, MILISECOND_HOUR } from "./dateManipulation.js"
+//this module uses UUID v8.1.0 library (CDN). The uuidv4 function comes from there
 
-if(!localStorage.getItem("eventId")){
-    localStorage.setItem("eventId", 0)
+import { MILISECOND_HOUR, getDayStart } from "./dateManipulation.js";
+import { TIMESLOT_DURATION } from "./weekView.js";
+import { storageState } from "./state.js";
+
+const initDB = () => {
+	if (!localStorage.events) {
+		setStorage("events", []);
+	}
+};
+
+export const findEventByTimestamp = (timestamp) => {
+	const events = getEvents();
+	return events.filter((event) => {
+		return getEventCellTimestamp(event) === timestamp;
+	});
+};
+
+export const findEventById = (eventId) => {
+	const events = getEvents();
+	return events.find((event) => {
+		return event.id === eventId;
+	});
+};
+
+export class FormData {
+	constructor(data) {
+		this.id = uuidv4();
+		this.title = data.title;
+		this.startTime = data.startTime;
+		this.endTime = data.endTime;
+		this.description = data.description;
+	}
 }
 
-const findByDate = (date) => {
-    const nextEventId = localStorage.getItem("eventId")
+export const getEventDuration = (event) => {
+	return Math.ceil((event.endTime - event.startTime) / (MILISECOND_HOUR / 4));
+};
+export const getEventTimeslot = (event) => {
+	const startDate = new Date(event.startTime);
+	return Math.floor(startDate.getMinutes() / TIMESLOT_DURATION);
+};
+export const getEventCellTimestamp = (event) => {
+	return new Date(event.startTime).setMinutes(0).valueOf();
+};
+export const getEventStartDate = (event) => {
+	return getDayStart(event.startTime);
+};
+export const getEventEndDate = (event) => {
+	return getDayStart(event.endTime);
+};
 
-    const result = []
+const getEvents = () => {
+	return JSON.parse(localStorage.getItem("events"));
+};
 
-    for (let i = 0; i < nextEventId; i++) {
-        const eventString = localStorage.getItem(i)
-        if(eventString){
-            const eventObj = JSON.parse(eventString)
-            if(isSameDate(date, new Date(eventObj.startDate))){
-                result.push(eventObj)
-            }
-        }
-    }
+export const saveFormData = (formData) => {
+	const events = getEvents();
+	events.push(formData);
+	setStorage("events", events);
+	storageState.setState(formData);
+};
 
-    return result
-}
+export const removeFormData = (eventId) => {
+	const event = findEventById(eventId);
+	if (event) {
+		const events = getEvents();
+		const updatedEvents = events.filter((event) => event.id !== eventId);
+		setStorage("events", updatedEvents);
+		storageState.setState(event);
+	}
+};
 
-export const findByHour = (timestamp) => {
-    const nextEventId = localStorage.getItem("eventId")
+const setStorage = (key, value) => {
+	localStorage.setItem(key, JSON.stringify(value));
+};
 
-    const result = []
+// switchWeekView(selectedDate.value, selectedDate.prev);
 
-    const date = new Date(timestamp)
-    const hourStart = new Date(timestamp).setHours(date.getHours(),0,0).valueOf()
-
-    for (let i = 0; i < nextEventId; i++) {
-        const eventString = localStorage.getItem(i)
-        if(eventString){
-            const eventObj = JSON.parse(eventString)
-            const diff = (eventObj.startDate - hourStart) 
-            if( diff >= 0 && diff < MILISECOND_HOUR){
-                result.push(eventObj)
-            }
-        }
-    }
-
-    return result
-}
-
-export const FormData = function(){
-    this.id = null,
-    this.title = null,
-    this.startDate = null,
-    this.endDate = null,
-    this.description = null
-    this.duration = null,
-    this.setId = () => {
-        if(!this.id){
-            const id = parseInt( localStorage.getItem("eventId") )
-            this.id = id
-            localStorage.setItem("eventId", id+1)
-        }
-        return this
-    }
-}
-
-// findByDate( getToday() ) 
-
-findByHour( getToday() )
+initDB();

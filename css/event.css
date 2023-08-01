@@ -9,11 +9,8 @@
     padding: 4em;
     border: 2px solid black;
     border-radius: 5px;
-    /* position: absolute; */
     background-color: white;
     position: relative;
-    /* left: 40%;
-    top: 30%; */
 }
 .event-input{
     background-color: rgba(255, 255, 255, 0);
@@ -72,6 +69,3 @@
 input[type="time"]::-webkit-calendar-picker-indicator {
     display: none;
 }
-/* .eventBubble-container span{
-    user-select: none;
-} */
