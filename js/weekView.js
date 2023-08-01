@@ -154,7 +154,11 @@ const createEventBubble = (timeslotEvents, index) => {
 const createTimeslot = (timeslotArray, index, timestamp) => {
 	const timeslotEvents = timeslotArray[index];
 	//longest events should appear on left side of timeslot
-	const sorted = sortByKey(timeslotEvents, "duration");
+	// const sorted = sortByKey(timeslotEvents, "duration");
+
+	const sorted = timeslotEvents.sort(
+		(a, b) => getEventDuration(b) - getEventDuration(a)
+	);
 
 	const container = document.createElement("div");
 	container.classList = "timeslot";
@@ -384,6 +388,10 @@ export const switchWeekView = (date, prevDate) => {
 	}, 200);
 };
 
-switchWeekView(selectedDate.value, selectedDate.prev);
+export const init = () => {
+	switchWeekView(selectedDate.value, selectedDate.prev);
 
-selectedDate.addListener(switchWeekView);
+	selectedDate.addListener(switchWeekView);
+};
+
+init();

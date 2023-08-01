@@ -1,7 +1,8 @@
 import { FormData, saveFormData } from "./database.js";
-import { MILISECOND_HOUR, getToday } from "./dateManipulation.js";
+import { getToday } from "./dateManipulation.js";
 
-const TIMESLOT_DURATION = 15;
+const TIME_VALIDATION_ERROR_MESSAGE = "Event cannot end before it starts.";
+const TITLE_VALIDATION_ERROR_MESSAGE = "Please enter a title.";
 
 const eventModal = document.querySelector("#eventModal");
 const eventForm = document.querySelector("#eventForm");
@@ -11,34 +12,41 @@ const eventButton_save = document.querySelector("#event-save");
 const eventDate = document.querySelector("#event-date");
 const startTime = document.querySelector("#event-startTime");
 const endTime = document.querySelector("#event-endTime");
+const title = document.querySelector("#event-title");
 
-const validateInput = (inputData) => {};
+const convertInputToDate = (dateString, timeString) => {
+	return Date.parse(`${dateString} ${timeString}`);
+};
 
 const collectFormData = () => {
 	const inputData = {};
 	const inputs = document.querySelectorAll("[data-key]");
 
 	inputs.forEach((input) => {
-		if (input.required && !input.value) {
-			throw `Required field (${input.dataset.key}) skipped`;
-		}
 		const key = input.dataset.key;
 		const value = input.value;
 		inputData[key] = value || null;
 	});
 
-	const startTime = Date.parse(`${inputData.startDate} ${inputData.startTime}`);
-	const endTime = Date.parse(
-		`${inputData.endDate || inputData.startDate} ${inputData.endTime}`
+	inputData.startTime = convertInputToDate(
+		inputData.startDate,
+		inputData.startTime
+	);
+	inputData.endTime = convertInputToDate(
+		inputData.endDate || inputData.startDate,
+		inputData.endTime
 	);
 
-	const formData = new FormData({ ...inputData, startTime, endTime });
+	const formData = new FormData(inputData);
 
 	return formData;
 };
 
 eventButton_save.addEventListener("click", (e) => {
 	e.preventDefault();
+	if (!validateTitleInput() || !validateTimeInput()) {
+		return;
+	}
 	const formData = collectFormData();
 	saveFormData(formData);
 	toggleDisplay();
@@ -68,6 +76,7 @@ export const displayModal = (date) => {
 };
 
 eventButton_cancel.addEventListener("click", (e) => {
+	resetForm();
 	eventForm.classList.add("slideOut_rtl");
 	setTimeout(() => {
 		eventModal.classList.add("display-none");
@@ -81,6 +90,63 @@ const toggleDisplay = () => {
 };
 
 const resetForm = () => {
+	const errorMessageContainers =
+		document.querySelectorAll(".validationMessage");
+	errorMessageContainers.forEach((elem) => {
+		elem.classList.remove("invalidInput");
+	});
 	const form = document.querySelector("#eventForm");
 	form.reset();
 };
+
+const isStartTimeBigger = () => {
+	const startTimestamp = convertInputToDate(eventDate.value, startTime.value);
+	const endTimestamp = convertInputToDate(eventDate.value, endTime.value);
+	if (startTimestamp > endTimestamp) {
+		return true;
+	} else {
+		return false;
+	}
+};
+
+const validateTimeInput = () => {
+	const errorMessageContainer = document.querySelector(
+		"[data-timeErrorMessage]"
+	);
+	const errorMessageText = errorMessageContainer.querySelector("span");
+	errorMessageText.innerHTML = TIME_VALIDATION_ERROR_MESSAGE;
+	if (isStartTimeBigger()) {
+		if (!errorMessageContainer.classList.contains("invalidInput")) {
+			errorMessageContainer.classList.add("invalidInput");
+		}
+		return false;
+	} else {
+		if (errorMessageContainer.classList.contains("invalidInput")) {
+			errorMessageContainer.classList.remove("invalidInput");
+		}
+		return true;
+	}
+};
+
+const validateTitleInput = () => {
+	const errorMessageContainer = document.querySelector(
+		"[data-titleErrorMessage]"
+	);
+	const errorMessageText = errorMessageContainer.querySelector("span");
+	errorMessageText.innerHTML = TITLE_VALIDATION_ERROR_MESSAGE;
+	if (!title.value) {
+		if (!errorMessageContainer.classList.contains("invalidInput")) {
+			errorMessageContainer.classList.add("invalidInput");
+		}
+		return false;
+	} else {
+		if (errorMessageContainer.classList.contains("invalidInput")) {
+			errorMessageContainer.classList.remove("invalidInput");
+		}
+		return true;
+	}
+};
+
+title.addEventListener("input", validateTitleInput);
+endTime.addEventListener("input", validateTimeInput);
+startTime.addEventListener("input", validateTimeInput);

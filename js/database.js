@@ -28,9 +28,9 @@ export class FormData {
 	constructor(data) {
 		this.id = uuidv4();
 		this.title = data.title;
+		this.description = data.description;
 		this.startTime = data.startTime;
 		this.endTime = data.endTime;
-		this.description = data.description;
 	}
 }
 

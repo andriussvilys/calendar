@@ -1,71 +1,94 @@
-.event-wrapper{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 999;
-    justify-content: center;
+.event-wrapper {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 999;
+	justify-content: center;
 }
-.event-container{
-    padding: 4em;
-    border: 2px solid black;
-    border-radius: 5px;
-    background-color: white;
-    position: relative;
+.event-container {
+	padding: 4em;
+	border: 2px solid black;
+	border-radius: 5px;
+	background-color: white;
+	position: relative;
 }
-.event-input{
-    background-color: rgba(255, 255, 255, 0);
-    border: none;
-    font-family: Arial, Helvetica, sans-serif;
+.event-input {
+	background-color: rgba(255, 255, 255, 0);
+	border: none;
+	font-family: Arial, Helvetica, sans-serif;
+	padding: 0.5em;
+	border-radius: 5px;
 }
-.event-title{
-    width: 100%;
+.validationMessage {
+	width: 100%;
+	opacity: 0;
+	transition: opacity 0.3s;
+	padding: 0.5em;
+	border-radius: 5px;
+	margin: 0.3em 0;
 }
-.event-titleInput{
-    border: none;
-    border-bottom: 1px solid var(--grey_light);
-    width: 100%;
+.invalidInput {
+	background-color: var(--error-message-bg);
+	opacity: 1;
 }
-.event-container > div{
-    margin-top: 1em;
+.eventInputContainer {
+	width: 100%;
+}
+.event-title {
+	width: 100%;
+}
+.event-titleInput {
+	border: none;
+	border-bottom: 1px solid var(--grey_light);
+	width: 100%;
 }
 
-.event-controls{
-    justify-content: right;
+.event-controls {
+	justify-content: right;
 }
-.display-none{
-    display: none;
+.display-none {
+	display: none;
 }
 
-.event-left{
-    width: 1.6em;
-    margin-right: 1em;
+.event-left {
+	width: 1.6em;
+	margin-right: 1em;
+	align-self: start;
 }
-.event-left > img{
-    width: 100%;
-    opacity: 0.5;
+.event-left > img {
+	width: 100%;
+	opacity: 0.5;
+	margin-top: 0.3em;
 }
-.event-right{
-    display: flex;
-    flex-grow: 1;
-    border-radius: 4px;
-    padding: 0.3em;
+.event-right {
+	display: flex;
+	flex-grow: 1;
+	border-radius: 4px;
+	flex-direction: column;
 }
-.event-right:hover{
-    background-color: var(--grey_light);
+.eventInputContainer {
+	border-radius: 5px;
 }
-.event-textarea{
-    width: 100%;
+.eventInputContainer:hover {
+	background-color: var(--grey_light);
 }
-.button-cancel{
-    margin-right: 1em;
+.event-textarea {
+	border: 1px solid var(--grey_light);
+	width: 100%;
 }
-.button-save{
-    background-color: var(--primary);
-    color: white;
+.button-cancel {
+	margin-right: 1em;
 }
-.button-save:hover{
-    background-color: var(--primary_dark);
+.button-save {
+	background-color: var(--primary);
+	color: white;
+}
+.button-save:hover {
+	background-color: var(--primary_dark);
 }
 input[type="time"]::-webkit-calendar-picker-indicator {
-    display: none;
+	display: none;
+}
+.event-description {
+	margin-bottom: 2em;
 }
