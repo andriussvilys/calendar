@@ -393,5 +393,3 @@ export const init = () => {
 
 	selectedDate.addListener(switchWeekView);
 };
-
-init();

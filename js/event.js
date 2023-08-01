@@ -42,16 +42,6 @@ const collectFormData = () => {
 	return formData;
 };
 
-eventButton_save.addEventListener("click", (e) => {
-	e.preventDefault();
-	if (!validateTitleInput() || !validateTimeInput()) {
-		return;
-	}
-	const formData = collectFormData();
-	saveFormData(formData);
-	toggleDisplay();
-});
-
 const setDateAndTimeInputValues = (date) => {
 	resetForm();
 	const time = date.toTimeString().slice(0, 5);
@@ -66,23 +56,10 @@ const setDateAndTimeInputValues = (date) => {
 	endTime.value = time;
 };
 
-eventButton_create.addEventListener("click", (e) => {
-	displayModal(getToday());
-});
-
 export const displayModal = (date) => {
 	setDateAndTimeInputValues(date);
 	toggleDisplay();
 };
-
-eventButton_cancel.addEventListener("click", (e) => {
-	resetForm();
-	eventForm.classList.add("slideOut_rtl");
-	setTimeout(() => {
-		eventModal.classList.add("display-none");
-		eventForm.classList.remove("slideOut_rtl");
-	}, 400);
-});
 
 const toggleDisplay = () => {
 	eventModal.classList.toggle("display-none");
@@ -147,6 +124,31 @@ const validateTitleInput = () => {
 	}
 };
 
-title.addEventListener("input", validateTitleInput);
-endTime.addEventListener("input", validateTimeInput);
-startTime.addEventListener("input", validateTimeInput);
+export const init = () => {
+	title.addEventListener("input", validateTitleInput);
+	endTime.addEventListener("input", validateTimeInput);
+	startTime.addEventListener("input", validateTimeInput);
+
+	eventButton_create.addEventListener("click", (e) => {
+		displayModal(getToday());
+	});
+
+	eventButton_cancel.addEventListener("click", (e) => {
+		resetForm();
+		eventForm.classList.add("slideOut_rtl");
+		setTimeout(() => {
+			eventModal.classList.add("display-none");
+			eventForm.classList.remove("slideOut_rtl");
+		}, 400);
+	});
+
+	eventButton_save.addEventListener("click", (e) => {
+		e.preventDefault();
+		if (!validateTitleInput() || !validateTimeInput()) {
+			return;
+		}
+		const formData = collectFormData();
+		saveFormData(formData);
+		toggleDisplay();
+	});
+};

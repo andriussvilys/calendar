@@ -4,18 +4,19 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="./css/main.css" />
-		<link rel="stylesheet" href="./month/months.css" />
+		<link rel="stylesheet" href="./css/months.css" />
 		<link rel="stylesheet" href="./css/weekView.css" />
 		<link rel="stylesheet" href="./css/event.css" />
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.1.0/uuidv4.min.js"></script>
-		<script async type="module" src="./js/database.js"></script>
+		<script type="module" src="./js/database.js"></script>
 		<script type="module" src="./js/dateManipulation.js"></script>
 		<script type="module" src="./js/state.js"></script>
 		<script type="module" src="./js/weekView.js"></script>
 		<script type="module" src="./js/event.js"></script>
-		<script type="module" src="./month/months.js"></script>
+		<script type="module" src="./js/months.js"></script>
 		<script type="module" src="./js/header.js"></script>
+		<script type="module" src="./js/main.js"></script>
 
 		<title>Calendar Clone</title>
 	</head>
@@ -110,8 +111,7 @@
 
 			<section class="weekView-wrapper"></section>
 		</main>
-		<div id="eventModal" class="event-wrapper container">
-			<!-- <div id="eventModal" class="event-wrapper container display-none"> -->
+		<div id="eventModal" class="event-wrapper container display-none">
 			<form id="eventForm" class="event-container">
 				<div class="container event-title">
 					<div class="event-left"></div>

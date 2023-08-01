@@ -4,12 +4,6 @@ import { MILISECOND_HOUR, getDayStart } from "./dateManipulation.js";
 import { TIMESLOT_DURATION } from "./weekView.js";
 import { storageState } from "./state.js";
 
-const initDB = () => {
-	if (!localStorage.events) {
-		setStorage("events", []);
-	}
-};
-
 export const findEventByTimestamp = (timestamp) => {
 	const events = getEvents();
 	return events.filter((event) => {
@@ -76,6 +70,8 @@ const setStorage = (key, value) => {
 	localStorage.setItem(key, JSON.stringify(value));
 };
 
-// switchWeekView(selectedDate.value, selectedDate.prev);
-
-initDB();
+export const init = () => {
+	if (!localStorage.events) {
+		setStorage("events", []);
+	}
+};
