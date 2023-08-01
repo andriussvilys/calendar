@@ -12,6 +12,8 @@ const eventDate = document.querySelector("#event-date");
 const startTime = document.querySelector("#event-startTime");
 const endTime = document.querySelector("#event-endTime");
 
+const validateInput = (inputData) => {};
+
 const collectFormData = () => {
 	const inputData = {};
 	const inputs = document.querySelectorAll("[data-key]");
@@ -22,7 +24,7 @@ const collectFormData = () => {
 		}
 		const key = input.dataset.key;
 		const value = input.value;
-		inputData[key] = value ? value : null;
+		inputData[key] = value || null;
 	});
 
 	const startTime = Date.parse(`${inputData.startDate} ${inputData.startTime}`);
@@ -32,19 +34,14 @@ const collectFormData = () => {
 
 	const formData = new FormData({ ...inputData, startTime, endTime });
 
-	console.log(formData);
-	console.log(inputData);
 	return formData;
 };
 
 eventButton_save.addEventListener("click", (e) => {
-	try {
-		const formData = collectFormData();
-		saveFormData(formData);
-		toggleDisplay();
-	} catch (err) {
-		console.error(err);
-	}
+	e.preventDefault();
+	const formData = collectFormData();
+	saveFormData(formData);
+	toggleDisplay();
 });
 
 const setDateAndTimeInputValues = (date) => {

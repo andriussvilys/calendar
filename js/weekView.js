@@ -27,6 +27,14 @@ const sortByKey = (objectArray, key) => {
 	});
 };
 
+const formatTimeString = (timestamp) => {
+	return new Date(timestamp).toLocaleTimeString("us-US", {
+		hour: "numeric",
+		minute: "numeric",
+		hour12: true,
+	});
+};
+
 const createEventCard = (eventId, eventBubble) => {
 	const event = findEventById(eventId);
 
@@ -84,23 +92,15 @@ const createEventCard = (eventId, eventBubble) => {
 
 	const date = document.createElement("p");
 
-	const startDate = new Date(event.startDate);
+	const startDate = new Date(event.startTime);
 	const dateString = startDate.toLocaleDateString(LOCALE, {
 		weekday: "long",
 		month: "long",
 		day: "numeric",
 	});
 
-	const timeString_start = startDate.toLocaleTimeString("us-US", {
-		hour: "numeric",
-		minute: "numeric",
-		hour12: true,
-	});
-	const timeString_end = new Date(event.endDate).toLocaleTimeString("us-US", {
-		hour: "numeric",
-		minute: "numeric",
-		hour12: true,
-	});
+	const timeString_start = formatTimeString(event.startTime);
+	const timeString_end = formatTimeString(event.endTime);
 
 	date.innerHTML = `<span>${dateString}</span><span> ⋅ </span><span>${timeString_start} — ${timeString_end}</span>`;
 	eventCardData.append(date);
@@ -359,7 +359,6 @@ let prevWeekView;
 let prevTimeout;
 
 export const switchWeekView = (date, prevDate) => {
-	console.log({ date });
 	if (prevWeekView) {
 		clearTimeout(prevTimeout);
 		prevWeekView?.remove();
