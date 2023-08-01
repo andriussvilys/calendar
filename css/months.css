@@ -46,9 +46,6 @@
 .centered{
     justify-content: space-around;
 }
-.sideBar{
-    width: auto;
-}
 
 .selected_secondary{
     background-color: var(--secondary-bg);
