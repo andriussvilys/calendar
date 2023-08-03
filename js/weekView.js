@@ -15,7 +15,7 @@ import {
 	getEventDuration,
 	getEventCellTimestamp,
 } from "./database.js";
-import { displayModal } from "./event.js";
+import { showFormModal } from "./event.js";
 
 export const TIMESLOT_DURATION = 15;
 const EVENTBUBBLE_OFFSET = 25;
@@ -26,6 +26,25 @@ const formatTimeString = (timestamp) => {
 		minute: "numeric",
 		hour12: true,
 	});
+};
+
+const hideModal = () => {
+	const modalContainer = document.querySelector("#eventCardModal");
+	modalState.value.classList.add("slideOut_rtl");
+	setTimeout(() => {
+		modalContainer.classList.add("display-none");
+		modalState.value.remove();
+		modalState.setState(null);
+	}, 400);
+};
+
+const showModal = (eventId, eventBubble) => {
+	const modalContainer = document.querySelector("#eventCardModal");
+	modalContainer.classList.remove("display-none");
+	const eventCard = createEventCard(eventId, eventBubble);
+	modalContainer.appendChild(eventCard);
+	eventCard.classList.add("slideIn_ltr");
+	modalState.setState(eventCard);
 };
 
 const positionEventCard = (eventBubble, eventCard) => {
@@ -51,8 +70,6 @@ const positionEventCard = (eventBubble, eventCard) => {
 	}
 
 	eventCard.style.top = `${eventBubbleTop}px`;
-
-	modalState.setState(eventCard);
 };
 
 const createEventCard = (eventId) => {
@@ -78,8 +95,9 @@ const createEventCard = (eventId) => {
 	deleteButton.append(deleteIcon);
 	deleteButton.addEventListener("click", () => {
 		removeFormData(eventId);
-		container.remove();
-		modalState.setState(null);
+		hideModal();
+		// container.remove();
+		// modalState.setState(null);
 	});
 
 	controls.append(deleteButton);
@@ -90,8 +108,9 @@ const createEventCard = (eventId) => {
 	closeIcon.src = "../images/close_FILL0_wght400_GRAD0_opsz48.svg";
 	closeButton.append(closeIcon);
 	closeButton.addEventListener("click", () => {
-		container.remove();
-		modalState.setState(null);
+		hideModal();
+		// container.remove();
+		// modalState.setState(null);
 	});
 	controls.append(closeButton);
 
@@ -356,11 +375,12 @@ const generateWeekView = (date) => {
 
 	weekView.addEventListener("click", (e) => {
 		if (e.target.dataset.timestamp) {
-			displayModal(new Date(parseInt(e.target.dataset.timestamp)));
+			showFormModal(new Date(parseInt(e.target.dataset.timestamp)));
 		} else if (e.target.dataset.eventId) {
-			const eventCard = createEventCard(e.target.dataset.eventId, e.target);
-			document.querySelector("body").appendChild(eventCard);
-			positionEventCard(e.target, eventCard);
+			showModal(e.target.dataset.eventId, e.target);
+			// const eventCard = createEventCard(e.target.dataset.eventId, e.target);
+			// document.querySelector("body").appendChild(eventCard);
+			// positionEventCard(e.target, eventCard);
 		}
 	});
 
@@ -404,6 +424,13 @@ export const switchWeekView = (date, prevDate) => {
 };
 
 export const init = () => {
+	const modalContainer = document.querySelector("#eventCardModal");
+
+	modalContainer.addEventListener("click", (e) => {
+		if (e.target.id === "eventCardModal") {
+			hideModal();
+		}
+	});
 	switchWeekView(selectedDate.value, selectedDate.prev);
 
 	selectedDate.addListener(switchWeekView);

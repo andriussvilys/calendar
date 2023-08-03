@@ -57,20 +57,12 @@ const setDateAndTimeInputValues = (date) => {
 	endTime.value = time;
 };
 
-const createForm = (date) => {
-	setDateAndTimeInputValues(date);
-};
-
-export const displayModal = (date) => {
+export const showFormModal = (date) => {
 	if (modalState.value?.dataset.eventId) {
 		console.log(modalState.value);
 		modalState.value.remove();
 	}
 	setDateAndTimeInputValues(date);
-	showModal();
-};
-
-const showModal = () => {
 	eventModal.classList.remove("display-none");
 	eventForm.classList.add("slideIn_ltr");
 };
@@ -133,7 +125,7 @@ const validateTitleInput = () => {
 	}
 };
 
-const closeModal = () => {
+const hideModal = () => {
 	resetForm();
 	eventForm.classList.add("slideOut_rtl");
 	setTimeout(() => {
@@ -150,16 +142,16 @@ export const init = () => {
 
 	eventModal.addEventListener("click", (e) => {
 		if (e.target.id === "eventModal") {
-			closeModal();
+			hideModal();
 		}
 	});
 
 	eventButton_create.addEventListener("click", (e) => {
-		displayModal(getToday());
+		showFormModal(getToday());
 	});
 
 	eventButton_cancel.addEventListener("click", (e) => {
-		closeModal();
+		hideModal();
 	});
 
 	eventButton_save.addEventListener("click", (e) => {
@@ -169,6 +161,6 @@ export const init = () => {
 		}
 		const formData = collectFormData();
 		saveFormData(formData);
-		closeModal();
+		hideModal();
 	});
 };
