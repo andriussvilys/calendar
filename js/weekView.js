@@ -6,7 +6,7 @@ import {
 	HOUR_COUNT,
 	LOCALE,
 } from "../js/dateManipulation.js";
-import { selectedDate, storageState } from "./state.js";
+import { modalState, selectedDate, storageState } from "./state.js";
 import {
 	findEventByTimestamp,
 	removeFormData,
@@ -20,13 +20,6 @@ import { displayModal } from "./event.js";
 export const TIMESLOT_DURATION = 15;
 const EVENTBUBBLE_OFFSET = 25;
 
-//in descending order
-const sortByKey = (objectArray, key) => {
-	return objectArray.sort((a, b) => {
-		b[key] - a[key];
-	});
-};
-
 const formatTimeString = (timestamp) => {
 	return new Date(timestamp).toLocaleTimeString("us-US", {
 		hour: "numeric",
@@ -35,25 +28,44 @@ const formatTimeString = (timestamp) => {
 	});
 };
 
-const createEventCard = (eventId, eventBubble) => {
-	const event = findEventById(eventId);
-
-	const container = document.createElement("div");
-	container.classList = "container eventCard";
+const positionEventCard = (eventBubble, eventCard) => {
+	modalState.value?.remove();
 
 	const domRect = eventBubble.getBoundingClientRect();
+	const eventBubbleLeft = domRect.left;
+	const eventBubbleTop = domRect.top;
+
 	const elemCenter = domRect.left + domRect.width / 2;
 	const htmlBodyWidth = document
 		.querySelector("body")
 		.getBoundingClientRect().width;
 
 	if (elemCenter > htmlBodyWidth / 2) {
-		container.classList.add("slideIn_ltr");
-		container.style.right = "100%";
+		eventCard.classList.add("slideIn_ltr");
+		eventCard.style.left = `${
+			eventBubbleLeft - eventCard.getBoundingClientRect().width
+		}px`;
 	} else {
-		container.classList.add("slideIn_rtl");
-		container.style.left = "100%";
+		eventCard.classList.add("slideIn_rtl");
+		eventCard.style.left = `${eventBubbleLeft + domRect.width}px`;
 	}
+
+	eventCard.style.top = `${eventBubbleTop}px`;
+
+	modalState.setState(eventCard);
+};
+
+const createEventCard = (eventId) => {
+	if (eventId == modalState.value?.dataset.eventId) {
+		return;
+	}
+
+	const event = findEventById(eventId);
+
+	const container = document.createElement("div");
+	container.classList = "container eventCard";
+
+	container.dataset.eventId = eventId;
 
 	const controls = document.createElement("div");
 	controls.classList = "container eventCard-controls";
@@ -67,6 +79,7 @@ const createEventCard = (eventId, eventBubble) => {
 	deleteButton.addEventListener("click", () => {
 		removeFormData(eventId);
 		container.remove();
+		modalState.setState(null);
 	});
 
 	controls.append(deleteButton);
@@ -78,6 +91,7 @@ const createEventCard = (eventId, eventBubble) => {
 	closeButton.append(closeIcon);
 	closeButton.addEventListener("click", () => {
 		container.remove();
+		modalState.setState(null);
 	});
 	controls.append(closeButton);
 
@@ -345,7 +359,8 @@ const generateWeekView = (date) => {
 			displayModal(new Date(parseInt(e.target.dataset.timestamp)));
 		} else if (e.target.dataset.eventId) {
 			const eventCard = createEventCard(e.target.dataset.eventId, e.target);
-			e.target.parentElement.append(eventCard);
+			document.querySelector("body").appendChild(eventCard);
+			positionEventCard(e.target, eventCard);
 		}
 	});
 

@@ -19,3 +19,4 @@ State.prototype.setState = function (value) {
 export const selectedDate = new State(getToday());
 export const selectedMonth = new State(getToday());
 export const storageState = new State(getToday());
+export const modalState = new State(null);

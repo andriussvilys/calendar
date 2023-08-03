@@ -3,6 +3,7 @@ import { init as initEvent } from "./event.js";
 import { init as initHeader } from "./header.js";
 import { init as initWeekView } from "./weekView.js";
 import { init as initMonth } from "./months.js";
+import { init as initModal } from "./modal.js";
 
 const init = () => {
 	initDatabase();
@@ -10,6 +11,7 @@ const init = () => {
 	initHeader();
 	initWeekView();
 	initMonth();
+	initModal();
 };
 
 init();

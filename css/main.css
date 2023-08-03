@@ -41,6 +41,7 @@ body {
 	flex-direction: column;
 	text-rendering: geometricPrecision;
 	-webkit-font-smoothing: antialiased;
+	position: relative;
 }
 
 button {

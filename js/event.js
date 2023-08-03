@@ -1,5 +1,6 @@
 import { FormData, saveFormData } from "./database.js";
 import { getToday } from "./dateManipulation.js";
+import { modalState } from "./state.js";
 
 const TIME_VALIDATION_ERROR_MESSAGE = "Event cannot end before it starts.";
 const TITLE_VALIDATION_ERROR_MESSAGE = "Please enter a title.";
@@ -56,13 +57,21 @@ const setDateAndTimeInputValues = (date) => {
 	endTime.value = time;
 };
 
-export const displayModal = (date) => {
+const createForm = (date) => {
 	setDateAndTimeInputValues(date);
-	toggleDisplay();
 };
 
-const toggleDisplay = () => {
-	eventModal.classList.toggle("display-none");
+export const displayModal = (date) => {
+	if (modalState.value?.dataset.eventId) {
+		console.log(modalState.value);
+		modalState.value.remove();
+	}
+	setDateAndTimeInputValues(date);
+	showModal();
+};
+
+const showModal = () => {
+	eventModal.classList.remove("display-none");
 	eventForm.classList.add("slideIn_ltr");
 };
 
@@ -124,22 +133,33 @@ const validateTitleInput = () => {
 	}
 };
 
+const closeModal = () => {
+	resetForm();
+	eventForm.classList.add("slideOut_rtl");
+	setTimeout(() => {
+		eventModal.classList.add("display-none");
+		eventForm.classList.remove("slideOut_rtl");
+	}, 400);
+	modalState.setState(null);
+};
+
 export const init = () => {
 	title.addEventListener("input", validateTitleInput);
 	endTime.addEventListener("input", validateTimeInput);
 	startTime.addEventListener("input", validateTimeInput);
+
+	eventModal.addEventListener("click", (e) => {
+		if (e.target.id === "eventModal") {
+			closeModal();
+		}
+	});
 
 	eventButton_create.addEventListener("click", (e) => {
 		displayModal(getToday());
 	});
 
 	eventButton_cancel.addEventListener("click", (e) => {
-		resetForm();
-		eventForm.classList.add("slideOut_rtl");
-		setTimeout(() => {
-			eventModal.classList.add("display-none");
-			eventForm.classList.remove("slideOut_rtl");
-		}, 400);
+		closeModal();
 	});
 
 	eventButton_save.addEventListener("click", (e) => {
@@ -149,6 +169,6 @@ export const init = () => {
 		}
 		const formData = collectFormData();
 		saveFormData(formData);
-		toggleDisplay();
+		closeModal();
 	});
 };
