@@ -5,7 +5,7 @@ import {
 	getToday,
 	HOUR_COUNT,
 	LOCALE,
-} from "../js/dateManipulation.js";
+} from "./dateManipulation.js";
 import { modalState, selectedDate, storageState } from "./state.js";
 import {
 	findEventByTimestamp,
