@@ -4,18 +4,22 @@ import { MILISECOND_HOUR, getDayStart } from "./dateManipulation.js";
 import { TIMESLOT_DURATION } from "./weekView.js";
 import { storageState } from "./state.js";
 
-export const findEventByTimestamp = (timestamp) => {
+export const findEventByTimestamp = (timestamp: number): FormData[] => {
 	const events = getEvents();
-	return events.filter((event) => {
+	return events.filter((event: FormData) => {
 		return getEventCellTimestamp(event) === timestamp;
 	});
 };
 
-export const findEventById = (eventId) => {
+export const findEventById = (eventId: string): FormData | null => {
 	const events = getEvents();
-	return events.find((event) => {
+	const result = events.find((event: FormData) => {
 		return event.id === eventId;
 	});
+	if (!result) {
+		return null;
+	}
+	return result;
 };
 
 export class FormData {
@@ -24,7 +28,7 @@ export class FormData {
 	description: string;
 	startTime: number;
 	endTime: number;
-	constructor(data) {
+	constructor(data: any) {
 		this.id = uuidv4();
 		this.title = data.title;
 		this.description = data.description;
@@ -51,8 +55,12 @@ export const getEventEndDate = (event: FormData): number => {
 };
 
 const getEvents = () => {
-	const rawEvents = JSON.parse(localStorage.getItem("events"));
-	return rawEvents.map((event) => new FormData(event));
+	const eventsString = localStorage.getItem("events");
+	if (eventsString) {
+		const parsedEvents: object[] = JSON.parse(eventsString);
+		return parsedEvents.map((event) => new FormData(event));
+	}
+	return [];
 };
 
 export const saveFormData = (formData: FormData): FormData[] => {
@@ -63,7 +71,7 @@ export const saveFormData = (formData: FormData): FormData[] => {
 	return events;
 };
 
-export const removeFormData = (eventId) => {
+export const removeFormData = (eventId: string) => {
 	const event = findEventById(eventId);
 	if (event) {
 		const events = getEvents();
@@ -73,11 +81,11 @@ export const removeFormData = (eventId) => {
 	}
 };
 
-const setStorage = (key, value) => {
+const setStorage = (key: string, value: FormData[]): void => {
 	localStorage.setItem(key, JSON.stringify(value));
 };
 
-export const init = () => {
+export const init = (): void => {
 	if (!localStorage.events) {
 		setStorage("events", []);
 	}

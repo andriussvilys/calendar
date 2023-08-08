@@ -10,9 +10,13 @@ export const findEventByTimestamp = (timestamp) => {
 };
 export const findEventById = (eventId) => {
     const events = getEvents();
-    return events.find((event) => {
+    const result = events.find((event) => {
         return event.id === eventId;
     });
+    if (!result) {
+        return null;
+    }
+    return result;
 };
 export class FormData {
     constructor(data) {
@@ -40,8 +44,12 @@ export const getEventEndDate = (event) => {
     return getDayStart(event.endTime);
 };
 const getEvents = () => {
-    const rawEvents = JSON.parse(localStorage.getItem("events"));
-    return rawEvents.map((event) => new FormData(event));
+    const eventsString = localStorage.getItem("events");
+    if (eventsString) {
+        const parsedEvents = JSON.parse(eventsString);
+        return parsedEvents.map((event) => new FormData(event));
+    }
+    return [];
 };
 export const saveFormData = (formData) => {
     const events = getEvents();
