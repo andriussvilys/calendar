@@ -39,10 +39,10 @@ const onMonthButtonClick = (event) => {
 
 const generateDayCell = (content) => {
 	const container = document.createElement("div");
-	container.classList = `container monthView-cell`;
+	container.className = `container monthView-cell`;
 
 	const button = document.createElement("button");
-	button.classList = `button button_round monthView-button ${
+	button.className = `button button_round monthView-button ${
 		content.isToday ? "button_today" : ""
 	}`;
 

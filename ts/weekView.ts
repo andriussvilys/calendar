@@ -41,7 +41,7 @@ const hideModal = () => {
 const showModal = (eventId, eventBubble) => {
 	const modalContainer = document.querySelector("#eventCardModal");
 	modalContainer.classList.remove("display-none");
-	const eventCard = createEventCard(eventId, eventBubble);
+	const eventCard = createEventCard(eventId);
 	modalContainer.appendChild(eventCard);
 	eventCard.classList.add("slideIn_ltr");
 	modalState.setState(eventCard);
@@ -79,31 +79,29 @@ const createEventCard = (eventId) => {
 
 	const event = findEventById(eventId);
 
-	const container = document.createElement("div");
-	container.classList = "container eventCard";
+	const container = document.createElement("div") as HTMLDivElement;
+	container.className = "container eventCard";
 
 	container.dataset.eventId = eventId;
 
 	const controls = document.createElement("div");
-	controls.classList = "container eventCard-controls";
+	controls.className = "container eventCard-controls";
 
 	const eventCardButtonClassList = "button button_round eventCard-button";
 	const deleteButton = document.createElement("button");
-	deleteButton.classList = eventCardButtonClassList;
+	deleteButton.className = eventCardButtonClassList;
 	const deleteIcon = document.createElement("img");
 	deleteIcon.src = "../images/delete_FILL0_wght400_GRAD0_opsz48.svg";
 	deleteButton.append(deleteIcon);
 	deleteButton.addEventListener("click", () => {
 		removeFormData(eventId);
 		hideModal();
-		// container.remove();
-		// modalState.setState(null);
 	});
 
 	controls.append(deleteButton);
 
 	const closeButton = document.createElement("button");
-	closeButton.classList = eventCardButtonClassList;
+	closeButton.className = eventCardButtonClassList;
 	const closeIcon = document.createElement("img");
 	closeIcon.src = "../images/close_FILL0_wght400_GRAD0_opsz48.svg";
 	closeButton.append(closeIcon);
@@ -117,10 +115,10 @@ const createEventCard = (eventId) => {
 	container.append(controls);
 
 	const eventCardData = document.createElement("div");
-	eventCardData.classList = "container eventCardData";
+	eventCardData.className = "container eventCardData";
 
 	const title = document.createElement("h2");
-	title.innerHTML = event.title;
+	title.innerText = event.title;
 	eventCardData.append(title);
 
 	const date = document.createElement("p");
@@ -135,13 +133,13 @@ const createEventCard = (eventId) => {
 	const timeString_start = formatTimeString(event.startTime);
 	const timeString_end = formatTimeString(event.endTime);
 
-	date.innerHTML = `<span>${dateString}</span><span> ⋅ </span><span>${timeString_start} — ${timeString_end}</span>`;
+	date.innerText = `<span>${dateString}</span><span> ⋅ </span><span>${timeString_start} — ${timeString_end}</span>`;
 	eventCardData.append(date);
 
 	if (event.description) {
 		const description = document.createElement("p");
-		description.classList = "eventCardData-description";
-		description.innerHTML = event.description;
+		description.className = "eventCardData-description";
+		description.innerText = event.description;
 		eventCardData.append(description);
 	}
 
@@ -159,13 +157,13 @@ const createEventBubble = (timeslotEvents, index) => {
 
 	const title = document.createElement("span");
 	title.classList.add("eventBubble-title");
-	title.innerHTML = event.title + ", ";
+	title.innerText = event.title + ", ";
 	container.append(title);
 
 	const time = document.createElement("span");
-	time.innerHTML = new Date(event.startTime).toTimeString().slice(0, 5);
-	time.innerHTML += "—";
-	time.innerHTML += new Date(event.endTime).toTimeString().slice(0, 5);
+	time.innerText = new Date(event.startTime).toTimeString().slice(0, 5);
+	time.innerText += "—";
+	time.innerText += new Date(event.endTime).toTimeString().slice(0, 5);
 
 	// eventBubble width depends on the number of rightSiblingCount
 	const rightSiblingCount = timeslotEvents.slice(
@@ -194,7 +192,7 @@ const createTimeslot = (timeslotArray, index, timestamp) => {
 	);
 
 	const container = document.createElement("div");
-	container.classList = "timeslot";
+	container.className = "timeslot";
 
 	sorted.forEach((event, index) => {
 		const eventBubble = createEventBubble(sorted, index);
@@ -238,7 +236,7 @@ const updateDayCell = (cellTimestamp, event) => {
 
 const createDayCell = (timestamp) => {
 	const cell = document.createElement("div");
-	cell.classList = "day-border dayCell";
+	cell.className = "day-border dayCell";
 	cell.dataset.timestamp = timestamp;
 
 	const events = findEventByTimestamp(timestamp);
@@ -271,25 +269,25 @@ const createDayColumn = (date) => {
 	columnContainer.classList.add("weekView-column");
 
 	const headerCell = document.createElement("div");
-	headerCell.classList = `container header-cell`;
+	headerCell.className = `container header-cell`;
 
 	const headerLabel = document.createElement("div");
-	headerLabel.classList = "container day-label";
+	headerLabel.className = "container day-label";
 
 	const weekday = document.createElement("span");
-	weekday.classList = `${isSameDate(date, today) ? "date_today" : ""}`;
-	weekday.innerHTML = date
+	weekday.className = `${isSameDate(date, today) ? "date_today" : ""}`;
+	weekday.innerText = date
 		.toLocaleDateString(LOCALE, { weekday: "short" })
 		.toUpperCase();
 
 	const button = document.createElement("button");
-	button.innerHTML = date.toLocaleDateString(LOCALE, { day: "numeric" });
-	button.classList = `button weekView-button button_round ${
+	button.innerText = date.toLocaleDateString(LOCALE, { day: "numeric" });
+	button.className = `button weekView-button button_round ${
 		isSameDate(date, today) ? "button_today" : ""
 	}`;
 
 	const eventCell = document.createElement("div");
-	eventCell.classList = "day-border eventCell_header";
+	eventCell.className = "day-border eventCell_header";
 
 	headerLabel.appendChild(weekday);
 	headerLabel.appendChild(button);
@@ -313,22 +311,22 @@ const createHourCell = (date) => {
 	let meridiam = Math.floor(date.getHours() / 12) == 0 ? "AM" : "PM";
 
 	const container = document.createElement("div");
-	container.classList = "hour";
+	container.className = "hour";
 
 	const labelContainer = document.createElement("div");
-	labelContainer.classList = "hour-labelContainer";
+	labelContainer.className = "hour-labelContainer";
 
 	const labelContent = document.createElement("div");
-	labelContent.classList = "hour-labelContent";
+	labelContent.className = "hour-labelContent";
 
 	const hourSpan = document.createElement("span");
-	hourSpan.innerHTML = hour;
+	hourSpan.innerText = hour.toString();
 
 	const spaceSpan = document.createElement("span");
-	spaceSpan.innerHTML = " ";
+	spaceSpan.innerText = " ";
 
 	const meridiamSpan = document.createElement("span");
-	meridiamSpan.innerHTML = meridiam;
+	meridiamSpan.innerText = meridiam;
 
 	labelContent.appendChild(hourSpan);
 	labelContent.appendChild(spaceSpan);
@@ -337,7 +335,7 @@ const createHourCell = (date) => {
 	labelContainer.appendChild(labelContent);
 
 	const hourSeparator = document.createElement("div");
-	hourSeparator.classList = "hour-separator";
+	hourSeparator.className = "hour-separator";
 
 	container.appendChild(labelContainer);
 	container.appendChild(hourSeparator);
@@ -347,13 +345,13 @@ const createHourCell = (date) => {
 
 const createHoursColumn = () => {
 	const container = document.createElement("div");
-	container.classList = "weekView-column hours";
+	container.className = "weekView-column hours";
 
 	const headerCell = document.createElement("div");
-	headerCell.classList = "hour header-cell";
+	headerCell.className = "hour header-cell";
 
 	const hourSeparator = document.createElement("div");
-	hourSeparator.classList = "hour-separator";
+	hourSeparator.className = "hour-separator";
 
 	headerCell.appendChild(hourSeparator);
 
@@ -369,18 +367,17 @@ const createHoursColumn = () => {
 
 const generateWeekView = (date) => {
 	const weekView = document.createElement("div");
-	weekView.classList = "weekView-main";
+	weekView.className = "weekView-main";
 
 	weekView.appendChild(createHoursColumn());
 
 	weekView.addEventListener("click", (e) => {
-		if (e.target.dataset.timestamp) {
-			showFormModal(new Date(parseInt(e.target.dataset.timestamp)));
-		} else if (e.target.dataset.eventId) {
-			showModal(e.target.dataset.eventId, e.target);
-			// const eventCard = createEventCard(e.target.dataset.eventId, e.target);
-			// document.querySelector("body").appendChild(eventCard);
-			// positionEventCard(e.target, eventCard);
+		const eventTarget = e.target as HTMLElement;
+		const eventTargetDataset = eventTarget.dataset;
+		if (eventTargetDataset.timestamp) {
+			showFormModal(new Date(parseInt(eventTargetDataset.timestamp)));
+		} else if (eventTargetDataset.eventId) {
+			showModal(eventTargetDataset.eventId, e.target);
 		}
 	});
 
@@ -427,7 +424,7 @@ export const init = () => {
 	const modalContainer = document.querySelector("#eventCardModal");
 
 	modalContainer.addEventListener("click", (e) => {
-		if (e.target.id === "eventCardModal") {
+		if ((e.target as HTMLElement).id === "eventCardModal") {
 			hideModal();
 		}
 	});

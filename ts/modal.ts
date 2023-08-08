@@ -1,21 +1,21 @@
 const createModalContainer = () => {
 	const container = document.createElement("div");
-	container.classList = "modalContainer container display-none";
+	container.className = "modalContainer container display-none";
 	return container;
 };
 const createModalContentContainer = () => {
 	const content = document.createElement("div");
-	content.classList = "modalContent";
+	content.className = "modalContent";
 	return content;
 };
 
 let modalContainer;
 let contentContainer;
 
-const showModal = () => {
-	eventModal.classList.remove("display-none");
-	contentContainer.classList.add("slideIn_ltr");
-};
+// const showModal = () => {
+// 	eventModal.classList.remove("display-none");
+// 	contentContainer.classList.add("slideIn_ltr");
+// };
 
 const closeModal = (callback) => {
 	// resetForm();

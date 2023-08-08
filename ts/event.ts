@@ -5,23 +5,33 @@ import { modalState } from "./state.js";
 const TIME_VALIDATION_ERROR_MESSAGE = "Event cannot end before it starts.";
 const TITLE_VALIDATION_ERROR_MESSAGE = "Please enter a title.";
 
-const eventModal = document.querySelector("#eventModal");
-const eventForm = document.querySelector("#eventForm");
-const eventButton_create = document.querySelector(".create");
-const eventButton_cancel = document.querySelector("#event-cancel");
-const eventButton_save = document.querySelector("#event-save");
-const eventDate = document.querySelector("#event-date");
-const startTime = document.querySelector("#event-startTime");
-const endTime = document.querySelector("#event-endTime");
-const title = document.querySelector("#event-title");
+const eventModal = document.querySelector("#eventModal") as HTMLDivElement;
+const eventForm = document.querySelector("#eventForm") as HTMLFormElement;
+const eventButton_create = document.querySelector(
+	".create"
+) as HTMLButtonElement;
+const eventButton_cancel = document.querySelector(
+	"#event-cancel"
+) as HTMLButtonElement;
+const eventButton_save = document.querySelector(
+	"#event-save"
+) as HTMLButtonElement;
+const eventDate = document.querySelector("#event-date") as HTMLInputElement;
+const startTime = document.querySelector(
+	"#event-startTime"
+) as HTMLInputElement;
+const endTime = document.querySelector("#event-endTime") as HTMLInputElement;
+const title = document.querySelector("#event-title") as HTMLInputElement;
 
 const convertInputToDate = (dateString, timeString) => {
 	return Date.parse(`${dateString} ${timeString}`);
 };
 
 const collectFormData = () => {
-	const inputData = {};
-	const inputs = document.querySelectorAll("[data-key]");
+	const inputData: any = {};
+	const inputs = Array.from(
+		document.querySelectorAll("input[data-key]")
+	) as HTMLInputElement[];
 
 	inputs.forEach((input) => {
 		const key = input.dataset.key;
@@ -73,8 +83,7 @@ const resetForm = () => {
 	errorMessageContainers.forEach((elem) => {
 		elem.classList.remove("invalidInput");
 	});
-	const form = document.querySelector("#eventForm");
-	form.reset();
+	eventForm.reset();
 };
 
 const isStartTimeBigger = () => {
@@ -141,7 +150,7 @@ export const init = () => {
 	startTime.addEventListener("input", validateTimeInput);
 
 	eventModal.addEventListener("click", (e) => {
-		if (e.target.id === "eventModal") {
+		if ((e.target as HTMLElement).id === "eventModal") {
 			hideModal();
 		}
 	});

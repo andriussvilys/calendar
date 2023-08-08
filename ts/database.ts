@@ -19,6 +19,11 @@ export const findEventById = (eventId) => {
 };
 
 export class FormData {
+	id: string;
+	title: string;
+	description: string;
+	startTime: number;
+	endTime: number;
 	constructor(data) {
 		this.id = uuidv4();
 		this.title = data.title;
@@ -28,32 +33,34 @@ export class FormData {
 	}
 }
 
-export const getEventDuration = (event) => {
+export const getEventDuration = (event: FormData): number => {
 	return Math.ceil((event.endTime - event.startTime) / (MILISECOND_HOUR / 4));
 };
-export const getEventTimeslot = (event) => {
+export const getEventTimeslot = (event: FormData): number => {
 	const startDate = new Date(event.startTime);
 	return Math.floor(startDate.getMinutes() / TIMESLOT_DURATION);
 };
-export const getEventCellTimestamp = (event) => {
+export const getEventCellTimestamp = (event: FormData): number => {
 	return new Date(event.startTime).setMinutes(0).valueOf();
 };
-export const getEventStartDate = (event) => {
+export const getEventStartDate = (event: FormData): number => {
 	return getDayStart(event.startTime);
 };
-export const getEventEndDate = (event) => {
+export const getEventEndDate = (event: FormData): number => {
 	return getDayStart(event.endTime);
 };
 
 const getEvents = () => {
-	return JSON.parse(localStorage.getItem("events"));
+	const rawEvents = JSON.parse(localStorage.getItem("events"));
+	return rawEvents.map((event) => new FormData(event));
 };
 
-export const saveFormData = (formData) => {
-	const events = getEvents();
+export const saveFormData = (formData: FormData): FormData[] => {
+	const events: FormData[] = getEvents();
 	events.push(formData);
 	setStorage("events", events);
 	storageState.setState(formData);
+	return events;
 };
 
 export const removeFormData = (eventId) => {
