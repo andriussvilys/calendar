@@ -23,11 +23,11 @@ const startTime = document.querySelector(
 const endTime = document.querySelector("#event-endTime") as HTMLInputElement;
 const title = document.querySelector("#event-title") as HTMLInputElement;
 
-const convertInputToDate = (dateString, timeString) => {
+const convertInputToDate = (dateString: string, timeString: string): number => {
 	return Date.parse(`${dateString} ${timeString}`);
 };
 
-const collectFormData = () => {
+const collectFormData = (): FormData => {
 	const inputData: any = {};
 	const inputs = Array.from(
 		document.querySelectorAll("input[data-key]")
@@ -35,8 +35,10 @@ const collectFormData = () => {
 
 	inputs.forEach((input) => {
 		const key = input.dataset.key;
-		const value = input.value;
-		inputData[key] = value || null;
+		if (key) {
+			const value = input.value;
+			inputData[key] = value;
+		}
 	});
 
 	inputData.startTime = convertInputToDate(
@@ -53,7 +55,7 @@ const collectFormData = () => {
 	return formData;
 };
 
-const setDateAndTimeInputValues = (date) => {
+const setDateAndTimeInputValues = (date: Date): void => {
 	resetForm();
 	const time = date.toTimeString().slice(0, 5);
 	//use 'lt-LT' as locale to correctly form date as YYYY-MM-DD
@@ -67,7 +69,7 @@ const setDateAndTimeInputValues = (date) => {
 	endTime.value = time;
 };
 
-export const showFormModal = (date) => {
+export const showFormModal = (date: Date): void => {
 	if (modalState.value?.dataset.eventId) {
 		console.log(modalState.value);
 		modalState.value.remove();
@@ -96,45 +98,60 @@ const isStartTimeBigger = () => {
 	}
 };
 
-const validateTimeInput = () => {
+const toggleErrorMessageElement = (
+	errorMessageContainer: Element,
+	condition: boolean,
+	errorMessage: string
+): boolean => {
+	const errorMessageText = errorMessageContainer.querySelector(
+		"span"
+	) as HTMLSpanElement;
+
+	errorMessageText.innerHTML = errorMessage;
+
+	if (condition) {
+		if (!errorMessageContainer.classList.contains("invalidInput")) {
+			errorMessageContainer.classList.add("invalidInput");
+		}
+		return true;
+	} else {
+		if (errorMessageContainer.classList.contains("invalidInput")) {
+			errorMessageContainer.classList.remove("invalidInput");
+		}
+		return false;
+	}
+};
+
+const validateTimeInput = (): boolean => {
 	const errorMessageContainer = document.querySelector(
 		"[data-timeErrorMessage]"
 	);
-	const errorMessageText = errorMessageContainer.querySelector("span");
-	errorMessageText.innerHTML = TIME_VALIDATION_ERROR_MESSAGE;
-	if (isStartTimeBigger()) {
-		if (!errorMessageContainer.classList.contains("invalidInput")) {
-			errorMessageContainer.classList.add("invalidInput");
-		}
-		return false;
-	} else {
-		if (errorMessageContainer.classList.contains("invalidInput")) {
-			errorMessageContainer.classList.remove("invalidInput");
-		}
-		return true;
+
+	if (errorMessageContainer) {
+		return toggleErrorMessageElement(
+			errorMessageContainer,
+			isStartTimeBigger(),
+			TIME_VALIDATION_ERROR_MESSAGE
+		);
 	}
+	return false;
 };
 
-const validateTitleInput = () => {
+const validateTitleInput = (): boolean => {
 	const errorMessageContainer = document.querySelector(
 		"[data-titleErrorMessage]"
 	);
-	const errorMessageText = errorMessageContainer.querySelector("span");
-	errorMessageText.innerHTML = TITLE_VALIDATION_ERROR_MESSAGE;
-	if (!title.value) {
-		if (!errorMessageContainer.classList.contains("invalidInput")) {
-			errorMessageContainer.classList.add("invalidInput");
-		}
-		return false;
-	} else {
-		if (errorMessageContainer.classList.contains("invalidInput")) {
-			errorMessageContainer.classList.remove("invalidInput");
-		}
-		return true;
+	if (errorMessageContainer) {
+		return toggleErrorMessageElement(
+			errorMessageContainer,
+			!title.value,
+			TITLE_VALIDATION_ERROR_MESSAGE
+		);
 	}
+	return false;
 };
 
-const hideModal = () => {
+const hideModal = (): void => {
 	resetForm();
 	eventForm.classList.add("slideOut_rtl");
 	setTimeout(() => {
@@ -144,7 +161,7 @@ const hideModal = () => {
 	modalState.setState(null);
 };
 
-export const init = () => {
+export const init = (): void => {
 	title.addEventListener("input", validateTitleInput);
 	endTime.addEventListener("input", validateTimeInput);
 	startTime.addEventListener("input", validateTimeInput);

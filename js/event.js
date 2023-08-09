@@ -20,8 +20,10 @@ const collectFormData = () => {
     const inputs = Array.from(document.querySelectorAll("input[data-key]"));
     inputs.forEach((input) => {
         const key = input.dataset.key;
-        const value = input.value;
-        inputData[key] = value || null;
+        if (key) {
+            const value = input.value;
+            inputData[key] = value;
+        }
     });
     inputData.startTime = convertInputToDate(inputData.startDate, inputData.startTime);
     inputData.endTime = convertInputToDate(inputData.endDate || inputData.startDate, inputData.endTime);
@@ -68,39 +70,35 @@ const isStartTimeBigger = () => {
         return false;
     }
 };
-const validateTimeInput = () => {
-    const errorMessageContainer = document.querySelector("[data-timeErrorMessage]");
+const toggleErrorMessageElement = (errorMessageContainer, condition, errorMessage) => {
     const errorMessageText = errorMessageContainer.querySelector("span");
-    errorMessageText.innerHTML = TIME_VALIDATION_ERROR_MESSAGE;
-    if (isStartTimeBigger()) {
+    errorMessageText.innerHTML = errorMessage;
+    if (condition) {
         if (!errorMessageContainer.classList.contains("invalidInput")) {
             errorMessageContainer.classList.add("invalidInput");
         }
-        return false;
+        return true;
     }
     else {
         if (errorMessageContainer.classList.contains("invalidInput")) {
             errorMessageContainer.classList.remove("invalidInput");
         }
-        return true;
+        return false;
     }
+};
+const validateTimeInput = () => {
+    const errorMessageContainer = document.querySelector("[data-timeErrorMessage]");
+    if (errorMessageContainer) {
+        return toggleErrorMessageElement(errorMessageContainer, isStartTimeBigger(), TIME_VALIDATION_ERROR_MESSAGE);
+    }
+    return false;
 };
 const validateTitleInput = () => {
     const errorMessageContainer = document.querySelector("[data-titleErrorMessage]");
-    const errorMessageText = errorMessageContainer.querySelector("span");
-    errorMessageText.innerHTML = TITLE_VALIDATION_ERROR_MESSAGE;
-    if (!title.value) {
-        if (!errorMessageContainer.classList.contains("invalidInput")) {
-            errorMessageContainer.classList.add("invalidInput");
-        }
-        return false;
+    if (errorMessageContainer) {
+        return toggleErrorMessageElement(errorMessageContainer, !title.value, TITLE_VALIDATION_ERROR_MESSAGE);
     }
-    else {
-        if (errorMessageContainer.classList.contains("invalidInput")) {
-            errorMessageContainer.classList.remove("invalidInput");
-        }
-        return true;
-    }
+    return false;
 };
 const hideModal = () => {
     resetForm();
