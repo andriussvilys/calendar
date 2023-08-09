@@ -131,31 +131,36 @@ const createEventBubble = (timeslotEvents, index) => {
     time.innerText += new Date(event.endTime).toTimeString().slice(0, 5);
     // eventBubble width depends on the number of rightSiblingCount
     const rightSiblingCount = timeslotEvents.slice(index, timeslotEvents.length).length;
-    const offset = index * EVENTBUBBLE_OFFSET;
-    const widthReduction = Math.max(0, rightSiblingCount - 1) * EVENTBUBBLE_OFFSET;
+    const columnWidth = 100 / (timeslotEvents.length + 1);
+    const offset = index * columnWidth;
+    const widthReduction = (Math.max(rightSiblingCount, 1) - 1) * columnWidth;
+    const width = 100 - offset - widthReduction;
+    console.log({ index, offset, widthReduction, rightSiblingCount, width });
     container.style.height = `${getEventDuration(event) * EVENTBUBBLE_OFFSET}%`;
     container.style.left = `${offset}%`;
-    container.style.width = `${100 - offset - widthReduction}%`;
+    container.style.width = `${width}%`;
     container.append(time);
     return container;
 };
-const createTimeslot = (timeslotArray, index, timestamp) => {
-    const timeslotEvents = timeslotArray[index];
+const createTimeslot = (cellTimeslots, index, timestamp) => {
+    const timeslot = cellTimeslots[index];
     //longest events should appear on left side of timeslot
-    // const sorted = sortByKey(timeslotEvents, "duration");
-    const sorted = timeslotEvents.sort((a, b) => getEventDuration(b) - getEventDuration(a));
+    const sorted = timeslot.sort((a, b) => getEventDuration(b) - getEventDuration(a));
     const container = document.createElement("div");
     container.className = "timeslot";
+    const eventBubbleContainer = document.createElement("div");
+    eventBubbleContainer.className = "eventBubbleContainer";
+    container.appendChild(eventBubbleContainer);
     sorted.forEach((event, index) => {
         const eventBubble = createEventBubble(sorted, index);
-        container.append(eventBubble);
+        eventBubbleContainer.append(eventBubble);
     });
-    const prevTimeslotSize = timeslotArray
+    const prevTimeslotSize = cellTimeslots
         .slice(0, index)
         .reduce((acc, prevArray) => {
         return Math.max(acc, prevArray.length);
     }, 0);
-    const nextTimeSlotSize = timeslotArray
+    const nextTimeSlotSize = cellTimeslots
         .slice(index + 1, 4)
         .reduce((acc, nextArr) => {
         return Math.max(acc, nextArr.length - 1);
@@ -186,8 +191,8 @@ const createDayCell = (timestamp) => {
     const events = filterEventsByTimestamp(timestamp);
     const timeSlots = [[], [], [], []];
     events.forEach((eventData) => {
-        const timeslot = getEventTimeslot(eventData);
-        timeSlots[timeslot].push(eventData);
+        const timeslotIndex = getEventTimeslot(eventData);
+        timeSlots[timeslotIndex].push(eventData);
     });
     timeSlots.forEach((timeslotArray, index) => {
         const timeslotTimestamp = new Date(timestamp)
@@ -271,7 +276,7 @@ const createHoursColumn = () => {
     }
     return container;
 };
-const generateWeekView = (date) => {
+const createWeekView = (date) => {
     const weekView = document.createElement("div");
     weekView.className = "weekView-main";
     weekView.appendChild(createHoursColumn());
@@ -302,7 +307,7 @@ export const switchWeekView = (date, prevDate) => {
     }
     const wrapper = document.querySelector(".weekView-wrapper");
     const weekView_current = document.querySelector(".weekView-main");
-    const weekView_new = generateWeekView(date);
+    const weekView_new = createWeekView(date);
     wrapper.appendChild(weekView_new);
     if (prevDate && !isSameWeek(date, prevDate)) {
         const slideInClass = date > prevDate ? "slideIn_ltr" : "slideIn_rtl";

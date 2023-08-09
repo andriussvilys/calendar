@@ -182,45 +182,49 @@ const createEventBubble = (timeslotEvents: FormData[], index: number) => {
 		index,
 		timeslotEvents.length
 	).length;
-	const offset = index * EVENTBUBBLE_OFFSET;
-	const widthReduction =
-		Math.max(0, rightSiblingCount - 1) * EVENTBUBBLE_OFFSET;
+
+	const columnWidth = 100 / (timeslotEvents.length + 1);
+	const offset = index * columnWidth;
+	const widthReduction = (Math.max(rightSiblingCount, 1) - 1) * columnWidth;
+	const width = 100 - offset - widthReduction;
+	console.log({ index, offset, widthReduction, rightSiblingCount, width });
 
 	container.style.height = `${getEventDuration(event) * EVENTBUBBLE_OFFSET}%`;
 	container.style.left = `${offset}%`;
-	container.style.width = `${100 - offset - widthReduction}%`;
+	container.style.width = `${width}%`;
 
 	container.append(time);
 	return container;
 };
 
 const createTimeslot = (
-	timeslotArray: FormData[][],
+	cellTimeslots: Timeslot[],
 	index: number,
 	timestamp: number
 ): HTMLElement => {
-	const timeslotEvents = timeslotArray[index];
+	const timeslot: Timeslot = cellTimeslots[index];
 	//longest events should appear on left side of timeslot
-	// const sorted = sortByKey(timeslotEvents, "duration");
-
-	const sorted = timeslotEvents.sort(
+	const sorted = timeslot.sort(
 		(a, b) => getEventDuration(b) - getEventDuration(a)
 	);
 
 	const container = document.createElement("div");
 	container.className = "timeslot";
+	const eventBubbleContainer = document.createElement("div");
+	eventBubbleContainer.className = "eventBubbleContainer";
+	container.appendChild(eventBubbleContainer);
 
 	sorted.forEach((event, index) => {
 		const eventBubble = createEventBubble(sorted, index);
-		container.append(eventBubble);
+		eventBubbleContainer.append(eventBubble);
 	});
 
-	const prevTimeslotSize = timeslotArray
+	const prevTimeslotSize = cellTimeslots
 		.slice(0, index)
 		.reduce((acc, prevArray) => {
 			return Math.max(acc, prevArray.length);
 		}, 0);
-	const nextTimeSlotSize = timeslotArray
+	const nextTimeSlotSize = cellTimeslots
 		.slice(index + 1, 4)
 		.reduce((acc, nextArr) => {
 			return Math.max(acc, nextArr.length - 1);
@@ -252,17 +256,18 @@ const updateDayCell = (cellTimestamp: number, event: FormData) => {
 	}
 };
 
+type Timeslot = FormData[];
 const createDayCell = (timestamp: number): HTMLElement => {
 	const cell = document.createElement("div");
 	cell.className = "day-border dayCell";
 	cell.dataset.timestamp = timestamp.toString();
 
 	const events = filterEventsByTimestamp(timestamp);
-	const timeSlots: FormData[][] = [[], [], [], []];
+	const timeSlots: Timeslot[] = [[], [], [], []];
 
 	events.forEach((eventData) => {
-		const timeslot = getEventTimeslot(eventData);
-		timeSlots[timeslot].push(eventData);
+		const timeslotIndex = getEventTimeslot(eventData);
+		timeSlots[timeslotIndex].push(eventData);
 	});
 
 	timeSlots.forEach((timeslotArray, index) => {
@@ -383,7 +388,7 @@ const createHoursColumn = (): HTMLElement => {
 	return container;
 };
 
-const generateWeekView = (date: Date): HTMLElement => {
+const createWeekView = (date: Date): HTMLElement => {
 	const weekView = document.createElement("div");
 	weekView.className = "weekView-main";
 
@@ -424,7 +429,7 @@ export const switchWeekView = (date: Date, prevDate: Date): void => {
 		".weekView-main"
 	) as HTMLElement;
 
-	const weekView_new = generateWeekView(date);
+	const weekView_new = createWeekView(date);
 	wrapper.appendChild(weekView_new);
 
 	if (prevDate && !isSameWeek(date, prevDate)) {

@@ -92,3 +92,8 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .event-description {
 	margin-bottom: 2em;
 }
+.eventBubbleContainer {
+	width: 90%;
+	height: 100%;
+	position: relative;
+}
