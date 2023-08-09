@@ -4,7 +4,7 @@ import { MILISECOND_HOUR, getDayStart } from "./dateManipulation.js";
 import { TIMESLOT_DURATION } from "./weekView.js";
 import { storageState } from "./state.js";
 
-export const findEventByTimestamp = (timestamp: number): FormData[] => {
+export const filterEventsByTimestamp = (timestamp: number): FormData[] => {
 	const events = getEvents();
 	return events.filter((event: FormData) => {
 		return getEventCellTimestamp(event) === timestamp;
@@ -13,6 +13,7 @@ export const findEventByTimestamp = (timestamp: number): FormData[] => {
 
 export const findEventById = (eventId: string): FormData | null => {
 	const events = getEvents();
+	console.log(events);
 	const result = events.find((event: FormData) => {
 		return event.id === eventId;
 	});
@@ -29,7 +30,7 @@ export class FormData {
 	startTime: number;
 	endTime: number;
 	constructor(data: any) {
-		this.id = uuidv4();
+		this.id = (data.id as string) || uuidv4();
 		this.title = data.title;
 		this.description = data.description;
 		this.startTime = data.startTime;
@@ -54,11 +55,12 @@ export const getEventEndDate = (event: FormData): number => {
 	return getDayStart(event.endTime);
 };
 
-const getEvents = () => {
+const getEvents = (): FormData[] => {
 	const eventsString = localStorage.getItem("events");
 	if (eventsString) {
 		const parsedEvents: object[] = JSON.parse(eventsString);
-		return parsedEvents.map((event) => new FormData(event));
+		const events: FormData[] = parsedEvents.map((event) => new FormData(event));
+		return events;
 	}
 	return [];
 };

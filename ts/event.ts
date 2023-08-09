@@ -91,6 +91,7 @@ const resetForm = () => {
 const isStartTimeBigger = () => {
 	const startTimestamp = convertInputToDate(eventDate.value, startTime.value);
 	const endTimestamp = convertInputToDate(eventDate.value, endTime.value);
+	console.log({ startTimestamp, endTimestamp });
 	if (startTimestamp > endTimestamp) {
 		return true;
 	} else {
@@ -100,7 +101,7 @@ const isStartTimeBigger = () => {
 
 const toggleErrorMessageElement = (
 	errorMessageContainer: Element,
-	condition: boolean,
+	failCondition: boolean,
 	errorMessage: string
 ): boolean => {
 	const errorMessageText = errorMessageContainer.querySelector(
@@ -109,16 +110,16 @@ const toggleErrorMessageElement = (
 
 	errorMessageText.innerHTML = errorMessage;
 
-	if (condition) {
+	if (failCondition) {
 		if (!errorMessageContainer.classList.contains("invalidInput")) {
 			errorMessageContainer.classList.add("invalidInput");
 		}
-		return true;
+		return false;
 	} else {
 		if (errorMessageContainer.classList.contains("invalidInput")) {
 			errorMessageContainer.classList.remove("invalidInput");
 		}
-		return false;
+		return true;
 	}
 };
 
@@ -128,11 +129,12 @@ const validateTimeInput = (): boolean => {
 	);
 
 	if (errorMessageContainer) {
-		return toggleErrorMessageElement(
+		const valResult = toggleErrorMessageElement(
 			errorMessageContainer,
 			isStartTimeBigger(),
 			TIME_VALIDATION_ERROR_MESSAGE
 		);
+		return valResult;
 	}
 	return false;
 };
@@ -142,11 +144,13 @@ const validateTitleInput = (): boolean => {
 		"[data-titleErrorMessage]"
 	);
 	if (errorMessageContainer) {
-		return toggleErrorMessageElement(
+		const valRes = toggleErrorMessageElement(
 			errorMessageContainer,
 			!title.value,
 			TITLE_VALIDATION_ERROR_MESSAGE
 		);
+
+		return valRes;
 	}
 	return false;
 };
@@ -185,6 +189,7 @@ export const init = (): void => {
 		if (!validateTitleInput() || !validateTimeInput()) {
 			return;
 		}
+		console.log("form is valid");
 		const formData = collectFormData();
 		saveFormData(formData);
 		hideModal();

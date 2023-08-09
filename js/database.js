@@ -2,7 +2,7 @@
 import { MILISECOND_HOUR, getDayStart } from "./dateManipulation.js";
 import { TIMESLOT_DURATION } from "./weekView.js";
 import { storageState } from "./state.js";
-export const findEventByTimestamp = (timestamp) => {
+export const filterEventsByTimestamp = (timestamp) => {
     const events = getEvents();
     return events.filter((event) => {
         return getEventCellTimestamp(event) === timestamp;
@@ -10,6 +10,7 @@ export const findEventByTimestamp = (timestamp) => {
 };
 export const findEventById = (eventId) => {
     const events = getEvents();
+    console.log(events);
     const result = events.find((event) => {
         return event.id === eventId;
     });
@@ -20,7 +21,7 @@ export const findEventById = (eventId) => {
 };
 export class FormData {
     constructor(data) {
-        this.id = uuidv4();
+        this.id = data.id || uuidv4();
         this.title = data.title;
         this.description = data.description;
         this.startTime = data.startTime;
@@ -47,7 +48,8 @@ const getEvents = () => {
     const eventsString = localStorage.getItem("events");
     if (eventsString) {
         const parsedEvents = JSON.parse(eventsString);
-        return parsedEvents.map((event) => new FormData(event));
+        const events = parsedEvents.map((event) => new FormData(event));
+        return events;
     }
     return [];
 };

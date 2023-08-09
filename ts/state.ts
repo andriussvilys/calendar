@@ -1,20 +1,25 @@
 import { getToday } from "./dateManipulation.js";
 
-const State = function (data) {
-	this.value = data;
-	this.prev = null;
-	this.listeners = [];
-};
-
-State.prototype.addListener = function (cb) {
-	this.listeners.push(cb);
-};
-
-State.prototype.setState = function (value) {
-	this.prev = this.value;
-	this.value = value;
-	this.listeners.forEach((callback) => callback(this.value, this.prev));
-};
+class State {
+	value: any;
+	prev: typeof this.value;
+	listeners: Function[];
+	constructor(data: any) {
+		this.value = data;
+		this.prev = null;
+		this.listeners = [];
+	}
+	addListener(cb: Function) {
+		this.listeners.push(cb);
+	}
+	setState(value: any) {
+		this.prev = this.value;
+		this.value = value;
+		this.listeners.forEach((callback: Function) =>
+			callback(this.value, this.prev)
+		);
+	}
+}
 
 export const selectedDate = new State(getToday());
 export const selectedMonth = new State(getToday());

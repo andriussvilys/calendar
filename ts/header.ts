@@ -6,37 +6,42 @@ import {
 } from "./dateManipulation.js";
 import { selectedDate } from "./state.js";
 
-const button_today = document.querySelector("#button_today");
-const headerControls_prev = document.querySelector("#headerControls_prev");
-const headerControls_next = document.querySelector("#headerControls_next");
-
-button_today.addEventListener("click", () => {
-	selectedDate.setState(getToday());
-});
-
-headerControls_prev.addEventListener("click", () => {
-	handleNextPrevClick(-1);
-});
-
-headerControls_next.addEventListener("click", () => {
-	handleNextPrevClick(1);
-});
-
-const handleNextPrevClick = (direction) => {
+const handleNextPrevClick = (direction: number): void => {
 	const newDate = incrementDay(selectedDate.value, WEEKDAYS * direction);
 	selectedDate.setState(newDate);
 };
 
-const updateMonthYearLabels = (date) => {
+const updateMonthYearLabels = (date: Date): void => {
 	const parentElem = document.querySelector("header");
-	const monthLabel = parentElem.querySelector("[data-calendarLabel='month']");
-	const yearLabel = parentElem.querySelector("[data-calendarLabel='year']");
+	if (parentElem) {
+		const monthLabel = parentElem.querySelector(
+			"[data-calendarLabel='month']"
+		) as HTMLSpanElement;
+		const yearLabel = parentElem.querySelector(
+			"[data-calendarLabel='year']"
+		) as HTMLSpanElement;
 
-	monthLabel.innerHTML = date.toLocaleDateString(LOCALE, { month: "long" });
-	yearLabel.innerHTML = date.getFullYear();
+		monthLabel.innerText = date.toLocaleDateString(LOCALE, { month: "long" });
+		yearLabel.innerHTML = date.getFullYear().toString();
+	}
 };
 
 export const init = () => {
+	const button_today = document.querySelector("#button_today");
+	const headerControls_prev = document.querySelector("#headerControls_prev");
+	const headerControls_next = document.querySelector("#headerControls_next");
+
+	button_today?.addEventListener("click", () => {
+		selectedDate.setState(getToday());
+	});
+
+	headerControls_prev?.addEventListener("click", () => {
+		handleNextPrevClick(-1);
+	});
+
+	headerControls_next?.addEventListener("click", () => {
+		handleNextPrevClick(1);
+	});
 	selectedDate.addListener(updateMonthYearLabels);
 	updateMonthYearLabels(selectedDate.value);
 };

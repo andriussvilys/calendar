@@ -1,6 +1,6 @@
 import { isSameDate, isSameWeek, getWeekDates, getToday, HOUR_COUNT, LOCALE, } from "./dateManipulation.js";
 import { modalState, selectedDate, storageState } from "./state.js";
-import { findEventByTimestamp, removeFormData, findEventById, getEventTimeslot, getEventDuration, getEventCellTimestamp, } from "./database.js";
+import { filterEventsByTimestamp, removeFormData, findEventById, getEventTimeslot, getEventDuration, getEventCellTimestamp, } from "./database.js";
 import { showFormModal } from "./event.js";
 export const TIMESLOT_DURATION = 15;
 const EVENTBUBBLE_OFFSET = 25;
@@ -15,18 +15,25 @@ const hideModal = () => {
     const modalContainer = document.querySelector("#eventCardModal");
     modalState.value.classList.add("slideOut_rtl");
     setTimeout(() => {
-        modalContainer.classList.add("display-none");
-        modalState.value.remove();
+        var _a;
+        modalContainer === null || modalContainer === void 0 ? void 0 : modalContainer.classList.add("display-none");
+        (_a = modalState.value) === null || _a === void 0 ? void 0 : _a.remove();
         modalState.setState(null);
     }, 400);
 };
-const showModal = (eventId, eventBubble) => {
+const showEventCardModal = (eventId) => {
+    console.log(eventId);
     const modalContainer = document.querySelector("#eventCardModal");
-    modalContainer.classList.remove("display-none");
-    const eventCard = createEventCard(eventId);
-    modalContainer.appendChild(eventCard);
-    eventCard.classList.add("slideIn_ltr");
-    modalState.setState(eventCard);
+    if (modalContainer) {
+        modalContainer === null || modalContainer === void 0 ? void 0 : modalContainer.classList.remove("display-none");
+        const eventCard = createEventCard(eventId);
+        console.log(eventCard);
+        if (eventCard) {
+            modalContainer.appendChild(eventCard);
+            eventCard.classList.add("slideIn_ltr");
+            modalState.setState(eventCard);
+        }
+    }
 };
 const positionEventCard = (eventBubble, eventCard) => {
     var _a;
@@ -51,61 +58,63 @@ const positionEventCard = (eventBubble, eventCard) => {
 const createEventCard = (eventId) => {
     var _a;
     if (eventId == ((_a = modalState.value) === null || _a === void 0 ? void 0 : _a.dataset.eventId)) {
-        return;
+        return null;
     }
     const event = findEventById(eventId);
-    const container = document.createElement("div");
-    container.className = "container eventCard";
-    container.dataset.eventId = eventId;
-    const controls = document.createElement("div");
-    controls.className = "container eventCard-controls";
-    const eventCardButtonClassList = "button button_round eventCard-button";
-    const deleteButton = document.createElement("button");
-    deleteButton.className = eventCardButtonClassList;
-    const deleteIcon = document.createElement("img");
-    deleteIcon.src = "../images/delete_FILL0_wght400_GRAD0_opsz48.svg";
-    deleteButton.append(deleteIcon);
-    deleteButton.addEventListener("click", () => {
-        removeFormData(eventId);
-        hideModal();
-    });
-    controls.append(deleteButton);
-    const closeButton = document.createElement("button");
-    closeButton.className = eventCardButtonClassList;
-    const closeIcon = document.createElement("img");
-    closeIcon.src = "../images/close_FILL0_wght400_GRAD0_opsz48.svg";
-    closeButton.append(closeIcon);
-    closeButton.addEventListener("click", () => {
-        hideModal();
-        // container.remove();
-        // modalState.setState(null);
-    });
-    controls.append(closeButton);
-    container.append(controls);
-    const eventCardData = document.createElement("div");
-    eventCardData.className = "container eventCardData";
-    const title = document.createElement("h2");
-    title.innerText = event.title;
-    eventCardData.append(title);
-    const date = document.createElement("p");
-    const startDate = new Date(event.startTime);
-    const dateString = startDate.toLocaleDateString(LOCALE, {
-        weekday: "long",
-        month: "long",
-        day: "numeric",
-    });
-    const timeString_start = formatTimeString(event.startTime);
-    const timeString_end = formatTimeString(event.endTime);
-    date.innerText = `<span>${dateString}</span><span> ⋅ </span><span>${timeString_start} — ${timeString_end}</span>`;
-    eventCardData.append(date);
-    if (event.description) {
-        const description = document.createElement("p");
-        description.className = "eventCardData-description";
-        description.innerText = event.description;
-        eventCardData.append(description);
+    console.log(event);
+    if (event) {
+        const container = document.createElement("div");
+        container.className = "container eventCard";
+        container.dataset.eventId = eventId;
+        const controls = document.createElement("div");
+        controls.className = "container eventCard-controls";
+        const eventCardButtonClassList = "button button_round eventCard-button";
+        const deleteButton = document.createElement("button");
+        deleteButton.className = eventCardButtonClassList;
+        const deleteIcon = document.createElement("img");
+        deleteIcon.src = "../images/delete_FILL0_wght400_GRAD0_opsz48.svg";
+        deleteButton.append(deleteIcon);
+        deleteButton.addEventListener("click", () => {
+            removeFormData(eventId);
+            hideModal();
+        });
+        controls.append(deleteButton);
+        const closeButton = document.createElement("button");
+        closeButton.className = eventCardButtonClassList;
+        const closeIcon = document.createElement("img");
+        closeIcon.src = "../images/close_FILL0_wght400_GRAD0_opsz48.svg";
+        closeButton.append(closeIcon);
+        closeButton.addEventListener("click", () => {
+            hideModal();
+        });
+        controls.append(closeButton);
+        container.append(controls);
+        const eventCardData = document.createElement("div");
+        eventCardData.className = "container eventCardData";
+        const title = document.createElement("h2");
+        title.innerText = event.title;
+        eventCardData.append(title);
+        const date = document.createElement("p");
+        const startDate = new Date(event.startTime);
+        const dateString = startDate.toLocaleDateString(LOCALE, {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+        });
+        const timeString_start = formatTimeString(event.startTime);
+        const timeString_end = formatTimeString(event.endTime);
+        date.innerHTML = `<span>${dateString}</span><span> ⋅ </span><span>${timeString_start} — ${timeString_end}</span>`;
+        eventCardData.append(date);
+        if (event.description) {
+            const description = document.createElement("p");
+            description.className = "eventCardData-description";
+            description.innerText = event.description;
+            eventCardData.append(description);
+        }
+        container.append(eventCardData);
+        return container;
     }
-    container.append(eventCardData);
-    return container;
+    return null;
 };
 const createEventBubble = (timeslotEvents, index) => {
     const event = timeslotEvents[index];
@@ -155,24 +164,26 @@ const createTimeslot = (timeslotArray, index, timestamp) => {
     container.style.left = `${prevTimeslotSize * 20}%`;
     container.style.width = `${100 - offset * 20}%`;
     container.style.top = `${index * EVENTBUBBLE_OFFSET}%`;
-    container.dataset.timestamp = timestamp;
+    container.dataset.timestamp = timestamp.toString();
     return container;
 };
 const updateDayCell = (cellTimestamp, event) => {
     if (cellTimestamp === getEventCellTimestamp(event)) {
         const oldCell = document.querySelector(`.dayCell[data-timestamp="${cellTimestamp}"]`);
-        oldCell.innerHTML = "";
-        const newCell = createDayCell(cellTimestamp);
-        newCell.querySelectorAll(".timeslot").forEach((timeslot) => {
-            oldCell.appendChild(timeslot);
-        });
+        if (oldCell) {
+            oldCell.innerHTML = "";
+            const newCell = createDayCell(cellTimestamp);
+            newCell.querySelectorAll(".timeslot").forEach((timeslot) => {
+                oldCell.appendChild(timeslot);
+            });
+        }
     }
 };
 const createDayCell = (timestamp) => {
     const cell = document.createElement("div");
     cell.className = "day-border dayCell";
-    cell.dataset.timestamp = timestamp;
-    const events = findEventByTimestamp(timestamp);
+    cell.dataset.timestamp = timestamp.toString();
+    const events = filterEventsByTimestamp(timestamp);
     const timeSlots = [[], [], [], []];
     events.forEach((eventData) => {
         const timeslot = getEventTimeslot(eventData);
@@ -185,8 +196,8 @@ const createDayCell = (timestamp) => {
         const timeslot = createTimeslot(timeSlots, index, timeslotTimestamp);
         cell.append(timeslot);
     });
-    storageState.addListener((state, prev) => {
-        updateDayCell(timestamp, state);
+    storageState.addListener(() => {
+        updateDayCell(timestamp, storageState.value);
     });
     return cell;
 };
@@ -271,7 +282,7 @@ const generateWeekView = (date) => {
             showFormModal(new Date(parseInt(eventTargetDataset.timestamp)));
         }
         else if (eventTargetDataset.eventId) {
-            showModal(eventTargetDataset.eventId, e.target);
+            showEventCardModal(eventTargetDataset.eventId);
         }
     });
     const weekDates = getWeekDates(date);
@@ -306,11 +317,13 @@ export const switchWeekView = (date, prevDate) => {
 };
 export const init = () => {
     const modalContainer = document.querySelector("#eventCardModal");
-    modalContainer.addEventListener("click", (e) => {
-        if (e.target.id === "eventCardModal") {
-            hideModal();
-        }
-    });
+    if (modalContainer) {
+        modalContainer.addEventListener("click", (e) => {
+            if (e.target.id === "eventCardModal") {
+                hideModal();
+            }
+        });
+    }
     switchWeekView(selectedDate.value, selectedDate.prev);
     selectedDate.addListener(switchWeekView);
 };

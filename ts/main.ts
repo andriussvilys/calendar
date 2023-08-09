@@ -5,7 +5,7 @@ import { init as initWeekView } from "./weekView.js";
 import { init as initMonth } from "./months.js";
 import { init as initModal } from "./modal.js";
 
-const init = () => {
+const init = (): void => {
 	initDatabase();
 	initEvent();
 	initHeader();

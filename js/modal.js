@@ -23,10 +23,10 @@ const closeModal = (callback) => {
         callback();
     }, 400);
 };
-const addContent = (content) => {
-    contentContainer.innerHtml = "";
-    contentContainer.appendChild(content);
-};
+// const addContent = (content) => {
+// 	contentContainer.innerHtml = "";
+// 	contentContainer.appendChild(content);
+// };
 export const init = () => {
     contentContainer = createModalContentContainer();
     modalContainer = createModalContainer();

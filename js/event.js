@@ -63,6 +63,7 @@ const resetForm = () => {
 const isStartTimeBigger = () => {
     const startTimestamp = convertInputToDate(eventDate.value, startTime.value);
     const endTimestamp = convertInputToDate(eventDate.value, endTime.value);
+    console.log({ startTimestamp, endTimestamp });
     if (startTimestamp > endTimestamp) {
         return true;
     }
@@ -70,33 +71,35 @@ const isStartTimeBigger = () => {
         return false;
     }
 };
-const toggleErrorMessageElement = (errorMessageContainer, condition, errorMessage) => {
+const toggleErrorMessageElement = (errorMessageContainer, failCondition, errorMessage) => {
     const errorMessageText = errorMessageContainer.querySelector("span");
     errorMessageText.innerHTML = errorMessage;
-    if (condition) {
+    if (failCondition) {
         if (!errorMessageContainer.classList.contains("invalidInput")) {
             errorMessageContainer.classList.add("invalidInput");
         }
-        return true;
+        return false;
     }
     else {
         if (errorMessageContainer.classList.contains("invalidInput")) {
             errorMessageContainer.classList.remove("invalidInput");
         }
-        return false;
+        return true;
     }
 };
 const validateTimeInput = () => {
     const errorMessageContainer = document.querySelector("[data-timeErrorMessage]");
     if (errorMessageContainer) {
-        return toggleErrorMessageElement(errorMessageContainer, isStartTimeBigger(), TIME_VALIDATION_ERROR_MESSAGE);
+        const valResult = toggleErrorMessageElement(errorMessageContainer, isStartTimeBigger(), TIME_VALIDATION_ERROR_MESSAGE);
+        return valResult;
     }
     return false;
 };
 const validateTitleInput = () => {
     const errorMessageContainer = document.querySelector("[data-titleErrorMessage]");
     if (errorMessageContainer) {
-        return toggleErrorMessageElement(errorMessageContainer, !title.value, TITLE_VALIDATION_ERROR_MESSAGE);
+        const valRes = toggleErrorMessageElement(errorMessageContainer, !title.value, TITLE_VALIDATION_ERROR_MESSAGE);
+        return valRes;
     }
     return false;
 };
@@ -129,6 +132,7 @@ export const init = () => {
         if (!validateTitleInput() || !validateTimeInput()) {
             return;
         }
+        console.log("form is valid");
         const formData = collectFormData();
         saveFormData(formData);
         hideModal();

@@ -9,15 +9,15 @@ const createModalContentContainer = () => {
 	return content;
 };
 
-let modalContainer;
-let contentContainer;
+let modalContainer: Element;
+let contentContainer: Element;
 
 // const showModal = () => {
 // 	eventModal.classList.remove("display-none");
 // 	contentContainer.classList.add("slideIn_ltr");
 // };
 
-const closeModal = (callback) => {
+const closeModal = (callback: Function) => {
 	// resetForm();
 	contentContainer.classList.add("slideOut_rtl");
 	setTimeout(() => {
@@ -27,14 +27,14 @@ const closeModal = (callback) => {
 	}, 400);
 };
 
-const addContent = (content) => {
-	contentContainer.innerHtml = "";
-	contentContainer.appendChild(content);
-};
+// const addContent = (content) => {
+// 	contentContainer.innerHtml = "";
+// 	contentContainer.appendChild(content);
+// };
 
 export const init = () => {
 	contentContainer = createModalContentContainer();
 	modalContainer = createModalContainer();
 	modalContainer.appendChild(contentContainer);
-	document.querySelector("body").append(modalContainer);
+	document.querySelector("body")!.append(modalContainer);
 };
