@@ -3,7 +3,6 @@ import { init as initEvent } from "./event.js";
 import { init as initHeader } from "./header.js";
 import { init as initWeekView } from "./weekView.js";
 import { init as initMonth } from "./months.js";
-import { init as initModal } from "./modal.js";
 import { createDateFormatter } from "./date-formatter.js";
 import { localeState } from "./state.js";
 
@@ -21,7 +20,6 @@ const init = (): void => {
 	initHeader(dateFormatter);
 	initWeekView(dateFormatter);
 	initMonth(dateFormatter);
-	initModal();
 };
 
 init();

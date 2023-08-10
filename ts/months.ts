@@ -4,8 +4,6 @@ import {
 	getToday,
 	WEEKDAYS,
 	incrementMonth,
-	getLocale,
-	getWeekDates,
 } from "./dateManipulation.js";
 import { localeState, selectedDate, selectedMonth } from "./state.js";
 
@@ -60,7 +58,6 @@ const generateDayCell = (date: Date, dateFormatter: DateFormatter) => {
 		isSameDate(date, getToday()) ? "button_today" : ""
 	}`;
 
-	// button.innerText = `${date.getDate()}`;
 	button.innerText = dateFormatter.getDate(date);
 
 	button.dataset.timestamp = date.valueOf().toString();
