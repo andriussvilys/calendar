@@ -21,7 +21,7 @@ import {
 	FormData,
 } from "./database.js";
 import { showFormModal } from "./event.js";
-import { DateFormatter, createDateFormatter } from "./date-formatter.js";
+import { DateFormatter } from "./date-formatter.js";
 
 export const TIMESLOT_DURATION = 15;
 const EVENTBUBBLE_OFFSET = 25;
@@ -377,9 +377,6 @@ const createHourCell = (
 	timestamp: number,
 	dateFormatter: DateFormatter
 ): HTMLElement => {
-	// let hour = date.getHours() % 12 || 12;
-	// let meridiam = Math.floor(date.getHours() / 12) == 0 ? "AM" : "PM";
-
 	const container = document.createElement("div");
 	container.className = "hour";
 
@@ -389,21 +386,14 @@ const createHourCell = (
 	const labelContent = document.createElement("div");
 	labelContent.className = "hour-labelContent";
 
-	// const hourSpan = document.createElement("span");
-	// hourSpan.innerText = hour.toString();
-
 	const hourSpan = document.createElement("span");
 	hourSpan.innerText = dateFormatter.getHour(timestamp);
 
 	const spaceSpan = document.createElement("span");
 	spaceSpan.innerText = " ";
 
-	// const meridiamSpan = document.createElement("span");
-	// meridiamSpan.innerText = meridiam;
-
 	labelContent.appendChild(hourSpan);
 	labelContent.appendChild(spaceSpan);
-	// labelContent.appendChild(meridiamSpan);
 
 	labelContainer.appendChild(labelContent);
 

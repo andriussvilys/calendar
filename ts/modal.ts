@@ -12,13 +12,7 @@ const createModalContentContainer = () => {
 let modalContainer: Element;
 let contentContainer: Element;
 
-// const showModal = () => {
-// 	eventModal.classList.remove("display-none");
-// 	contentContainer.classList.add("slideIn_ltr");
-// };
-
 const closeModal = (callback: Function) => {
-	// resetForm();
 	contentContainer.classList.add("slideOut_rtl");
 	setTimeout(() => {
 		modalContainer.classList.add("display-none");
@@ -26,11 +20,6 @@ const closeModal = (callback: Function) => {
 		callback();
 	}, 400);
 };
-
-// const addContent = (content) => {
-// 	contentContainer.innerHtml = "";
-// 	contentContainer.appendChild(content);
-// };
 
 export const init = () => {
 	contentContainer = createModalContentContainer();
