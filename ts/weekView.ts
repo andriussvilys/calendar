@@ -4,9 +4,13 @@ import {
 	getWeekDates,
 	getToday,
 	HOUR_COUNT,
-	LOCALE,
 } from "./dateManipulation.js";
-import { modalState, selectedDate, storageState } from "./state.js";
+import {
+	localeState,
+	modalState,
+	selectedDate,
+	storageState,
+} from "./state.js";
 import {
 	filterEventsByTimestamp,
 	removeFormData,
@@ -17,17 +21,10 @@ import {
 	FormData,
 } from "./database.js";
 import { showFormModal } from "./event.js";
+import { DateFormatter, createDateFormatter } from "./date-formatter.js";
 
 export const TIMESLOT_DURATION = 15;
 const EVENTBUBBLE_OFFSET = 25;
-
-const formatTimeString = (timestamp: number): string => {
-	return new Date(timestamp).toLocaleTimeString("us-US", {
-		hour: "numeric",
-		minute: "numeric",
-		hour12: true,
-	});
-};
 
 const hideModal = (): void => {
 	const modalContainer = document.querySelector("#eventCardModal");
@@ -39,13 +36,14 @@ const hideModal = (): void => {
 	}, 400);
 };
 
-const showEventCardModal = (eventId: string): void => {
-	console.log(eventId);
+const showEventCardModal = (
+	eventId: string,
+	dateFormatter: DateFormatter
+): void => {
 	const modalContainer = document.querySelector("#eventCardModal");
 	if (modalContainer) {
 		modalContainer?.classList.remove("display-none");
-		const eventCard = createEventCard(eventId);
-		console.log(eventCard);
+		const eventCard = createEventCard(eventId, dateFormatter);
 		if (eventCard) {
 			modalContainer.appendChild(eventCard);
 			eventCard.classList.add("slideIn_ltr");
@@ -82,13 +80,15 @@ const positionEventCard = (
 	eventCard.style.top = `${eventBubbleTop}px`;
 };
 
-const createEventCard = (eventId: string): HTMLElement | null => {
+const createEventCard = (
+	eventId: string,
+	dateFormatter: DateFormatter
+): HTMLElement | null => {
 	if (eventId == modalState.value?.dataset.eventId) {
 		return null;
 	}
 
 	const event = findEventById(eventId);
-	console.log(event);
 	if (event) {
 		const container = document.createElement("div") as HTMLDivElement;
 		container.className = "container eventCard";
@@ -133,16 +133,14 @@ const createEventCard = (eventId: string): HTMLElement | null => {
 		const date = document.createElement("p");
 
 		const startDate = new Date(event.startTime);
-		const dateString = startDate.toLocaleDateString(LOCALE, {
-			weekday: "long",
-			month: "long",
-			day: "numeric",
-		});
+		const dateString = dateFormatter.getEventDate(startDate);
 
-		const timeString_start = formatTimeString(event.startTime);
-		const timeString_end = formatTimeString(event.endTime);
+		const eventTimeRange = dateFormatter.getEventHourRange(
+			event.startTime,
+			event.endTime
+		);
 
-		date.innerHTML = `<span>${dateString}</span><span> ⋅ </span><span>${timeString_start} — ${timeString_end}</span>`;
+		date.innerHTML = `<span>${dateString}</span><span> ⋅ </span>${eventTimeRange}</span>`;
 		eventCardData.append(date);
 
 		if (event.description) {
@@ -160,7 +158,11 @@ const createEventCard = (eventId: string): HTMLElement | null => {
 	return null;
 };
 
-const createEventBubble = (timeslotEvents: FormData[], index: number) => {
+const createEventBubble = (
+	timeslotEvents: FormData[],
+	index: number,
+	dateFormatter: DateFormatter
+) => {
 	const event = timeslotEvents[index];
 
 	const container = document.createElement("div");
@@ -173,9 +175,10 @@ const createEventBubble = (timeslotEvents: FormData[], index: number) => {
 	container.append(title);
 
 	const time = document.createElement("span");
-	time.innerText = new Date(event.startTime).toTimeString().slice(0, 5);
-	time.innerText += "—";
-	time.innerText += new Date(event.endTime).toTimeString().slice(0, 5);
+	time.innerText = dateFormatter.getEventHourRange(
+		event.startTime,
+		event.endTime
+	);
 
 	// eventBubble width depends on the number of rightSiblingCount
 	const rightSiblingCount = timeslotEvents.slice(
@@ -187,60 +190,77 @@ const createEventBubble = (timeslotEvents: FormData[], index: number) => {
 	const offset = index * columnWidth;
 	const widthReduction = (Math.max(rightSiblingCount, 1) - 1) * columnWidth;
 	const width = 100 - offset - widthReduction;
-	console.log({ index, offset, widthReduction, rightSiblingCount, width });
 
-	container.style.height = `${getEventDuration(event) * EVENTBUBBLE_OFFSET}%`;
+	container.style.height = `${Math.max(getEventDuration(event), 1) * 100}%`;
 	container.style.left = `${offset}%`;
 	container.style.width = `${width}%`;
 
 	container.append(time);
+	container.addEventListener("click", (e) => {
+		showEventCardModal(event.id, dateFormatter);
+	});
 	return container;
 };
 
 const createTimeslot = (
 	cellTimeslots: Timeslot[],
 	index: number,
-	timestamp: number
+	timestamp: number,
+	dateFormatter: DateFormatter
 ): HTMLElement => {
-	const timeslot: Timeslot = cellTimeslots[index];
-	//longest events should appear on left side of timeslot
-	const sorted = timeslot.sort(
-		(a, b) => getEventDuration(b) - getEventDuration(a)
-	);
-
 	const container = document.createElement("div");
 	container.className = "timeslot";
-	const eventBubbleContainer = document.createElement("div");
-	eventBubbleContainer.className = "eventBubbleContainer";
-	container.appendChild(eventBubbleContainer);
-
-	sorted.forEach((event, index) => {
-		const eventBubble = createEventBubble(sorted, index);
-		eventBubbleContainer.append(eventBubble);
-	});
-
-	const prevTimeslotSize = cellTimeslots
-		.slice(0, index)
-		.reduce((acc, prevArray) => {
-			return Math.max(acc, prevArray.length);
-		}, 0);
-	const nextTimeSlotSize = cellTimeslots
-		.slice(index + 1, 4)
-		.reduce((acc, nextArr) => {
-			return Math.max(acc, nextArr.length - 1);
-		}, 0);
-
-	const offset = Math.max(prevTimeslotSize, nextTimeSlotSize);
-
-	container.style.left = `${prevTimeslotSize * 20}%`;
-	container.style.width = `${100 - offset * 20}%`;
-	container.style.top = `${index * EVENTBUBBLE_OFFSET}%`;
 	container.dataset.timestamp = timestamp.toString();
 
+	const eventBubbleContainer = document.createElement("div");
+	eventBubbleContainer.className = "eventBubbleContainer";
+
+	const eventBubbleWrapper = document.createElement("div");
+	eventBubbleWrapper.className = "eventBubbleWrapper";
+	eventBubbleWrapper.dataset.timestamp = timestamp.toString();
+
+	eventBubbleWrapper.appendChild(eventBubbleContainer);
+	container.appendChild(eventBubbleWrapper);
+
+	const timeslot: Timeslot = cellTimeslots[index];
+
+	if (timeslot.length > 0) {
+		//longest events should appear on left side of timeslot
+		const sorted = timeslot.sort(
+			(a, b) => getEventDuration(b) - getEventDuration(a)
+		);
+		sorted.forEach((event, index) => {
+			const eventBubble = createEventBubble(sorted, index, dateFormatter);
+			eventBubbleContainer.append(eventBubble);
+		});
+
+		const prevTimeslotSize = cellTimeslots
+			.slice(0, index)
+			.reduce((acc, prevArray) => {
+				return Math.max(acc, prevArray.length);
+			}, 0);
+		const nextTimeSlotSize = cellTimeslots
+			.slice(index + 1, 4)
+			.reduce((acc, nextArr) => {
+				return Math.max(acc, nextArr.length - 1);
+			}, 0);
+
+		const offset = Math.max(prevTimeslotSize, nextTimeSlotSize);
+
+		eventBubbleContainer.style.left = `${prevTimeslotSize * 20}%`;
+		// eventBubbleContainer.style.width = `${100 - offset * 20}%`;
+		eventBubbleContainer.style.width = `${100 - prevTimeslotSize * 20}%`;
+	}
+
+	container.style.top = `${index * EVENTBUBBLE_OFFSET}%`;
 	return container;
 };
 
-const updateDayCell = (cellTimestamp: number, event: FormData) => {
+const updateDayCell = (
+	cellTimestamp: number,
+	event: FormData,
+	dateFormatter: DateFormatter
+) => {
 	if (cellTimestamp === getEventCellTimestamp(event)) {
 		const oldCell = document.querySelector(
 			`.dayCell[data-timestamp="${cellTimestamp}"]`
@@ -248,7 +268,7 @@ const updateDayCell = (cellTimestamp: number, event: FormData) => {
 		if (oldCell) {
 			oldCell.innerHTML = "";
 
-			const newCell = createDayCell(cellTimestamp);
+			const newCell = createDayCell(cellTimestamp, dateFormatter);
 			newCell.querySelectorAll(".timeslot").forEach((timeslot) => {
 				oldCell.appendChild(timeslot);
 			});
@@ -257,7 +277,10 @@ const updateDayCell = (cellTimestamp: number, event: FormData) => {
 };
 
 type Timeslot = FormData[];
-const createDayCell = (timestamp: number): HTMLElement => {
+const createDayCell = (
+	timestamp: number,
+	dateFormatter: DateFormatter
+): HTMLElement => {
 	const cell = document.createElement("div");
 	cell.className = "day-border dayCell";
 	cell.dataset.timestamp = timestamp.toString();
@@ -274,18 +297,41 @@ const createDayCell = (timestamp: number): HTMLElement => {
 		const timeslotTimestamp = new Date(timestamp)
 			.setMinutes(index * TIMESLOT_DURATION)
 			.valueOf();
-		const timeslot = createTimeslot(timeSlots, index, timeslotTimestamp);
+		const timeslot = createTimeslot(
+			timeSlots,
+			index,
+			timeslotTimestamp,
+			dateFormatter
+		);
 		cell.append(timeslot);
 	});
 
 	storageState.addListener(() => {
-		updateDayCell(timestamp, storageState.value);
+		updateDayCell(timestamp, storageState.value, dateFormatter);
 	});
 
 	return cell;
 };
 
-const createDayColumn = (date: Date): HTMLElement => {
+const updateDayLabels = (date: Date, dateFormatter: DateFormatter) => {
+	const dayLabels = document.querySelectorAll(".header-cell .day-label > span");
+	const weekDayLabels = dateFormatter.getWeekDayLabels(date);
+	dayLabels.forEach((label, index) => {
+		(label as HTMLSpanElement).innerText = weekDayLabels[index];
+	});
+	const dayLabelButtons = document.querySelectorAll(
+		".header-cell .day-label > button"
+	);
+	const weekDates = dateFormatter.getWeekDates(date);
+	dayLabelButtons.forEach((button: Element, index: number) => {
+		(button as HTMLElement).innerText = weekDates[index];
+	});
+};
+
+const createDayColumn = (
+	date: Date,
+	dateFormatter: DateFormatter
+): HTMLElement => {
 	const today = getToday();
 
 	const columnContainer = document.createElement("div");
@@ -299,12 +345,10 @@ const createDayColumn = (date: Date): HTMLElement => {
 
 	const weekday = document.createElement("span");
 	weekday.className = `${isSameDate(date, today) ? "date_today" : ""}`;
-	weekday.innerText = date
-		.toLocaleDateString(LOCALE, { weekday: "short" })
-		.toUpperCase();
+	weekday.innerText = dateFormatter.getWeekDateLabel(date);
 
 	const button = document.createElement("button");
-	button.innerText = date.toLocaleDateString(LOCALE, { day: "numeric" });
+	button.innerText = dateFormatter.getDate(date);
 	button.className = `button weekView-button button_round ${
 		isSameDate(date, today) ? "button_today" : ""
 	}`;
@@ -322,16 +366,19 @@ const createDayColumn = (date: Date): HTMLElement => {
 
 	for (let index = 0; index < HOUR_COUNT; index++) {
 		const timestamp = new Date(date).setHours(index).valueOf();
-		const cell = createDayCell(timestamp);
+		const cell = createDayCell(timestamp, dateFormatter);
 		columnContainer.appendChild(cell);
 	}
 
 	return columnContainer;
 };
 
-const createHourCell = (date: Date): HTMLElement => {
-	let hour = date.getHours() % 12 || 12;
-	let meridiam = Math.floor(date.getHours() / 12) == 0 ? "AM" : "PM";
+const createHourCell = (
+	timestamp: number,
+	dateFormatter: DateFormatter
+): HTMLElement => {
+	// let hour = date.getHours() % 12 || 12;
+	// let meridiam = Math.floor(date.getHours() / 12) == 0 ? "AM" : "PM";
 
 	const container = document.createElement("div");
 	container.className = "hour";
@@ -342,18 +389,21 @@ const createHourCell = (date: Date): HTMLElement => {
 	const labelContent = document.createElement("div");
 	labelContent.className = "hour-labelContent";
 
+	// const hourSpan = document.createElement("span");
+	// hourSpan.innerText = hour.toString();
+
 	const hourSpan = document.createElement("span");
-	hourSpan.innerText = hour.toString();
+	hourSpan.innerText = dateFormatter.getHour(timestamp);
 
 	const spaceSpan = document.createElement("span");
 	spaceSpan.innerText = " ";
 
-	const meridiamSpan = document.createElement("span");
-	meridiamSpan.innerText = meridiam;
+	// const meridiamSpan = document.createElement("span");
+	// meridiamSpan.innerText = meridiam;
 
 	labelContent.appendChild(hourSpan);
 	labelContent.appendChild(spaceSpan);
-	labelContent.appendChild(meridiamSpan);
+	// labelContent.appendChild(meridiamSpan);
 
 	labelContainer.appendChild(labelContent);
 
@@ -366,7 +416,7 @@ const createHourCell = (date: Date): HTMLElement => {
 	return container;
 };
 
-const createHoursColumn = (): HTMLElement => {
+const createHoursColumn = (dateFormatter: DateFormatter): HTMLElement => {
 	const container = document.createElement("div");
 	container.className = "weekView-column hours";
 
@@ -381,33 +431,37 @@ const createHoursColumn = (): HTMLElement => {
 	container.appendChild(headerCell);
 
 	for (let index = 1; index < HOUR_COUNT; index++) {
-		const cell = createHourCell(new Date(0, 0, 0, index));
+		const cell = createHourCell(
+			new Date(0, 0, 0, index).valueOf(),
+			dateFormatter
+		);
 		container.appendChild(cell);
 	}
 
 	return container;
 };
 
-const createWeekView = (date: Date): HTMLElement => {
+const createWeekView = (
+	date: Date,
+	dateFormatter: DateFormatter
+): HTMLElement => {
 	const weekView = document.createElement("div");
 	weekView.className = "weekView-main";
 
-	weekView.appendChild(createHoursColumn());
+	weekView.appendChild(createHoursColumn(dateFormatter));
 
 	weekView.addEventListener("click", (e) => {
 		const eventTarget = e.target as HTMLElement;
 		const eventTargetDataset = eventTarget.dataset;
 		if (eventTargetDataset.timestamp) {
 			showFormModal(new Date(parseInt(eventTargetDataset.timestamp)));
-		} else if (eventTargetDataset.eventId) {
-			showEventCardModal(eventTargetDataset.eventId);
 		}
 	});
 
 	const weekDates = getWeekDates(date);
 
 	for (const date of weekDates) {
-		const column = createDayColumn(date);
+		const column = createDayColumn(date, dateFormatter);
 		weekView.appendChild(column);
 	}
 
@@ -417,7 +471,11 @@ const createWeekView = (date: Date): HTMLElement => {
 let prevWeekView: HTMLElement | null;
 let prevTimeout: number;
 
-export const switchWeekView = (date: Date, prevDate: Date): void => {
+export const switchWeekView = (
+	date: Date,
+	prevDate: Date,
+	dateFormatter: DateFormatter
+): void => {
 	if (prevWeekView) {
 		clearTimeout(prevTimeout);
 		prevWeekView?.remove();
@@ -429,7 +487,7 @@ export const switchWeekView = (date: Date, prevDate: Date): void => {
 		".weekView-main"
 	) as HTMLElement;
 
-	const weekView_new = createWeekView(date);
+	const weekView_new = createWeekView(date, dateFormatter);
 	wrapper.appendChild(weekView_new);
 
 	if (prevDate && !isSameWeek(date, prevDate)) {
@@ -445,7 +503,7 @@ export const switchWeekView = (date: Date, prevDate: Date): void => {
 	}, 200);
 };
 
-export const init = (): void => {
+export const init = (dateFormatter: DateFormatter): void => {
 	const modalContainer = document.querySelector("#eventCardModal");
 
 	if (modalContainer) {
@@ -455,7 +513,18 @@ export const init = (): void => {
 			}
 		});
 	}
-	switchWeekView(selectedDate.value, selectedDate.prev);
 
-	selectedDate.addListener(switchWeekView);
+	switchWeekView(selectedDate.value, selectedDate.prev, dateFormatter);
+	updateDayLabels(selectedDate.value, dateFormatter);
+
+	localeState.addListener(() => {
+		const weekViewMain = document.querySelector(".weekView-main");
+		weekViewMain!.innerHTML = "";
+		weekViewMain?.appendChild(
+			createWeekView(selectedDate.value, dateFormatter)
+		);
+	});
+	selectedDate.addListener((currentState: Date, prevState: Date) =>
+		switchWeekView(currentState, prevState, dateFormatter)
+	);
 };

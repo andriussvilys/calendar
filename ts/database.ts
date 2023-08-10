@@ -1,8 +1,13 @@
 //this module uses UUID v8.1.0 library (CDN). The uuidv4 function comes from there
-
 import { MILISECOND_HOUR, getDayStart } from "./dateManipulation.js";
 import { TIMESLOT_DURATION } from "./weekView.js";
 import { storageState } from "./state.js";
+
+declare global {
+	interface Window {
+		uuidv4: any;
+	}
+}
 
 export const filterEventsByTimestamp = (timestamp: number): FormData[] => {
 	const events = getEvents();
@@ -13,7 +18,6 @@ export const filterEventsByTimestamp = (timestamp: number): FormData[] => {
 
 export const findEventById = (eventId: string): FormData | null => {
 	const events = getEvents();
-	console.log(events);
 	const result = events.find((event: FormData) => {
 		return event.id === eventId;
 	});
@@ -30,7 +34,7 @@ export class FormData {
 	startTime: number;
 	endTime: number;
 	constructor(data: any) {
-		this.id = (data.id as string) || uuidv4();
+		this.id = (data.id as string) || window.uuidv4();
 		this.title = data.title;
 		this.description = data.description;
 		this.startTime = data.startTime;

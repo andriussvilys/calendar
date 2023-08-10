@@ -21,7 +21,7 @@ export const findEventById = (eventId) => {
 };
 export class FormData {
     constructor(data) {
-        this.id = data.id || uuidv4();
+        this.id = data.id || window.uuidv4();
         this.title = data.title;
         this.description = data.description;
         this.startTime = data.startTime;

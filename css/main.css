@@ -75,7 +75,7 @@ button {
 header {
 	height: 4em;
 	border-bottom: 1px solid var(--grey_light);
-	justify-content: left;
+	justify-content: space-between;
 	flex-shrink: 0;
 }
 
@@ -134,4 +134,11 @@ main {
 .monthYearLabel {
 	color: var(--grey_dark);
 	font-size: 1.4em;
+}
+.localeSelector {
+	justify-self: flex-end;
+	margin-right: 3em;
+}
+select {
+	border: none;
 }

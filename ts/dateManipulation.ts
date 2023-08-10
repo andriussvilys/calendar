@@ -1,9 +1,19 @@
 export const WEEKDAYS = 7;
 export const HOUR_COUNT = 24;
-export const LOCALE = "us-US";
 export const MILISECOND_HOUR = 60 * 60 * 1000;
 
-export const getToday = () => new Date(Date.now());
+export type localeType = "us-US" | "lt-LT";
+let locale: localeType = "us-US";
+
+export const getLocale = (): localeType => {
+	return locale;
+};
+export const setLocale = (newLocale: localeType): localeType => {
+	locale = newLocale;
+	return locale;
+};
+
+export const getToday = () => new Date();
 
 export const isSameWeek = (date1: Date, date2: Date): boolean => {
 	const week = getWeekDates(date1);

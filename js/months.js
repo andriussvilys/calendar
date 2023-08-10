@@ -1,5 +1,5 @@
-import { isSameDate, getToday, WEEKDAYS, incrementMonth, LOCALE, } from "./dateManipulation.js";
-import { selectedDate, selectedMonth } from "./state.js";
+import { isSameDate, getToday, WEEKDAYS, incrementMonth, } from "./dateManipulation.js";
+import { localeState, selectedDate, selectedMonth } from "./state.js";
 const CALENDAR_ROWS = 6;
 const today = getToday();
 const toggleSelectedSecondary = (date) => {
@@ -19,34 +19,48 @@ const onMonthButtonClick = (event) => {
         selectedDate.setState(newDate);
     }
 };
-const generateDayCell = (date) => {
+const createWeekDayLabels = (date, dateFormatter) => {
+    const container = document.querySelector(".monthView-weekDayNames");
+    container.innerHTML = "";
+    dateFormatter.getWeekDayLabels(date).forEach((label) => {
+        const span = document.createElement("span");
+        span.innerText = label.slice(0, 1);
+        container.appendChild(span);
+    });
+    return container;
+};
+const generateDayCell = (date, dateFormatter) => {
     const container = document.createElement("div");
     container.className = `container monthView-cell`;
     const button = document.createElement("button");
     button.className = `button button_round monthView-button ${isSameDate(date, getToday()) ? "button_today" : ""}`;
-    button.innerText = `${date.getDate()}`;
+    // button.innerText = `${date.getDate()}`;
+    button.innerText = dateFormatter.getDate(date);
     button.dataset.timestamp = date.valueOf().toString();
     button.addEventListener("click", (e) => onMonthButtonClick(e.target));
     container.appendChild(button);
     return container;
 };
-export const switchMonth = (newDate) => {
+export const switchMonth = (newDate, dateFormatter) => {
     const months = document.querySelector("#month");
     if (months) {
         months.innerHTML = "";
         const monthView = getMonthViewDays(newDate);
         monthView.forEach((date) => {
-            months.appendChild(generateDayCell(date));
+            months.appendChild(generateDayCell(date, dateFormatter));
         });
     }
 };
-const updateMonthYearLabels = (date) => {
+const onLocaleChange = (dateFormatter) => {
+    updateMonthYearLabels(selectedDate.value, dateFormatter);
+    createWeekDayLabels(selectedDate.value, dateFormatter);
+    switchMonth(selectedDate.value, dateFormatter);
+};
+const updateMonthYearLabels = (date, dateFormatter) => {
     const parentElem = document.querySelector(".monthView-label");
     if (parentElem) {
-        const monthLabel = parentElem.querySelector("[data-calendarLabel='month']");
-        const yearLabel = parentElem.querySelector("[data-calendarLabel='year']");
-        monthLabel.innerText = date.toLocaleDateString(LOCALE, { month: "long" });
-        yearLabel.innerHTML = date.getFullYear().toString();
+        const label = parentElem.querySelector("span");
+        label.innerText = dateFormatter.getMonthYearLabel(date);
     }
 };
 const getMonthViewDays = (newDate) => {
@@ -72,16 +86,16 @@ const getMonthViewDays = (newDate) => {
     }
     return result;
 };
-const onDateChange = (date) => {
-    switchMonth(date);
+const onDateChange = (date, dateFormatter) => {
+    switchMonth(date, dateFormatter);
     toggleSelectedSecondary(date);
-    updateMonthYearLabels(date);
+    updateMonthYearLabels(date, dateFormatter);
 };
-const onMonthChange = (date) => {
-    switchMonth(date);
-    updateMonthYearLabels(date);
+const onMonthChange = (date, dateFormatter) => {
+    switchMonth(date, dateFormatter);
+    updateMonthYearLabels(date, dateFormatter);
 };
-export const init = () => {
+export const init = (dateFormatter) => {
     var _a, _b;
     (_a = document.querySelector("#months-next")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => {
         const nextDate = incrementMonth(selectedMonth.value, +1);
@@ -91,8 +105,10 @@ export const init = () => {
         const nextDate = incrementMonth(selectedMonth.value, -1);
         selectedMonth.setState(nextDate);
     });
-    selectedDate.addListener(onDateChange);
-    selectedMonth.addListener(onMonthChange);
-    switchMonth(selectedDate.value);
-    updateMonthYearLabels(selectedDate.value);
+    switchMonth(selectedDate.value, dateFormatter);
+    createWeekDayLabels(selectedDate.value, dateFormatter);
+    updateMonthYearLabels(selectedDate.value, dateFormatter);
+    selectedDate.addListener((stateValue) => onDateChange(stateValue, dateFormatter));
+    selectedMonth.addListener((stateValue) => onMonthChange(stateValue, dateFormatter));
+    localeState.addListener(() => onLocaleChange(dateFormatter));
 };

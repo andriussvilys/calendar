@@ -25,3 +25,4 @@ export const selectedDate = new State(getToday());
 export const selectedMonth = new State(getToday());
 export const storageState = new State(getToday());
 export const modalState = new State(null);
+export const localeState = new State("us-US");
