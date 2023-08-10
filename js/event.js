@@ -46,7 +46,6 @@ const setDateAndTimeInputValues = (date) => {
 export const showFormModal = (date) => {
     var _a;
     if ((_a = modalState.value) === null || _a === void 0 ? void 0 : _a.dataset.eventId) {
-        console.log(modalState.value);
         modalState.value.remove();
     }
     setDateAndTimeInputValues(date);
@@ -63,7 +62,6 @@ const resetForm = () => {
 const isStartTimeBigger = () => {
     const startTimestamp = convertInputToDate(eventDate.value, startTime.value);
     const endTimestamp = convertInputToDate(eventDate.value, endTime.value);
-    console.log({ startTimestamp, endTimestamp });
     if (startTimestamp > endTimestamp) {
         return true;
     }
@@ -132,7 +130,6 @@ export const init = () => {
         if (!validateTitleInput() || !validateTimeInput()) {
             return;
         }
-        console.log("form is valid");
         const formData = collectFormData();
         saveFormData(formData);
         hideModal();

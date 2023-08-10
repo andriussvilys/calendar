@@ -10,7 +10,6 @@ export const filterEventsByTimestamp = (timestamp) => {
 };
 export const findEventById = (eventId) => {
     const events = getEvents();
-    console.log(events);
     const result = events.find((event) => {
         return event.id === eventId;
     });
