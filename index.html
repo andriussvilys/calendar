@@ -10,69 +10,71 @@
 		<link rel="stylesheet" href="./css/modal.css" />
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.1.0/uuidv4.min.js"></script>
-		<script type="module" src="./js/database.js"></script>
-		<script type="module" src="./js/dateManipulation.js"></script>
-		<script type="module" src="./js/state.js"></script>
-		<script type="module" src="./js/weekView.js"></script>
-		<script type="module" src="./js/event.js"></script>
-		<script type="module" src="./js/months.js"></script>
-		<script type="module" src="./js/header.js"></script>
-		<script type="module" src="./js/modal.js"></script>
-		<script type="module" src="./js/main.js"></script>
+		<script type="module" src="./dist/database.js"></script>
+		<script type="module" src="./dist/dateManipulation.js"></script>
+		<script type="module" src="./dist/state.js"></script>
+		<script type="module" src="./dist/weekView.js"></script>
+		<script type="module" src="./dist/event.js"></script>
+		<script type="module" src="./dist/months.js"></script>
+		<script type="module" src="./dist/header.js"></script>
+		<script type="module" src="./dist/date-formatter.js"></script>
+		<script type="module" src="./dist/main.js"></script>
 
 		<title>Calendar Clone</title>
 	</head>
 	<body>
-		<header class="container">
-			<div class="logo">
-				<h1>Calendar</h1>
+		<header class="container header">
+			<div class="container">
+				<div class="logo">
+					<h1>Calendar</h1>
+				</div>
+				<div class="container controls">
+					<button id="button_today" class="button button_secondary today">
+						Today
+					</button>
+					<div class="container nextPrev">
+						<button
+							id="headerControls_prev"
+							class="button button_round button-controls prev"
+						>
+							<img
+								src="./images/chevron_left_FILL0_wght400_GRAD0_opsz48.svg"
+								alt="arrow left"
+							/>
+						</button>
+						<button
+							id="headerControls_next"
+							class="button button_round button-controls next"
+						>
+							<img
+								src="./images/chevron_right_FILL0_wght400_GRAD0_opsz48.svg"
+								alt="arrow right"
+							/>
+						</button>
+					</div>
+				</div>
+				<div class="monthYearLabel">
+					<span>Month/Year</span>
+				</div>
 			</div>
 
-			<div class="container controls">
-				<button id="button_today" class="button button_secondary today">
-					Today
-				</button>
-				<div class="container nextPrev">
-					<button
-						id="headerControls_prev"
-						class="button button_round button-controls prev"
-					>
-						<img
-							src="./images/chevron_left_FILL0_wght400_GRAD0_opsz48.svg"
-							alt="arrow left"
-						/>
-					</button>
-					<button
-						id="headerControls_next"
-						class="button button_round button-controls next"
-					>
-						<img
-							src="./images/chevron_right_FILL0_wght400_GRAD0_opsz48.svg"
-							alt="arrow right"
-						/>
-					</button>
-				</div>
-				<div class="date">
-					<span data-calendarLabel="month">Month</span>
-					<span data-calendarLabel="year">Year</span>
-				</div>
+			<div class="localeSelectorContainer">
+				<select id="localeSelector" class="localeSelector">
+					<option value="en">🇺🇸 US</option>
+					<option value="lt-LT">🇱🇹 LT</option>
+					<option value="fa-AF">✅ afghanistan</option>
+				</select>
 			</div>
 		</header>
 
-		<main>
+		<main class="main">
 			<aside class="container sideBar">
 				<button class="button button-primary create">Create Event</button>
 
 				<div class="monthView">
 					<div class="container monthView-header">
-						<div class="monthView-label">
-							<span data-calendarLabel="month" id="monthView-label-month"
-								>Month</span
-							>
-							<span> </span>
-							<span data-calendarLabel="year" id="monthView-label-year"
-								>Year</span
-							>
+						<div class="monthView-label monthYearLabel">
+							<span>Month/Year</span>
 						</div>
 						<div class="container">
 							<button
@@ -96,15 +98,7 @@
 						</div>
 					</div>
 					<div class="monthView-main">
-						<div class="container centered monthView-weekDayNames">
-							<span>M</span>
-							<span>T</span>
-							<span>W</span>
-							<span>T</span>
-							<span>F</span>
-							<span>S</span>
-							<span>S</span>
-						</div>
+						<div class="container centered monthView-weekDayNames"></div>
 						<!-- #month is generated with months.js -->
 						<div id="month" class="monthView-days"></div>
 					</div>

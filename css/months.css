@@ -1,66 +1,60 @@
-.monthView{
-    margin-top: 1em;
-    padding: 1em;
-    border: 1px solid var(--grey_light);
-    font-size: 10px;
+.monthView {
+	margin-top: 1em;
+	font-size: 10px;
 }
-.monthView-header{
-    justify-content: space-between;
+.monthView-header {
+	justify-content: space-between;
+	padding-left: 1em;
 }
-.monthView-label{
-    margin-right: 2em;
-}
-.monthView-main{
-    margin-top: 1em;
-    border: 1px solid var(--grey_light);
-    padding: 1em;
+.monthView-main {
+	margin-top: 1em;
 }
 
-.monthView-days{
-    display: grid;
-    grid-template-columns: repeat(7, max-content);
-    grid-template-rows: repeat(6, max-content);
-    margin-top: 1em;
+.monthView-days {
+	display: grid;
+	grid-template-columns: repeat(7, max-content);
+	grid-template-rows: repeat(6, max-content);
+	margin-top: 1em;
 }
-.monthView-cell{
-    width: 2em;
-    height: 2em;
-    justify-content: center;
-    margin: 0.6em;
+.monthView-cell {
+	width: 2em;
+	height: 2em;
+	justify-content: center;
+	margin: 0.6em;
 }
-.monthView-button{
-    font-size: inherit;
-    color: var(--grey_medium);
-    width: 100%;
-    height: 100%;
-    font-weight: 600;
-}
-
-.selectedMonth{
-    color: var(--grey_dark);
+.monthView-button {
+	font-size: inherit;
+	color: var(--grey_medium);
+	width: 100%;
+	height: 100%;
+	font-weight: 600;
 }
 
-.monthView-weekDayNames{
-    width: 100%;
-}
-.centered{
-    justify-content: space-around;
+.selectedMonth {
+	color: var(--grey_dark);
 }
 
-.selected_secondary{
-    background-color: var(--secondary-bg);
-    color: var(--secondary-font);
+.monthView-weekDayNames {
+	width: 100%;
+}
+.centered {
+	justify-content: space-around;
 }
 
-.selected_secondary:hover{
-    background-color: rgb(174,203,250);
-    color: var(--secondary-font);
+.selected_secondary {
+	background-color: var(--secondary-bg);
+	color: var(--secondary-font);
 }
-.button_today{
-    color: white;
-    background-color: var(--primary);
+
+.selected_secondary:hover {
+	background-color: rgb(174, 203, 250);
+	color: var(--secondary-font);
 }
-.button_today:hover{
-    color: white;
-    background-color: var(--primary_dark);
+.button_today {
+	color: white;
+	background-color: var(--primary);
+}
+.button_today:hover {
+	color: white;
+	background-color: var(--primary_dark);
 }

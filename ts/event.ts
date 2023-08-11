@@ -5,28 +5,40 @@ import { modalState } from "./state.js";
 const TIME_VALIDATION_ERROR_MESSAGE = "Event cannot end before it starts.";
 const TITLE_VALIDATION_ERROR_MESSAGE = "Please enter a title.";
 
-const eventModal = document.querySelector("#eventModal");
-const eventForm = document.querySelector("#eventForm");
-const eventButton_create = document.querySelector(".create");
-const eventButton_cancel = document.querySelector("#event-cancel");
-const eventButton_save = document.querySelector("#event-save");
-const eventDate = document.querySelector("#event-date");
-const startTime = document.querySelector("#event-startTime");
-const endTime = document.querySelector("#event-endTime");
-const title = document.querySelector("#event-title");
+const eventModal = document.querySelector("#eventModal") as HTMLDivElement;
+const eventForm = document.querySelector("#eventForm") as HTMLFormElement;
+const eventButtonCreate = document.querySelector(
+	".create"
+) as HTMLButtonElement;
+const eventButtonCancel = document.querySelector(
+	"#event-cancel"
+) as HTMLButtonElement;
+const eventButtonSave = document.querySelector(
+	"#event-save"
+) as HTMLButtonElement;
+const eventDate = document.querySelector("#event-date") as HTMLInputElement;
+const startTime = document.querySelector(
+	"#event-startTime"
+) as HTMLInputElement;
+const endTime = document.querySelector("#event-endTime") as HTMLInputElement;
+const title = document.querySelector("#event-title") as HTMLInputElement;
 
-const convertInputToDate = (dateString, timeString) => {
+const convertInputToDate = (dateString: string, timeString: string): number => {
 	return Date.parse(`${dateString} ${timeString}`);
 };
 
-const collectFormData = () => {
-	const inputData = {};
-	const inputs = document.querySelectorAll("[data-key]");
+const collectFormData = (): FormData => {
+	const inputData: any = {};
+	const inputs = Array.from(
+		document.querySelectorAll("input[data-key]")
+	) as HTMLInputElement[];
 
 	inputs.forEach((input) => {
 		const key = input.dataset.key;
-		const value = input.value;
-		inputData[key] = value || null;
+		if (key) {
+			const value = input.value;
+			inputData[key] = value;
+		}
 	});
 
 	inputData.startTime = convertInputToDate(
@@ -43,7 +55,7 @@ const collectFormData = () => {
 	return formData;
 };
 
-const setDateAndTimeInputValues = (date) => {
+const setDateAndTimeInputValues = (date: Date): void => {
 	resetForm();
 	const time = date.toTimeString().slice(0, 5);
 	//use 'lt-LT' as locale to correctly form date as YYYY-MM-DD
@@ -57,9 +69,8 @@ const setDateAndTimeInputValues = (date) => {
 	endTime.value = time;
 };
 
-export const showFormModal = (date) => {
+export const showFormModal = (date: Date): void => {
 	if (modalState.value?.dataset.eventId) {
-		console.log(modalState.value);
 		modalState.value.remove();
 	}
 	setDateAndTimeInputValues(date);
@@ -73,8 +84,7 @@ const resetForm = () => {
 	errorMessageContainers.forEach((elem) => {
 		elem.classList.remove("invalidInput");
 	});
-	const form = document.querySelector("#eventForm");
-	form.reset();
+	eventForm.reset();
 };
 
 const isStartTimeBigger = () => {
@@ -87,45 +97,62 @@ const isStartTimeBigger = () => {
 	}
 };
 
-const validateTimeInput = () => {
+const toggleErrorMessageElement = (
+	errorMessageContainer: Element,
+	failCondition: boolean,
+	errorMessage: string
+): boolean => {
+	const errorMessageText = errorMessageContainer.querySelector(
+		"span"
+	) as HTMLSpanElement;
+
+	errorMessageText.innerHTML = errorMessage;
+
+	if (failCondition) {
+		if (!errorMessageContainer.classList.contains("invalidInput")) {
+			errorMessageContainer.classList.add("invalidInput");
+		}
+		return false;
+	} else {
+		if (errorMessageContainer.classList.contains("invalidInput")) {
+			errorMessageContainer.classList.remove("invalidInput");
+		}
+		return true;
+	}
+};
+
+const validateTimeInput = (): boolean => {
 	const errorMessageContainer = document.querySelector(
 		"[data-timeErrorMessage]"
 	);
-	const errorMessageText = errorMessageContainer.querySelector("span");
-	errorMessageText.innerHTML = TIME_VALIDATION_ERROR_MESSAGE;
-	if (isStartTimeBigger()) {
-		if (!errorMessageContainer.classList.contains("invalidInput")) {
-			errorMessageContainer.classList.add("invalidInput");
-		}
-		return false;
-	} else {
-		if (errorMessageContainer.classList.contains("invalidInput")) {
-			errorMessageContainer.classList.remove("invalidInput");
-		}
-		return true;
+
+	if (errorMessageContainer) {
+		return toggleErrorMessageElement(
+			errorMessageContainer,
+			isStartTimeBigger(),
+			TIME_VALIDATION_ERROR_MESSAGE
+		);
 	}
+	return false;
 };
 
-const validateTitleInput = () => {
+const validateTitleInput = (): boolean => {
 	const errorMessageContainer = document.querySelector(
 		"[data-titleErrorMessage]"
 	);
-	const errorMessageText = errorMessageContainer.querySelector("span");
-	errorMessageText.innerHTML = TITLE_VALIDATION_ERROR_MESSAGE;
-	if (!title.value) {
-		if (!errorMessageContainer.classList.contains("invalidInput")) {
-			errorMessageContainer.classList.add("invalidInput");
-		}
-		return false;
-	} else {
-		if (errorMessageContainer.classList.contains("invalidInput")) {
-			errorMessageContainer.classList.remove("invalidInput");
-		}
-		return true;
+	if (errorMessageContainer) {
+		const valRes = toggleErrorMessageElement(
+			errorMessageContainer,
+			!title.value,
+			TITLE_VALIDATION_ERROR_MESSAGE
+		);
+
+		return valRes;
 	}
+	return false;
 };
 
-const hideModal = () => {
+const hideModal = (): void => {
 	resetForm();
 	eventForm.classList.add("slideOut_rtl");
 	setTimeout(() => {
@@ -135,26 +162,26 @@ const hideModal = () => {
 	modalState.setState(null);
 };
 
-export const init = () => {
+export const init = (): void => {
 	title.addEventListener("input", validateTitleInput);
 	endTime.addEventListener("input", validateTimeInput);
 	startTime.addEventListener("input", validateTimeInput);
 
 	eventModal.addEventListener("click", (e) => {
-		if (e.target.id === "eventModal") {
+		if ((e.target as HTMLElement).id === "eventModal") {
 			hideModal();
 		}
 	});
 
-	eventButton_create.addEventListener("click", (e) => {
+	eventButtonCreate.addEventListener("click", (e) => {
 		showFormModal(getToday());
 	});
 
-	eventButton_cancel.addEventListener("click", (e) => {
+	eventButtonCancel.addEventListener("click", (e) => {
 		hideModal();
 	});
 
-	eventButton_save.addEventListener("click", (e) => {
+	eventButtonSave.addEventListener("click", (e) => {
 		e.preventDefault();
 		if (!validateTitleInput() || !validateTimeInput()) {
 			return;
