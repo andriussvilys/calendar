@@ -11,9 +11,9 @@ declare global {
 
 export const filterEventsByTimestamp = (timestamp: number): FormData[] => {
 	const events = getEvents();
-	return events.filter((event: FormData) => {
-		return getEventCellTimestamp(event) === timestamp;
-	});
+	return events.filter(
+		(event: FormData) => getEventCellTimestamp(event) === timestamp
+	);
 };
 
 export const findEventById = (eventId: string): FormData | null => {
@@ -70,14 +70,13 @@ const getEvents = (): FormData[] => {
 };
 
 export const saveFormData = (formData: FormData): FormData[] => {
-	const events: FormData[] = getEvents();
-	events.push(formData);
+	const events: FormData[] = [...getEvents(), formData];
 	setStorage("events", events);
 	storageState.setState(formData);
 	return events;
 };
 
-export const removeFormData = (eventId: string) => {
+export const removeFormData = (eventId: string): void => {
 	const event = findEventById(eventId);
 	if (event) {
 		const events = getEvents();

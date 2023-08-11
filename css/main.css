@@ -44,7 +44,7 @@ body {
 	position: relative;
 }
 
-button {
+.button {
 	border: none;
 	display: flex;
 	justify-content: center;
@@ -72,14 +72,14 @@ button {
 	background-color: var(--grey_medium);
 }
 
-header {
+.header {
 	height: 4em;
 	border-bottom: 1px solid var(--grey_light);
 	justify-content: space-between;
 	flex-shrink: 0;
 }
 
-main {
+.main {
 	overflow: hidden;
 	display: flex;
 	flex: 1;
@@ -92,9 +92,6 @@ main {
 .button img {
 	width: 100%;
 }
-/* .button-controls img{
-    width: 100%;
-} */
 
 .button_round {
 	border-radius: 999px;
@@ -135,10 +132,10 @@ main {
 	color: var(--grey_dark);
 	font-size: 1.4em;
 }
-.localeSelector {
+.localeSelectorContainer {
 	justify-self: flex-end;
 	margin-right: 3em;
 }
-select {
+.localeSelector {
 	border: none;
 }

@@ -1,11 +1,11 @@
-import { DateFormatter } from "./date-formatter.js";
+import { DateFormatter } from "./dateFormatter.js";
 import {
 	getLocale,
 	getToday,
 	incrementDay,
 	setLocale,
 	WEEKDAYS,
-	localeType,
+	LocaleType,
 } from "./dateManipulation.js";
 import { localeState, selectedDate } from "./state.js";
 
@@ -26,25 +26,25 @@ const updateMonthYearLabels = (
 };
 
 export const init = (dateFormatter: DateFormatter) => {
-	const button_today = document.querySelector("#button_today");
-	const headerControls_prev = document.querySelector("#headerControls_prev");
-	const headerControls_next = document.querySelector("#headerControls_next");
+	const buttonToday = document.querySelector("#button_today");
+	const headerControlsPrev = document.querySelector("#headerControls_prev");
+	const headerControlsNext = document.querySelector("#headerControls_next");
 	const localeSelector = document.querySelector("#localeSelector");
 
-	button_today?.addEventListener("click", () => {
+	buttonToday?.addEventListener("click", () => {
 		selectedDate.setState(getToday());
 	});
 
-	headerControls_prev?.addEventListener("click", () => {
+	headerControlsPrev?.addEventListener("click", () => {
 		handleNextPrevClick(-1);
 	});
 
-	headerControls_next?.addEventListener("click", () => {
+	headerControlsNext?.addEventListener("click", () => {
 		handleNextPrevClick(1);
 	});
 
 	localeSelector?.addEventListener("change", (e) => {
-		setLocale((e.target as HTMLInputElement)!.value as localeType);
+		setLocale((e.target as HTMLInputElement)!.value as LocaleType);
 		localeState.setState(getLocale());
 	});
 

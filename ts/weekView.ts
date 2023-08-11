@@ -21,7 +21,7 @@ import {
 	FormData,
 } from "./database.js";
 import { showFormModal } from "./event.js";
-import { DateFormatter } from "./date-formatter.js";
+import { DateFormatter } from "./dateFormatter.js";
 
 export const TIMESLOT_DURATION = 15;
 const EVENTBUBBLE_OFFSET = 25;
@@ -166,7 +166,7 @@ const createEventBubble = (
 	const event = timeslotEvents[index];
 
 	const container = document.createElement("div");
-	container.classList.add("eventBubble-container");
+	container.classList.add("eventBubble");
 	container.dataset.eventId = event.id;
 
 	const title = document.createElement("span");
@@ -215,12 +215,12 @@ const createTimeslot = (
 	const eventBubbleContainer = document.createElement("div");
 	eventBubbleContainer.className = "eventBubbleContainer";
 
-	const eventBubbleWrapper = document.createElement("div");
-	eventBubbleWrapper.className = "eventBubbleWrapper";
-	eventBubbleWrapper.dataset.timestamp = timestamp.toString();
+	const timeslotInnerContainer = document.createElement("div");
+	timeslotInnerContainer.className = "timeslot-innerContainer";
+	timeslotInnerContainer.dataset.timestamp = timestamp.toString();
 
-	eventBubbleWrapper.appendChild(eventBubbleContainer);
-	container.appendChild(eventBubbleWrapper);
+	timeslotInnerContainer.appendChild(eventBubbleContainer);
+	container.appendChild(timeslotInnerContainer);
 
 	const timeslot: Timeslot = cellTimeslots[index];
 
@@ -319,9 +319,7 @@ const updateDayLabels = (date: Date, dateFormatter: DateFormatter) => {
 	dayLabels.forEach((label, index) => {
 		(label as HTMLSpanElement).innerText = weekDayLabels[index];
 	});
-	const dayLabelButtons = document.querySelectorAll(
-		".header-cell .day-label > button"
-	);
+	const dayLabelButtons = document.querySelectorAll(".dayLabel-button");
 	const weekDates = dateFormatter.getWeekDates(date);
 	dayLabelButtons.forEach((button: Element, index: number) => {
 		(button as HTMLElement).innerText = weekDates[index];
@@ -349,7 +347,7 @@ const createDayColumn = (
 
 	const button = document.createElement("button");
 	button.innerText = dateFormatter.getDate(date);
-	button.className = `button weekView-button button_round ${
+	button.className = `button dayLabel-button button_round ${
 		isSameDate(date, today) ? "button_today" : ""
 	}`;
 

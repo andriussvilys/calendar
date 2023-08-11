@@ -79,8 +79,7 @@
 .weekView-column > .day-border:last-of-type {
 	border-bottom: none;
 }
-
-.weekView-button {
+.dayLabel-button {
 	margin-top: 0.3em;
 	font-size: 1.4em;
 	width: 2em;
@@ -153,7 +152,7 @@
 	width: 100%;
 }
 
-.eventBubble-container {
+.eventBubble {
 	padding: 0.05em 0.4em;
 	background-color: var(--eventBubbleBlue);
 	color: white;
@@ -165,7 +164,7 @@
 	min-height: 25%;
 	z-index: 1;
 }
-.eventBubble-container * {
+.eventBubble * {
 	cursor: default;
 }
 .eventBubble-title {
@@ -199,7 +198,7 @@
 	height: 3em;
 	width: 3em;
 }
-.eventBubbleWrapper {
+.timeslot-innerContainer {
 	width: calc(100% - 10px);
 	height: 100%;
 	position: relative;

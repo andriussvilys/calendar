@@ -17,7 +17,6 @@
 		<script type="module" src="./dist/event.js"></script>
 		<script type="module" src="./dist/months.js"></script>
 		<script type="module" src="./dist/header.js"></script>
-		<script type="module" src="./dist/modal.js"></script>
 		<script type="module" src="./dist/date-formatter.js"></script>
 		<script type="module" src="./dist/main.js"></script>
 
@@ -59,8 +58,8 @@
 				</div>
 			</div>
 
-			<div class="localeSelector">
-				<select id="localeSelector">
+			<div class="localeSelectorContainer">
+				<select id="localeSelector" class="localeSelector">
 					<option value="en">🇺🇸 US</option>
 					<option value="lt-LT">🇱🇹 LT</option>
 					<option value="fa-AF">✅ afghanistan</option>
@@ -68,7 +67,7 @@
 			</div>
 		</header>
 
-		<main>
+		<main class="main">
 			<aside class="container sideBar">
 				<button class="button button-primary create">Create Event</button>
 

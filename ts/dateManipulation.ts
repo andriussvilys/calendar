@@ -2,29 +2,33 @@ export const WEEKDAYS = 7;
 export const HOUR_COUNT = 24;
 export const MILISECOND_HOUR = 60 * 60 * 1000;
 
-export type localeType = "us-US" | "lt-LT";
-let locale: localeType = "us-US";
+export enum LocaleType {
+	US = "us-US",
+	LT = "lt-LT",
+}
 
-export const getLocale = (): localeType => {
+let locale: LocaleType = LocaleType.US;
+
+export const getLocale = (): LocaleType => {
 	return locale;
 };
-export const setLocale = (newLocale: localeType): localeType => {
+export const setLocale = (newLocale: LocaleType): LocaleType => {
 	locale = newLocale;
 	return locale;
 };
 
-export const getToday = () => new Date();
+export const getToday = (): Date => new Date();
 
 export const isSameWeek = (date1: Date, date2: Date): boolean => {
 	const week = getWeekDates(date1);
 	const result = week.find((item) => isSameDate(item, date2));
-	return result ? true : false;
+	return !!result;
 };
 
 export const isSameDate = (date1: Date, date2: Date): boolean => {
-	const year = date1.getFullYear() === date2.getFullYear() ? true : false;
-	const month = date1.getMonth() === date2.getMonth() ? true : false;
-	const date = date1.getDate() === date2.getDate() ? true : false;
+	const year = date1.getFullYear() === date2.getFullYear();
+	const month = date1.getMonth() === date2.getMonth();
+	const date = date1.getDate() === date2.getDate();
 
 	return year && month && date;
 };
@@ -62,4 +66,16 @@ export const getDayStart = (timestamp: number): number => {
 	day.setMilliseconds(0);
 
 	return day.valueOf();
+};
+
+export default {
+	LocaleType,
+	getLocale,
+	setLocale,
+	getToday,
+	isSameDate,
+	getWeekDates,
+	incrementDay,
+	incrementMonth,
+	getDayStart,
 };

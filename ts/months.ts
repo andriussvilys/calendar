@@ -1,4 +1,4 @@
-import { DateFormatter } from "./date-formatter.js";
+import { DateFormatter } from "./dateFormatter.js";
 import {
 	isSameDate,
 	getToday,

@@ -7,13 +7,13 @@ const TITLE_VALIDATION_ERROR_MESSAGE = "Please enter a title.";
 
 const eventModal = document.querySelector("#eventModal") as HTMLDivElement;
 const eventForm = document.querySelector("#eventForm") as HTMLFormElement;
-const eventButton_create = document.querySelector(
+const eventButtonCreate = document.querySelector(
 	".create"
 ) as HTMLButtonElement;
-const eventButton_cancel = document.querySelector(
+const eventButtonCancel = document.querySelector(
 	"#event-cancel"
 ) as HTMLButtonElement;
-const eventButton_save = document.querySelector(
+const eventButtonSave = document.querySelector(
 	"#event-save"
 ) as HTMLButtonElement;
 const eventDate = document.querySelector("#event-date") as HTMLInputElement;
@@ -127,12 +127,11 @@ const validateTimeInput = (): boolean => {
 	);
 
 	if (errorMessageContainer) {
-		const valResult = toggleErrorMessageElement(
+		return toggleErrorMessageElement(
 			errorMessageContainer,
 			isStartTimeBigger(),
 			TIME_VALIDATION_ERROR_MESSAGE
 		);
-		return valResult;
 	}
 	return false;
 };
@@ -174,15 +173,15 @@ export const init = (): void => {
 		}
 	});
 
-	eventButton_create.addEventListener("click", (e) => {
+	eventButtonCreate.addEventListener("click", (e) => {
 		showFormModal(getToday());
 	});
 
-	eventButton_cancel.addEventListener("click", (e) => {
+	eventButtonCancel.addEventListener("click", (e) => {
 		hideModal();
 	});
 
-	eventButton_save.addEventListener("click", (e) => {
+	eventButtonSave.addEventListener("click", (e) => {
 		e.preventDefault();
 		if (!validateTitleInput() || !validateTimeInput()) {
 			return;

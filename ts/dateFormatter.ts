@@ -1,4 +1,4 @@
-import { getWeekDates } from "./dateManipulation.js";
+import DateManipulation from "./dateManipulation.js";
 
 export type DateFormatter = ReturnType<typeof createDateFormatter>;
 
@@ -11,7 +11,7 @@ export const createDateFormatter = (locale: string) => {
 				month: "long",
 			}),
 		getWeekDayLabels: (date: Date): string[] => {
-			return getWeekDates(date).map((date: Date) => {
+			return DateManipulation.getWeekDates(date).map((date: Date) => {
 				return date
 					.toLocaleDateString(currentLocale, { weekday: "short" })
 					.toUpperCase();
@@ -23,7 +23,7 @@ export const createDateFormatter = (locale: string) => {
 				.toUpperCase();
 		},
 		getWeekDates: (date: Date): string[] => {
-			return getWeekDates(date).map((date: Date) => {
+			return DateManipulation.getWeekDates(date).map((date: Date) => {
 				return date.toLocaleDateString(currentLocale, { day: "numeric" });
 			});
 		},
@@ -42,7 +42,6 @@ export const createDateFormatter = (locale: string) => {
 		getHour: (timestamp: number): string => {
 			return new Date(timestamp).toLocaleTimeString(currentLocale, {
 				hour: "numeric",
-				// minute: "numeric",
 			});
 		},
 		getEventDate: (date: Date): string => {
