@@ -1,9 +1,9 @@
-import DateManipulation from "./dateManipulation";
+import DateManipulation, { LocaleType } from "./dateManipulation";
 
 export type DateFormatter = ReturnType<typeof createDateFormatter>;
 
-export const createDateFormatter = (locale: string) => {
-	let currentLocale = locale;
+export const createDateFormatter = (locale: LocaleType) => {
+	let currentLocale: LocaleType = locale;
 
 	return {
 		getFormattedMonth: (date: Date): string =>
@@ -74,7 +74,7 @@ export const createDateFormatter = (locale: string) => {
 				new Date(endTimestamp)
 			);
 		},
-		changeLocale: (newLocale: string) => {
+		changeLocale: (newLocale: LocaleType) => {
 			currentLocale = newLocale;
 		},
 	};

@@ -1,15 +1,8 @@
 import { DateFormatter } from "../../Utils/dateFormatter.js";
-import {
-	isSameDate,
-	getToday,
-	WEEKDAYS,
-	incrementMonth,
-} from "../../Utils/dateManipulation.js";
+import { WEEKDAYS, incrementMonth } from "../../Utils/dateManipulation.js";
 import { localeState, selectedDate, selectedMonth } from "../../Utils/state.js";
 
 const CALENDAR_ROWS = 6;
-
-const today = getToday();
 
 const toggleSelectedSecondary = (date: Date) => {
 	const buttons = document.querySelectorAll(
@@ -49,29 +42,29 @@ const createWeekDayLabels = (
 	return container;
 };
 
-const generateDayCell = (date: Date, dateFormatter: DateFormatter) => {
-	const container = document.createElement("div");
-	container.className = `container monthView-cell`;
+// const generateDayCell = (date: Date, dateFormatter: DateFormatter) => {
+// 	const container = document.createElement("div");
+// 	container.className = `container monthView-cell`;
 
-	const button = document.createElement("button");
-	button.className = `button button_round monthView-button ${
-		isSameDate(date, getToday()) ? "button_today" : ""
-	}`;
+// 	const button = document.createElement("button");
+// 	button.className = `button button_round monthView-button ${
+// 		isSameDate(date, getToday()) ? "button_today" : ""
+// 	}`;
 
-	button.innerText = dateFormatter.getDate(date);
+// 	button.innerText = dateFormatter.getDate(date);
 
-	button.dataset.timestamp = date.valueOf().toString();
+// 	button.dataset.timestamp = date.valueOf().toString();
 
-	button.addEventListener("click", (e) =>
-		onMonthButtonClick(e.target as HTMLElement)
-	);
+// 	button.addEventListener("click", (e) =>
+// 		onMonthButtonClick(e.target as HTMLElement)
+// 	);
 
-	container.appendChild(button);
+// 	container.appendChild(button);
 
-	return container;
-};
+// 	return container;
+// };
 
-export const switchMonth = (newDate: Date, dateFormatter: DateFormatter) => {
+const switchMonth = (newDate: Date, dateFormatter: DateFormatter) => {
 	const months = document.querySelector("#month");
 	if (months) {
 		months.innerHTML = "";
