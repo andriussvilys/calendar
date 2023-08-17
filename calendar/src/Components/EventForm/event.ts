@@ -1,6 +1,6 @@
 import { FormData, saveFormData } from "../../Utils/database";
-import { getToday } from "../../Utils/dateManipulation.js";
-import { modalState } from "../../Utils/state.js";
+import { getToday } from "../../Utils/dateManipulation";
+import { modalState } from "../../Utils/state";
 
 const TIME_VALIDATION_ERROR_MESSAGE = "Event cannot end before it starts.";
 const TITLE_VALIDATION_ERROR_MESSAGE = "Please enter a title.";

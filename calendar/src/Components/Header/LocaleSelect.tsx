@@ -4,7 +4,7 @@ interface LocaleSelectProps {
 	onLocaleChange: Function;
 }
 
-const LocaleSelect: React.FC<LocaleSelectProps> = ({ onLocaleChange }) => {
+const LocaleSelect = ({ onLocaleChange }: LocaleSelectProps) => {
 	const handleOptionSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		onLocaleChange(e.target.value);
 	};

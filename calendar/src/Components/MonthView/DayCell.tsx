@@ -1,46 +1,31 @@
-import { createDateFormatter } from "../../Utils/dateFormatter";
+import { DateFormatter, createDateFormatter } from "../../Utils/dateFormatter";
 import { LocaleType, getToday, isSameDate } from "../../Utils/dateManipulation";
 
 interface DayCellProps {
-	locale: LocaleType;
+	dateFormatter: DateFormatter;
 	date: Date;
 	onDateChange: Function;
+	selectedDate: Date;
 }
 
-const generateDayCell = (
-	locale: LocaleType,
-	date: Date,
-	onDateChange: Function
-) => {
-	// const container = document.createElement("div");
-	// container.className = `container monthView-cell`;
-
-	// const button = document.createElement("button");
-	// button.className = `button button_round monthView-button ${
-	// 	isSameDate(date, getToday()) ? "button_today" : ""
-	// }`;
-
-	// button.innerText = createDateFormatter(locale).getDate(date);
-
-	// button.dataset.timestamp = date.valueOf().toString();
-
-	// button.addEventListener("click", (e) =>
-	// 	onMonthButtonClick(e.target as HTMLElement, onDateChange)
-	// );
-
-	// container.appendChild(button);
-
+const DayCell = ({
+	dateFormatter,
+	date,
+	onDateChange,
+	selectedDate,
+}: DayCellProps) => {
 	return (
 		<div className="container monthView-cell">
 			<button
 				className={`button button_round monthView-button ${
 					isSameDate(date, getToday()) ? "button_today" : ""
-				}`}
+				} ${isSameDate(date, selectedDate) ? "selected_secondary" : ""}`}
+				data-timestamp={date.valueOf()}
 				onClick={(e) => {
 					onMonthButtonClick(e.target as HTMLElement, onDateChange);
 				}}
 			>
-				{createDateFormatter(locale).getDate(date)}
+				{dateFormatter.getDate(date)}
 			</button>
 		</div>
 	);
@@ -51,8 +36,11 @@ const onMonthButtonClick = (
 	onDateChange: Function
 ) => {
 	const timestamp = eventTarget?.dataset?.timestamp;
+	console.log(eventTarget, timestamp);
 	if (timestamp) {
 		const newDate = new Date(Number(timestamp));
 		onDateChange(newDate);
 	}
 };
+
+export default DayCell;

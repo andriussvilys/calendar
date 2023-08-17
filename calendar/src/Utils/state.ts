@@ -1,4 +1,4 @@
-import { getToday } from "./dateManipulation.js";
+import { getToday } from "./dateManipulation";
 
 class State {
 	value: any;

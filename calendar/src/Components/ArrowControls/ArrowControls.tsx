@@ -7,12 +7,12 @@ interface ArrowControlsProps {
 	onBackArrowClick: Function;
 }
 
-const ArrowControls: React.FC<ArrowControlsProps> = ({
+const ArrowControls = ({
 	onForwardArrowClick,
 	onBackArrowClick,
-}) => {
+}: ArrowControlsProps) => {
 	return (
-		<div className="container nextPrev">
+		<div className="container">
 			<button
 				id="headerControls_prev"
 				className="button button_round button-controls prev"

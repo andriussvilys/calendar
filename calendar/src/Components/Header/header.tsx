@@ -9,20 +9,21 @@ import MonthYearLabel from "../MonthYearLabel/MonthYearLabel";
 import ArrowControls from "../ArrowControls/ArrowControls";
 import LocaleSelect from "./LocaleSelect";
 import "./header.css";
+import { DateFormatter } from "../../Utils/dateFormatter";
 
 interface HeaderProps {
-	locale: LocaleType;
+	dateFormatter: DateFormatter;
 	selectedDate: Date;
 	onLocaleChange: Function;
 	onSelectedDateChange: Function;
 }
 
-export const Header: React.FC<HeaderProps> = ({
-	locale,
+export const Header = ({
+	dateFormatter,
 	selectedDate,
 	onLocaleChange,
 	onSelectedDateChange,
-}) => {
+}: HeaderProps) => {
 	const handleNextPrevClick = (direction: number): void => {
 		const newDate = incrementDay(selectedDate, WEEKDAYS * direction);
 		onSelectedDateChange(newDate);
@@ -47,7 +48,10 @@ export const Header: React.FC<HeaderProps> = ({
 						onForwardArrowClick={() => handleNextPrevClick(1)}
 					/>
 				</div>
-				<MonthYearLabel locale={locale} selectedDate={selectedDate} />
+				<MonthYearLabel
+					dateFormatter={dateFormatter}
+					selectedDate={selectedDate}
+				/>
 			</div>
 
 			<LocaleSelect onLocaleChange={onLocaleChange} />

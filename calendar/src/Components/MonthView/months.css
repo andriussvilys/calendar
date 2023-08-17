@@ -1,6 +1,8 @@
 .monthView {
 	margin-top: 1em;
 	font-size: 10px;
+	display: grid;
+	grid-template-columns: max-content;
 }
 .monthView-header {
 	justify-content: space-between;

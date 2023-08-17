@@ -1,15 +1,14 @@
-import React from "react";
-import { LocaleType } from "../../Utils/dateManipulation";
-import { createDateFormatter } from "../../Utils/dateFormatter";
+import { DateFormatter } from "../../Utils/dateFormatter";
 import "./MonthYearLabel.css";
 
-interface HeaderProps {
-	locale: LocaleType;
+interface MonthYearLabelProps {
+	dateFormatter: DateFormatter;
 	selectedDate: Date;
 }
-const MonthYearLabel: React.FC<HeaderProps> = ({ locale, selectedDate }) => {
-	const dateFormatter = createDateFormatter(locale);
-
+const MonthYearLabel = ({
+	dateFormatter,
+	selectedDate,
+}: MonthYearLabelProps) => {
 	return (
 		<div className="monthYearLabel">
 			<span>{dateFormatter.getMonthYearLabel(selectedDate)}</span>

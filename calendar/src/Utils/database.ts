@@ -1,7 +1,6 @@
 //this module uses UUID v8.1.0 library (CDN). The uuidv4 function comes from there
-import { MILISECOND_HOUR, getDayStart } from "./dateManipulation.js";
-import { TIMESLOT_DURATION } from "../Components/WeekView/weekView.js";
-import { storageState } from "./state.js";
+import { MILISECOND_HOUR, getDayStart } from "./dateManipulation";
+import { TIMESLOT_DURATION } from "../Components/WeekView/weekView";
 
 declare global {
 	interface Window {
@@ -59,7 +58,7 @@ export const getEventEndDate = (event: FormData): number => {
 	return getDayStart(event.endTime);
 };
 
-const getEvents = (): FormData[] => {
+export const getEvents = (): FormData[] => {
 	const eventsString = localStorage.getItem("events");
 	if (eventsString) {
 		const parsedEvents: object[] = JSON.parse(eventsString);
@@ -72,7 +71,7 @@ const getEvents = (): FormData[] => {
 export const saveFormData = (formData: FormData): FormData[] => {
 	const events: FormData[] = [...getEvents(), formData];
 	setStorage("events", events);
-	storageState.setState(formData);
+	// storageState.setState(formData);
 	return events;
 };
 
@@ -82,7 +81,7 @@ export const removeFormData = (eventId: string): void => {
 		const events = getEvents();
 		const updatedEvents = events.filter((event) => event.id !== eventId);
 		setStorage("events", updatedEvents);
-		storageState.setState(event);
+		// storageState.setState(event);
 	}
 };
 
