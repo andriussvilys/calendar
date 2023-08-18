@@ -173,8 +173,6 @@
 }
 .eventCard {
 	background-color: white;
-	border: 2px solid;
-	position: absolute;
 	z-index: 999;
 	flex-direction: column;
 	padding: 1em;
@@ -182,7 +180,7 @@
 	min-width: 40ch;
 }
 .eventCard-controls {
-	align-self: flex-end;
+	justify-content: flex-end;
 }
 .eventCardData {
 	flex-direction: column;

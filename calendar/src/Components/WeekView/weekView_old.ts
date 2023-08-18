@@ -20,7 +20,7 @@ import {
 	getEventCellTimestamp,
 	FormData,
 } from "../../Utils/database";
-import { showFormModal } from "../EventForm/event";
+import { showFormModal } from "../EventForm/EventForm";
 import { DateFormatter } from "../../Utils/dateFormatter";
 
 import "./weekView.css";

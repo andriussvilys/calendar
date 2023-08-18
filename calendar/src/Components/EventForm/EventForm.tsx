@@ -1,6 +1,11 @@
+import { Fragment, PropsWithChildren, ReactNode } from "react";
 import { FormData, saveFormData } from "../../Utils/database";
 import { getToday } from "../../Utils/dateManipulation";
 import { modalState } from "../../Utils/state";
+import "./event.css";
+
+import timeIcon from "../../images/schedule_FILL0_wght400_GRAD0_opsz48.svg";
+import noteIcon from "../../images/notes_FILL0_wght400_GRAD0_opsz48.svg";
 
 const TIME_VALIDATION_ERROR_MESSAGE = "Event cannot end before it starts.";
 const TITLE_VALIDATION_ERROR_MESSAGE = "Please enter a title.";
@@ -152,42 +157,154 @@ const validateTitleInput = (): boolean => {
 	return false;
 };
 
-const hideModal = (): void => {
-	resetForm();
-	eventForm.classList.add("slideOut_rtl");
-	setTimeout(() => {
-		eventModal.classList.add("display-none");
-		eventForm.classList.remove("slideOut_rtl");
-	}, 400);
-	modalState.setState(null);
+// const hideModal = (): void => {
+// 	resetForm();
+// 	eventForm.classList.add("slideOut_rtl");
+// 	setTimeout(() => {
+// 		eventModal.classList.add("display-none");
+// 		eventForm.classList.remove("slideOut_rtl");
+// 	}, 400);
+// 	modalState.setState(null);
+// };
+
+// export const init = (): void => {
+// 	title.addEventListener("input", validateTitleInput);
+// 	endTime.addEventListener("input", validateTimeInput);
+// 	startTime.addEventListener("input", validateTimeInput);
+
+// 	eventModal.addEventListener("click", (e) => {
+// 		if ((e.target as HTMLElement).id === "eventModal") {
+// 			hideModal();
+// 		}
+// 	});
+
+// 	eventButtonCreate.addEventListener("click", (e) => {
+// 		showFormModal(getToday());
+// 	});
+
+// 	eventButtonCancel.addEventListener("click", (e) => {
+// 		hideModal();
+// 	});
+
+// 	eventButtonSave.addEventListener("click", (e) => {
+// 		e.preventDefault();
+// 		if (!validateTitleInput() || !validateTimeInput()) {
+// 			return;
+// 		}
+// 		const formData = collectFormData();
+// 		saveFormData(formData);
+// 		hideModal();
+// 	});
+// };
+
+interface FormFieldContainerProps extends PropsWithChildren {
+	icon: ReactNode;
+}
+
+const FormFieldContainer = ({ children, icon }: FormFieldContainerProps) => {
+	return (
+		<div className="container event-title">
+			<div className="event-left">{icon}</div>
+			<div className="event-right container">
+				<div className="eventInputContainer container">{children}</div>
+				<div className="validationMessage">
+					<span className="validationMessageText">PLACEHOLDER</span>
+				</div>
+			</div>
+		</div>
+	);
 };
 
-export const init = (): void => {
-	title.addEventListener("input", validateTitleInput);
-	endTime.addEventListener("input", validateTimeInput);
-	startTime.addEventListener("input", validateTimeInput);
+export interface EventFormProps {
+	hideModal: Function;
+	saveToLocalStorage: Function;
+}
 
-	eventModal.addEventListener("click", (e) => {
-		if ((e.target as HTMLElement).id === "eventModal") {
-			hideModal();
-		}
-	});
+const EventForm = ({ hideModal, saveToLocalStorage }: EventFormProps) => {
+	const titleInput = (
+		<input
+			data-key="title"
+			id="event-title"
+			className="event-input event-titleInput"
+			type="text"
+			placeholder="Add title"
+			required
+		/>
+	);
+	const dateInput = (
+		<input
+			key={"startDate"}
+			data-key="startDate"
+			id="event-date"
+			className="event-input"
+			type="date"
+		/>
+	);
+	const timeInput = (
+		<Fragment key={"timeInput"}>
+			<input
+				data-key="startTime"
+				id="event-startTime"
+				className="event-input event-time-input"
+				type="time"
+			/>
+			<span>—</span>
+			<input
+				data-key="endTime"
+				id="event-endTime"
+				className="event-input event-time-input"
+				type="time"
+			/>
+		</Fragment>
+	);
+	const timeIconElement = <img src={timeIcon} alt="clock icon" />;
+	return (
+		<form
+			id="eventForm"
+			className="event-container"
+			onClick={(e) => e.stopPropagation()}
+		>
+			<FormFieldContainer children={titleInput} icon={null} />
 
-	eventButtonCreate.addEventListener("click", (e) => {
-		showFormModal(getToday());
-	});
+			<FormFieldContainer
+				children={[dateInput, timeInput]}
+				icon={timeIconElement}
+			/>
 
-	eventButtonCancel.addEventListener("click", (e) => {
-		hideModal();
-	});
+			<FormFieldContainer
+				children={
+					<textarea
+						data-key="description"
+						id="event-description"
+						className="event-input event-textarea"
+						placeholder="Description"
+					></textarea>
+				}
+				icon={<img src={noteIcon} alt="note icon" />}
+			/>
 
-	eventButtonSave.addEventListener("click", (e) => {
-		e.preventDefault();
-		if (!validateTitleInput() || !validateTimeInput()) {
-			return;
-		}
-		const formData = collectFormData();
-		saveFormData(formData);
-		hideModal();
-	});
+			<div className="container event-controls">
+				<button
+					className="button button_secondary button-cancel"
+					id="event-cancel"
+					type="reset"
+					onClick={() => {
+						console.log(`typeof hideModal: ${typeof hideModal}`);
+						hideModal();
+					}}
+				>
+					Cancel
+				</button>
+				<button
+					className="button button_secondary button-save"
+					id="event-save"
+					type="submit"
+				>
+					Save
+				</button>
+			</div>
+		</form>
+	);
 };
+
+export default EventForm;

@@ -6,6 +6,12 @@
 	justify-content: center;
 	top: 0;
 }
+.modalInnerContainer {
+	border: 2px solid black;
+	border-radius: 6px;
+	/* padding: 4em; */
+	background-color: yellow;
+}
 .modalContent {
 	position: relative;
 }

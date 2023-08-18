@@ -16,6 +16,7 @@ import "./weekView.css";
 import deleteIcon from "../../images/delete_FILL0_wght400_GRAD0_opsz48.svg";
 import closeIcon from "../../images/close_FILL0_wght400_GRAD0_opsz48.svg";
 import { Fragment } from "react";
+import EventForm, { EventFormProps } from "../EventForm/EventForm";
 
 export const TIMESLOT_DURATION = 15;
 const EVENTBUBBLE_OFFSET = 25;
@@ -32,12 +33,7 @@ const EventCard = ({ event, dateFormatter }: EventCardProps) => {
 		event.endTime
 	);
 	return (
-		// <div
-		// 	className="container eventCard slideIn_ltr"
-		// 	data-event-id="a4110264-03f2-4e75-beeb-bfae960815ae"
-		// >
-		// </div>
-		<Fragment>
+		<div className="eventCard">
 			<div className="container eventCard-controls">
 				<button className="button button_round eventCard-button">
 					<img src={deleteIcon} alt="delete icon" />
@@ -54,7 +50,7 @@ const EventCard = ({ event, dateFormatter }: EventCardProps) => {
 					<span>{eventTimeRange}</span>
 				</p>
 			</div>
-		</Fragment>
+		</div>
 	);
 };
 
@@ -95,7 +91,8 @@ const EventBubble = ({
 
 	const columnWidth = 100 / (timeslotEvents.length + 1);
 	const offset = index * columnWidth;
-	const widthReduction = (Math.max(rightSiblingCount, 1) - 1) * columnWidth;
+	// const widthReduction = (Math.max(rightSiblingCount, 1) - 1) * columnWidth;
+	const widthReduction = 0;
 	const width = 100 - offset - widthReduction;
 
 	const style = {
@@ -294,28 +291,40 @@ const HourColumn = ({ dateFormatter }: { dateFormatter: DateFormatter }) => {
 	);
 };
 
-interface WeekViewProps {
-	selectedDate: Date;
-	onLocalStorageChange: Function;
-	dateFormatter: DateFormatter;
-	events: FormData[];
-	onModalBodyChange: Function;
-}
-
-const handleWeekViewClick = (event: any) => {
+const handleWeekViewClick = (
+	event: any,
+	onModalBodyChange: Function,
+	hideModal: Function,
+	saveToLocalStorage: Function
+) => {
+	console.log(typeof hideModal);
 	const eventTarget = event.nativeEvent.target as HTMLElement;
 	const eventTargetDataset = eventTarget.dataset;
 	console.log({ eventTarget, eventTargetDataset, natEvent: event.nativeEvent });
 	if (eventTargetDataset.timestamp) {
+		onModalBodyChange(
+			<EventForm
+				hideModal={hideModal}
+				saveToLocalStorage={saveToLocalStorage}
+			/>
+		);
 		// showFormModal(new Date(parseInt(eventTargetDataset.timestamp)));
 	}
 };
+
+interface WeekViewProps extends EventFormProps {
+	selectedDate: Date;
+	dateFormatter: DateFormatter;
+	events: FormData[];
+	openModal: Function;
+}
 const WeekView = ({
 	selectedDate,
 	dateFormatter,
-	onLocalStorageChange,
 	events,
-	onModalBodyChange,
+	openModal,
+	hideModal,
+	saveToLocalStorage,
 }: WeekViewProps) => {
 	const weekDates = getWeekDates(selectedDate);
 
@@ -323,7 +332,7 @@ const WeekView = ({
 		<div
 			className="weekView-main"
 			onClick={(e) => {
-				handleWeekViewClick(e);
+				handleWeekViewClick(e, openModal, hideModal, saveToLocalStorage);
 			}}
 		>
 			<HourColumn dateFormatter={dateFormatter} />
@@ -334,7 +343,7 @@ const WeekView = ({
 						date={date}
 						dateFormatter={dateFormatter}
 						events={events}
-						onModalBodyChange={onModalBodyChange}
+						onModalBodyChange={openModal}
 					/>
 				);
 			})}

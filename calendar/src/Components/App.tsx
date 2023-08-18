@@ -23,13 +23,16 @@ function App() {
 	const onSelectedDateChange = (newDate: Date) => {
 		setSelectedDate(newDate);
 	};
-	const onLocalStorageChange = (event: FormData) => {
+	const saveToLocalStorage = (event: FormData) => {
 		setEvents([...events, event]);
 		localStorage.setItem("events", JSON.stringify(events));
 	};
-	const onModalBodyChange = (children: JSX.Element) => {
+	const openModal = (children: JSX.Element) => {
 		setModalBody(children);
 		setIsModalVisible(true);
+	};
+	const hideModal = () => {
+		setIsModalVisible(false);
 	};
 
 	return (
@@ -52,9 +55,10 @@ function App() {
 					<WeekView
 						selectedDate={selectedDate}
 						dateFormatter={dateFormatter}
-						onLocalStorageChange={onLocalStorageChange}
 						events={events}
-						onModalBodyChange={onModalBodyChange}
+						openModal={openModal}
+						hideModal={hideModal}
+						saveToLocalStorage={saveToLocalStorage}
 					/>
 				</section>
 			</main>
