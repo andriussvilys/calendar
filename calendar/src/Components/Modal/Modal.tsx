@@ -48,12 +48,16 @@ const Modal = ({ children, isVisible, setModalVisibility }: ModalProps) => {
 			ref={modalContainer}
 			id="eventCardModal"
 			className={`modalContainer container display-none`}
-			onClick={() => {
+			onClick={(e) => {
 				closeModal(modalContent.current, modalContainer.current);
 				setModalVisibility(false);
 			}}
 		>
-			<div ref={modalContent} className="container modalInnerContainer">
+			<div
+				ref={modalContent}
+				className="container modalInnerContainer"
+				onClick={(e) => e.stopPropagation()}
+			>
 				{children}
 			</div>
 		</div>

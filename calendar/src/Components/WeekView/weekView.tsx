@@ -297,18 +297,25 @@ const handleWeekViewClick = (
 	hideModal: Function,
 	saveToLocalStorage: Function
 ) => {
-	console.log(typeof hideModal);
 	const eventTarget = event.nativeEvent.target as HTMLElement;
 	const eventTargetDataset = eventTarget.dataset;
-	console.log({ eventTarget, eventTargetDataset, natEvent: event.nativeEvent });
+	console.log({
+		eventTarget,
+		eventTargetDataset,
+		timestamp: eventTargetDataset.timestamp,
+	});
 	if (eventTargetDataset.timestamp) {
-		onModalBodyChange(
+		const timestamp: number = Number.parseInt(
+			event.nativeEvent.target.dataset.timestamp
+		);
+		const eventForm = (
 			<EventForm
 				hideModal={hideModal}
 				saveToLocalStorage={saveToLocalStorage}
+				timestamp={timestamp}
 			/>
 		);
-		// showFormModal(new Date(parseInt(eventTargetDataset.timestamp)));
+		onModalBodyChange(eventForm);
 	}
 };
 

@@ -59,6 +59,7 @@ function App() {
 						openModal={openModal}
 						hideModal={hideModal}
 						saveToLocalStorage={saveToLocalStorage}
+						timestamp={0}
 					/>
 				</section>
 			</main>

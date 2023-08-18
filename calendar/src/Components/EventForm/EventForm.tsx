@@ -1,4 +1,11 @@
-import { Fragment, PropsWithChildren, ReactNode } from "react";
+import {
+	Fragment,
+	PropsWithChildren,
+	ReactNode,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 import { FormData, saveFormData } from "../../Utils/database";
 import { getToday } from "../../Utils/dateManipulation";
 import { modalState } from "../../Utils/state";
@@ -12,15 +19,7 @@ const TITLE_VALIDATION_ERROR_MESSAGE = "Please enter a title.";
 
 const eventModal = document.querySelector("#eventModal") as HTMLDivElement;
 const eventForm = document.querySelector("#eventForm") as HTMLFormElement;
-const eventButtonCreate = document.querySelector(
-	".create"
-) as HTMLButtonElement;
-const eventButtonCancel = document.querySelector(
-	"#event-cancel"
-) as HTMLButtonElement;
-const eventButtonSave = document.querySelector(
-	"#event-save"
-) as HTMLButtonElement;
+
 const eventDate = document.querySelector("#event-date") as HTMLInputElement;
 const startTime = document.querySelector(
 	"#event-startTime"
@@ -32,14 +31,11 @@ const convertInputToDate = (dateString: string, timeString: string): number => {
 	return Date.parse(`${dateString} ${timeString}`);
 };
 
-const collectFormData = (): FormData => {
+const collectFormData = (inputs: (HTMLInputElement | null)[]): FormData => {
 	const inputData: any = {};
-	const inputs = Array.from(
-		document.querySelectorAll("input[data-key]")
-	) as HTMLInputElement[];
 
 	inputs.forEach((input) => {
-		const key = input.dataset.key;
+		const key = input?.dataset.key;
 		if (key) {
 			const value = input.value;
 			inputData[key] = value;
@@ -55,13 +51,14 @@ const collectFormData = (): FormData => {
 		inputData.endTime
 	);
 
+	console.log(inputData);
 	const formData = new FormData(inputData);
 
 	return formData;
 };
 
 const setDateAndTimeInputValues = (date: Date): void => {
-	resetForm();
+	// resetForm();
 	const time = date.toTimeString().slice(0, 5);
 	//use 'lt-LT' as locale to correctly form date as YYYY-MM-DD
 	const YMDdate = date.toLocaleDateString("lt-LT", {
@@ -74,27 +71,31 @@ const setDateAndTimeInputValues = (date: Date): void => {
 	endTime.value = time;
 };
 
-export const showFormModal = (date: Date): void => {
-	if (modalState.value?.dataset.eventId) {
-		modalState.value.remove();
-	}
-	setDateAndTimeInputValues(date);
-	eventModal.classList.remove("display-none");
-	eventForm.classList.add("slideIn_ltr");
-};
+// export const showFormModal = (date: Date): void => {
+// 	if (modalState.value?.dataset.eventId) {
+// 		modalState.value.remove();
+// 	}
+// 	setDateAndTimeInputValues(date);
+// 	eventModal.classList.remove("display-none");
+// 	eventForm.classList.add("slideIn_ltr");
+// };
 
-const resetForm = () => {
-	const errorMessageContainers =
-		document.querySelectorAll(".validationMessage");
-	errorMessageContainers.forEach((elem) => {
-		elem.classList.remove("invalidInput");
-	});
-	eventForm.reset();
-};
+// const resetForm = () => {
+// 	const errorMessageContainers =
+// 		document.querySelectorAll(".validationMessage");
+// 	errorMessageContainers.forEach((elem) => {
+// 		elem.classList.remove("invalidInput");
+// 	});
+// 	eventForm.reset();
+// };
 
-const isStartTimeBigger = () => {
-	const startTimestamp = convertInputToDate(eventDate.value, startTime.value);
-	const endTimestamp = convertInputToDate(eventDate.value, endTime.value);
+const isStartTimeBigger = (
+	dateInput: string,
+	startTimeInput: string,
+	endTimeInput: string
+): boolean => {
+	const startTimestamp = convertInputToDate(dateInput, startTimeInput);
+	const endTimestamp = convertInputToDate(dateInput, endTimeInput);
 	if (startTimestamp > endTimestamp) {
 		return true;
 	} else {
@@ -103,99 +104,43 @@ const isStartTimeBigger = () => {
 };
 
 const toggleErrorMessageElement = (
-	errorMessageContainer: Element,
+	errorMessageContainer: Element | null,
 	failCondition: boolean,
 	errorMessage: string
 ): boolean => {
-	const errorMessageText = errorMessageContainer.querySelector(
+	const errorMessageText = errorMessageContainer?.querySelector(
 		"span"
 	) as HTMLSpanElement;
 
 	errorMessageText.innerHTML = errorMessage;
 
 	if (failCondition) {
-		if (!errorMessageContainer.classList.contains("invalidInput")) {
-			errorMessageContainer.classList.add("invalidInput");
+		if (!errorMessageContainer?.classList.contains("invalidInput")) {
+			errorMessageContainer?.classList.add("invalidInput");
 		}
 		return false;
 	} else {
-		if (errorMessageContainer.classList.contains("invalidInput")) {
-			errorMessageContainer.classList.remove("invalidInput");
+		if (errorMessageContainer?.classList.contains("invalidInput")) {
+			errorMessageContainer?.classList.remove("invalidInput");
 		}
 		return true;
 	}
 };
 
-const validateTimeInput = (): boolean => {
-	const errorMessageContainer = document.querySelector(
-		"[data-timeErrorMessage]"
-	);
-
+const validateTimeInput = (
+	errorMessageContainer: HTMLElement | null,
+	startTime: number,
+	endTime: number
+): boolean => {
 	if (errorMessageContainer) {
 		return toggleErrorMessageElement(
 			errorMessageContainer,
-			isStartTimeBigger(),
+			startTime < endTime,
 			TIME_VALIDATION_ERROR_MESSAGE
 		);
 	}
 	return false;
 };
-
-const validateTitleInput = (): boolean => {
-	const errorMessageContainer = document.querySelector(
-		"[data-titleErrorMessage]"
-	);
-	if (errorMessageContainer) {
-		const valRes = toggleErrorMessageElement(
-			errorMessageContainer,
-			!title.value,
-			TITLE_VALIDATION_ERROR_MESSAGE
-		);
-
-		return valRes;
-	}
-	return false;
-};
-
-// const hideModal = (): void => {
-// 	resetForm();
-// 	eventForm.classList.add("slideOut_rtl");
-// 	setTimeout(() => {
-// 		eventModal.classList.add("display-none");
-// 		eventForm.classList.remove("slideOut_rtl");
-// 	}, 400);
-// 	modalState.setState(null);
-// };
-
-// export const init = (): void => {
-// 	title.addEventListener("input", validateTitleInput);
-// 	endTime.addEventListener("input", validateTimeInput);
-// 	startTime.addEventListener("input", validateTimeInput);
-
-// 	eventModal.addEventListener("click", (e) => {
-// 		if ((e.target as HTMLElement).id === "eventModal") {
-// 			hideModal();
-// 		}
-// 	});
-
-// 	eventButtonCreate.addEventListener("click", (e) => {
-// 		showFormModal(getToday());
-// 	});
-
-// 	eventButtonCancel.addEventListener("click", (e) => {
-// 		hideModal();
-// 	});
-
-// 	eventButtonSave.addEventListener("click", (e) => {
-// 		e.preventDefault();
-// 		if (!validateTitleInput() || !validateTimeInput()) {
-// 			return;
-// 		}
-// 		const formData = collectFormData();
-// 		saveFormData(formData);
-// 		hideModal();
-// 	});
-// };
 
 interface FormFieldContainerProps extends PropsWithChildren {
 	icon: ReactNode;
@@ -215,12 +160,83 @@ const FormFieldContainer = ({ children, icon }: FormFieldContainerProps) => {
 	);
 };
 
+const validateTitleInput = (
+	errorMessageContainer: HTMLElement | null
+): boolean => {
+	if (errorMessageContainer) {
+		const valRes = toggleErrorMessageElement(
+			errorMessageContainer,
+			!title.value,
+			TITLE_VALIDATION_ERROR_MESSAGE
+		);
+
+		return valRes;
+	}
+	return false;
+};
+
+// const validateInput = (
+// 	errorMessageContainer: HTMLElement | null,
+// 	failCondition: boolean,
+// 	errorMessage: string
+// ): boolean => {
+// 	if (errorMessageContainer) {
+// 		const valRes = toggleErrorMessageElement(
+// 			errorMessageContainer,
+// 			!title.value,
+// 			TITLE_VALIDATION_ERROR_MESSAGE
+// 		);
+
+// 		return valRes;
+// 	}
+// 	return false;
+// };
+
+const TitleInput = () => {
+	const inputRef = useRef<HTMLInputElement>(null);
+	const errorMessageContainerRef = useRef<HTMLDivElement>(null);
+	const titleInput = (
+		<input
+			data-key="title"
+			id="event-title"
+			className="event-input event-titleInput"
+			type="text"
+			placeholder="Add title"
+			required
+			onChange={(e) => {
+				// validateInput(
+				// 	errorMessageContainerRef.current,
+				// 	!!inputRef.current?.value,
+				// 	TITLE_VALIDATION_ERROR_MESSAGE
+				// );
+			}}
+			ref={inputRef}
+		/>
+	);
+	return (
+		<div className="container event-title">
+			<div className="event-left"></div>
+			<div className="event-right container">
+				<div className="eventInputContainer container">{titleInput}</div>
+				<div ref={errorMessageContainerRef} className="validationMessage">
+					<span className="validationMessageText">PLACEHOLDER</span>
+				</div>
+			</div>
+		</div>
+	);
+};
+
 export interface EventFormProps {
 	hideModal: Function;
 	saveToLocalStorage: Function;
+	timestamp: number;
 }
 
-const EventForm = ({ hideModal, saveToLocalStorage }: EventFormProps) => {
+const EventForm = ({
+	hideModal,
+	saveToLocalStorage,
+	timestamp,
+}: EventFormProps) => {
 	const titleInput = (
 		<input
 			data-key="title"
@@ -264,7 +280,8 @@ const EventForm = ({ hideModal, saveToLocalStorage }: EventFormProps) => {
 			className="event-container"
 			onClick={(e) => e.stopPropagation()}
 		>
-			<FormFieldContainer children={titleInput} icon={null} />
+			{/* <FormFieldContainer children={titleInput} icon={null} /> */}
+			<TitleInput />
 
 			<FormFieldContainer
 				children={[dateInput, timeInput]}
@@ -286,10 +303,8 @@ const EventForm = ({ hideModal, saveToLocalStorage }: EventFormProps) => {
 			<div className="container event-controls">
 				<button
 					className="button button_secondary button-cancel"
-					id="event-cancel"
 					type="reset"
 					onClick={() => {
-						console.log(`typeof hideModal: ${typeof hideModal}`);
 						hideModal();
 					}}
 				>
@@ -297,8 +312,10 @@ const EventForm = ({ hideModal, saveToLocalStorage }: EventFormProps) => {
 				</button>
 				<button
 					className="button button_secondary button-save"
-					id="event-save"
 					type="submit"
+					onClick={() => {
+						// saveToLocalStorage(collectFormData());
+					}}
 				>
 					Save
 				</button>
@@ -307,4 +324,177 @@ const EventForm = ({ hideModal, saveToLocalStorage }: EventFormProps) => {
 	);
 };
 
-export default EventForm;
+const EventFormSimple = ({
+	hideModal,
+	saveToLocalStorage,
+	timestamp,
+}: EventFormProps) => {
+	const titleInputRef = useRef<HTMLInputElement>(null);
+	const dateInputRef = useRef<HTMLInputElement>(null);
+	const startTimeInputRef = useRef<HTMLInputElement>(null);
+	const endTimeInputRef = useRef<HTMLInputElement>(null);
+	const inputs = [
+		titleInputRef.current,
+		dateInputRef.current,
+		startTimeInputRef.current,
+		endTimeInputRef.current,
+	];
+	const timeValidationRef = useRef<HTMLDivElement>(null);
+	const titleValidationRef = useRef<HTMLDivElement>(null);
+
+	const date = new Date(timestamp);
+	const time = date.toTimeString().slice(0, 5);
+	const YMDdate = date.toLocaleDateString("lt-LT", {
+		year: "numeric",
+		month: "numeric",
+		day: "numeric",
+	});
+	const [startDate, setStartDate] = useState<string>(YMDdate);
+	const [startTime, setStartTime] = useState<string>(time);
+	const [endTime, setEndTime] = useState<string>(time);
+	const [title, setTitle] = useState<string>("");
+
+	const validateTimeInput = (): boolean => {
+		return toggleErrorMessageElement(
+			timeValidationRef.current,
+			isStartTimeBigger(startDate, startTime, endTime),
+			TIME_VALIDATION_ERROR_MESSAGE
+		);
+	};
+
+	const validateTitleInput = (): boolean => {
+		return toggleErrorMessageElement(
+			titleValidationRef.current,
+			!!!titleInputRef.current?.value,
+			TITLE_VALIDATION_ERROR_MESSAGE
+		);
+	};
+
+	useEffect(() => {
+		validateTimeInput();
+	}, [startTime, endTime]);
+
+	useEffect(() => {
+		validateTitleInput();
+	}, [title]);
+
+	//use 'lt-LT' as locale to correctly form date as YYYY-MM-DD
+	return (
+		<form id="eventForm" className="event-container">
+			<div className="container event-title">
+				<div className="event-left"></div>
+				<div className="event-right container">
+					<div className="eventInputContainer container">
+						<input
+							ref={titleInputRef}
+							data-key="title"
+							id="event-title"
+							className="event-input event-titleInput"
+							type="text"
+							placeholder="Add title"
+							required
+							value={title}
+							onChange={(e) => {
+								setTitle(e.target.value);
+							}}
+						/>
+					</div>
+					<div className="validationMessage" ref={titleValidationRef}>
+						<span className="validationMessageText">PLACEHOLDER</span>
+					</div>
+				</div>
+			</div>
+
+			<div className="container event-timeAndDate">
+				<div className="event-left">
+					<img src={timeIcon} alt="clock icon" />
+				</div>
+
+				<div className="event-right container">
+					<div className="eventInputContainer container">
+						<input
+							ref={dateInputRef}
+							data-key="startDate"
+							id="event-date"
+							className="event-input"
+							type="date"
+							value={startDate}
+							onChange={(e) => {
+								setStartDate(e.target.value);
+							}}
+						/>
+						<div className="event-time">
+							<input
+								ref={startTimeInputRef}
+								data-key="startTime"
+								id="event-startTime"
+								className="event-input event-time-input"
+								type="time"
+								value={startTime}
+								onChange={(e) => {
+									setStartTime(e.target.value);
+								}}
+							/>
+							<span>—</span>
+							<input
+								ref={endTimeInputRef}
+								data-key="endTime"
+								id="event-endTime"
+								className="event-input event-time-input"
+								type="time"
+								value={endTime}
+								onChange={(e) => {
+									setEndTime(e.target.value);
+								}}
+							/>
+						</div>
+					</div>
+					<div className="validationMessage" ref={timeValidationRef}>
+						<span className="validationMessageText">PLACEHOLDER</span>
+					</div>
+				</div>
+			</div>
+
+			<div className="container event-description">
+				<div className="event-left">
+					<img src={noteIcon} alt="notebook icon" />
+				</div>
+
+				<div className="event-right">
+					<textarea
+						data-key="description"
+						id="event-description"
+						className="event-input event-textarea"
+						placeholder="Description"
+					></textarea>
+				</div>
+			</div>
+
+			<div className="container event-controls">
+				<button
+					className="button button_secondary button-cancel"
+					type="reset"
+					onClick={() => {
+						hideModal();
+					}}
+				>
+					Cancel
+				</button>
+				<button
+					className="button button_secondary button-save"
+					type="submit"
+					onClick={(e) => {
+						e.preventDefault();
+						if (validateTimeInput()) {
+							console.log(collectFormData(inputs));
+						}
+					}}
+				>
+					Save
+				</button>
+			</div>
+		</form>
+	);
+};
+
+export default EventFormSimple;
