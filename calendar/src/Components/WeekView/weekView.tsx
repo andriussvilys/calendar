@@ -1,31 +1,68 @@
 import {
 	isSameDate,
-	isSameWeek,
 	getWeekDates,
 	getToday,
 	HOUR_COUNT,
 } from "../../Utils/dateManipulation";
 import {
-	filterEventsByTimestamp,
-	removeFormData,
-	findEventById,
 	getEventTimeslot,
 	getEventDuration,
 	getEventCellTimestamp,
 	FormData,
 } from "../../Utils/database";
-import { showFormModal } from "../EventForm/event";
 import { DateFormatter } from "../../Utils/dateFormatter";
 
 import "./weekView.css";
+import deleteIcon from "../../images/delete_FILL0_wght400_GRAD0_opsz48.svg";
+import closeIcon from "../../images/close_FILL0_wght400_GRAD0_opsz48.svg";
+import { Fragment } from "react";
 
 export const TIMESLOT_DURATION = 15;
 const EVENTBUBBLE_OFFSET = 25;
+
+interface EventCardProps {
+	event: FormData;
+	dateFormatter: DateFormatter;
+}
+const EventCard = ({ event, dateFormatter }: EventCardProps) => {
+	const dateString = dateFormatter.getEventDate(new Date(event.startTime));
+
+	const eventTimeRange = dateFormatter.getEventHourRange(
+		event.startTime,
+		event.endTime
+	);
+	return (
+		// <div
+		// 	className="container eventCard slideIn_ltr"
+		// 	data-event-id="a4110264-03f2-4e75-beeb-bfae960815ae"
+		// >
+		// </div>
+		<Fragment>
+			<div className="container eventCard-controls">
+				<button className="button button_round eventCard-button">
+					<img src={deleteIcon} alt="delete icon" />
+				</button>
+				<button className="button button_round eventCard-button">
+					<img src={closeIcon} alt="close icon" />
+				</button>
+			</div>
+			<div className="container eventCardData">
+				<h2>{event.title}</h2>
+				<p>
+					<span>{dateString}</span>
+					<span> ⋅ </span>
+					<span>{eventTimeRange}</span>
+				</p>
+			</div>
+		</Fragment>
+	);
+};
 
 interface DayCellProps {
 	date: Date;
 	dateFormatter: DateFormatter;
 	events: FormData[];
+	onModalBodyChange: Function;
 }
 
 interface TimeSlotProps {
@@ -33,18 +70,21 @@ interface TimeSlotProps {
 	date: Date;
 	cellTimeslots: FormData[][];
 	index: number;
+	onModalBodyChange: Function;
 }
 
 interface EventBubbleProps {
 	timeslotEvents: FormData[];
 	index: number;
 	dateFormatter: DateFormatter;
+	onModalBodyChange: Function;
 }
 
 const EventBubble = ({
 	timeslotEvents,
 	index,
 	dateFormatter,
+	onModalBodyChange,
 }: EventBubbleProps) => {
 	const rightSiblingCount = timeslotEvents.slice(
 		index,
@@ -73,7 +113,11 @@ const EventBubble = ({
 			className="eventBubble"
 			data-event-id={event.id}
 			style={style}
-			// onClick={() => showEventCardModal(event.id, dateFormatter)}
+			onClick={() =>
+				onModalBodyChange(
+					<EventCard event={event} dateFormatter={dateFormatter} />
+				)
+			}
 		>
 			<span className="eventBubble-title">{event.title}</span>
 			<span>{eventTime}</span>
@@ -86,6 +130,7 @@ const TimeSlot = ({
 	dateFormatter,
 	cellTimeslots,
 	index,
+	onModalBodyChange,
 }: TimeSlotProps) => {
 	const timeslotTimestamp = date
 		.setMinutes(index * TIMESLOT_DURATION)
@@ -120,6 +165,7 @@ const TimeSlot = ({
 								timeslotEvents={sorted}
 								index={index}
 								dateFormatter={dateFormatter}
+								onModalBodyChange={onModalBodyChange}
 							/>
 						);
 					})}
@@ -129,9 +175,13 @@ const TimeSlot = ({
 	);
 };
 
-const DayCell = ({ date, dateFormatter, events }: DayCellProps) => {
+const DayCell = ({
+	date,
+	dateFormatter,
+	events,
+	onModalBodyChange,
+}: DayCellProps) => {
 	const timestamp = date.valueOf();
-	console.log(date);
 	const filteredEvents = events.filter(
 		(event) => getEventCellTimestamp(event) == timestamp
 	);
@@ -151,6 +201,7 @@ const DayCell = ({ date, dateFormatter, events }: DayCellProps) => {
 						index={index}
 						date={date}
 						dateFormatter={dateFormatter}
+						onModalBodyChange={onModalBodyChange}
 					/>
 				);
 			})}
@@ -180,7 +231,12 @@ const DayColumnHeader = ({ date, dateFormatter }: DayColumnHeaderProps) => {
 	);
 };
 
-const DayColumn = ({ date, dateFormatter, events }: DayCellProps) => {
+const DayColumn = ({
+	date,
+	dateFormatter,
+	events,
+	onModalBodyChange,
+}: DayCellProps) => {
 	return (
 		<div className="weekView-column">
 			<DayColumnHeader date={date} dateFormatter={dateFormatter} />
@@ -194,6 +250,7 @@ const DayColumn = ({ date, dateFormatter, events }: DayCellProps) => {
 						date={dayCellDate}
 						dateFormatter={dateFormatter}
 						events={events}
+						onModalBodyChange={onModalBodyChange}
 					/>
 				);
 			})}
@@ -242,6 +299,7 @@ interface WeekViewProps {
 	onLocalStorageChange: Function;
 	dateFormatter: DateFormatter;
 	events: FormData[];
+	onModalBodyChange: Function;
 }
 
 const handleWeekViewClick = (event: any) => {
@@ -257,6 +315,7 @@ const WeekView = ({
 	dateFormatter,
 	onLocalStorageChange,
 	events,
+	onModalBodyChange,
 }: WeekViewProps) => {
 	const weekDates = getWeekDates(selectedDate);
 
@@ -275,6 +334,7 @@ const WeekView = ({
 						date={date}
 						dateFormatter={dateFormatter}
 						events={events}
+						onModalBodyChange={onModalBodyChange}
 					/>
 				);
 			})}

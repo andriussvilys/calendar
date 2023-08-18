@@ -127,8 +127,6 @@ const getMonthViewDays = (newDate: Date): Date[] => {
 		result.push(new Date(year, month + 1, index));
 	}
 
-	console.log(result);
-
 	return result;
 };
 

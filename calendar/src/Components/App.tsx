@@ -6,8 +6,11 @@ import MonthView from "./MonthView/MonthView";
 import { DateFormatter, createDateFormatter } from "../Utils/dateFormatter";
 import WeekView from "./WeekView/weekView";
 import { FormData, getEvents } from "../Utils/database";
+import Modal from "./Modal/Modal";
 
 function App() {
+	const [modalBody, setModalBody] = useState<JSX.Element>(<Fragment />);
+	const [isModalVisible, setIsModalVisible] = useState<Boolean>(false);
 	const [dateFormatter, setDateFormatter] = useState<DateFormatter>(
 		createDateFormatter(LocaleType.US)
 	);
@@ -23,6 +26,10 @@ function App() {
 	const onLocalStorageChange = (event: FormData) => {
 		setEvents([...events, event]);
 		localStorage.setItem("events", JSON.stringify(events));
+	};
+	const onModalBodyChange = (children: JSX.Element) => {
+		setModalBody(children);
+		setIsModalVisible(true);
 	};
 
 	return (
@@ -47,9 +54,15 @@ function App() {
 						dateFormatter={dateFormatter}
 						onLocalStorageChange={onLocalStorageChange}
 						events={events}
+						onModalBodyChange={onModalBodyChange}
 					/>
 				</section>
 			</main>
+			<Modal
+				children={modalBody}
+				isVisible={isModalVisible}
+				setModalVisibility={setIsModalVisible}
+			/>
 		</Fragment>
 	);
 }
