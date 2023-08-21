@@ -1,6 +1,5 @@
-//this module uses UUID v8.1.0 library (CDN). The uuidv4 function comes from there
-import { MILISECOND_HOUR, getDayStart } from "./dateManipulation";
-import { TIMESLOT_DURATION } from "../Components/WeekView/weekView";
+import { TIMESLOT_DURATION } from "../Components/WeekView/DayColumn/Timeslot";
+import { MILISECOND_HOUR } from "./dateManipulation";
 import { v4 as uuidv4 } from "uuid";
 
 const findEventById = (eventId: string): FormData | null => {

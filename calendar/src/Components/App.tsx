@@ -4,9 +4,9 @@ import { Header } from "./Header/header";
 import "./main.css";
 import MonthView from "./MonthView/MonthView";
 import { DateFormatter, createDateFormatter } from "../Utils/dateFormatter";
-import WeekView from "./WeekView/weekView";
 import { FormData, deleteEvent, getEvents, saveEvent } from "../Utils/database";
 import Modal from "./Modal/Modal";
+import WeekView from "./WeekView/WeekView";
 
 function App() {
 	const [modalBody, setModalBody] = useState<JSX.Element>(<Fragment />);
