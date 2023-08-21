@@ -124,18 +124,23 @@ const TimeSlot = ({
 			return Math.max(acc, prevArray.length);
 		}, 0);
 
-	const style = {
-		top: `${index * EVENTBUBBLE_OFFSET}%`,
-		left: `${prevTimeslotSize * 20}%`,
-		width: timeslot.length > 0 ? `${100 - prevTimeslotSize * 20}%` : 0,
-	};
 	return (
-		<div className="timeslot" data-timestamp={timeslotTimestamp} style={style}>
+		<div
+			className="timeslot"
+			data-timestamp={timeslotTimestamp}
+			style={{ top: `${index * EVENTBUBBLE_OFFSET}%` }}
+		>
 			<div
 				className="timeslot-innerContainer"
 				data-timestamp={timeslotTimestamp}
 			>
-				<div className="eventBubbleContainer">
+				<div
+					className="eventBubbleContainer"
+					style={{
+						left: `${prevTimeslotSize * 20}%`,
+						width: timeslot.length > 0 ? `${100 - prevTimeslotSize * 20}%` : 0,
+					}}
+				>
 					{sorted.map((event, index) => {
 						return (
 							<EventBubble
@@ -289,6 +294,7 @@ const handleWeekViewClick = (
 	saveToLocalStorage: Function
 ) => {
 	const eventTarget = event.nativeEvent.target as HTMLElement;
+	console.log(eventTarget);
 	const eventTargetDataset = eventTarget.dataset;
 	if (eventTargetDataset.timestamp) {
 		const timestamp: number = Number.parseInt(
