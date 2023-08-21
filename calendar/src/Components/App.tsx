@@ -5,7 +5,7 @@ import "./main.css";
 import MonthView from "./MonthView/MonthView";
 import { DateFormatter, createDateFormatter } from "../Utils/dateFormatter";
 import WeekView from "./WeekView/weekView";
-import { FormData, getEvents } from "../Utils/database";
+import { FormData, deleteEvent, getEvents, saveEvent } from "../Utils/database";
 import Modal from "./Modal/Modal";
 
 function App() {
@@ -26,7 +26,11 @@ function App() {
 	const saveToLocalStorage = (event: FormData) => {
 		const newState = [...events, event];
 		setEvents(newState);
-		localStorage.setItem("events", JSON.stringify(newState));
+		saveEvent(event);
+	};
+	const removeFromLocalStorage = (eventId: string) => {
+		setEvents(events.filter((storedEvent) => storedEvent.id !== eventId));
+		deleteEvent(eventId);
 	};
 	const openModal = (children: JSX.Element) => {
 		setModalBody(children);
@@ -60,6 +64,7 @@ function App() {
 						openModal={openModal}
 						hideModal={hideModal}
 						saveToLocalStorage={saveToLocalStorage}
+						removeFromLocalStorage={removeFromLocalStorage}
 						timestamp={0}
 					/>
 				</section>

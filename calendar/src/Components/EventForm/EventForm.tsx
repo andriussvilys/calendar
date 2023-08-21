@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useReducer, useRef, useState } from "react";
 import { FormData } from "../../Utils/database";
 import "./event.css";
 
@@ -6,17 +6,12 @@ import timeIcon from "../../images/schedule_FILL0_wght400_GRAD0_opsz48.svg";
 import noteIcon from "../../images/notes_FILL0_wght400_GRAD0_opsz48.svg";
 import Input, { InputTypes } from "./Input";
 import InputValidator from "./InputValidator";
+import FormBlock from "./FormBlock";
 
 const TIME_VALIDATION_ERROR_MESSAGE = "Event cannot end before it starts.";
 const TITLE_VALIDATION_ERROR_MESSAGE = "Please enter a title.";
 
 const convertInputToDate = (dateString: string, timeString: string): number => {
-	console.log({
-		dateString,
-		timeString,
-		date: new Date(`${dateString} ${timeString}`),
-		parsed: Date.parse(`${dateString} ${timeString}`),
-	});
 	return Date.parse(`${dateString} ${timeString}`);
 };
 
@@ -48,8 +43,6 @@ const EventFormSimple = ({
 	saveToLocalStorage,
 	timestamp,
 }: EventFormProps) => {
-	console.log({ timestamp });
-
 	const [title, setTitle] = useState<string>("");
 	const [isTitleValid, setIsTitleValid] = useState<boolean>(true);
 
@@ -85,81 +78,71 @@ const EventFormSimple = ({
 		validateEventTime(newState);
 	};
 
+	const descriptionRef = useRef<HTMLTextAreaElement>(null);
+
 	return (
 		<form className="event-container">
-			<div className="container">
-				<div className="event-left"></div>
-				<div className="event-right">
+			<FormBlock icon={null}>
+				<Input
+					type={InputTypes.Text}
+					inputPlaceholder={"Add title"}
+					inputValue={title}
+					onValueChange={onTitleInputChange}
+				/>
+				<InputValidator
+					errorMessage={TITLE_VALIDATION_ERROR_MESSAGE}
+					isValid={isTitleValid}
+				/>
+			</FormBlock>
+
+			<FormBlock icon={<img src={timeIcon} alt="clock icon" />}>
+				<div className="container">
 					<Input
-						type={InputTypes.Text}
-						inputPlaceholder={"Add title"}
-						inputValue={title}
-						onValueChange={onTitleInputChange}
+						type={InputTypes.Date}
+						inputPlaceholder={""}
+						inputValue={eventDate}
+						onValueChange={setEventDate}
 					/>
-					<InputValidator
-						errorMessage={TITLE_VALIDATION_ERROR_MESSAGE}
-						isValid={isTitleValid}
+					<Input
+						type={InputTypes.Time}
+						inputPlaceholder={""}
+						inputValue={formatTimestampToTimeString(eventTime.startTime)}
+						onValueChange={(value: string) => {
+							onEventTimeChange({
+								...eventTime,
+								startTime: convertInputToDate(eventDate, value),
+							});
+						}}
 					/>
-				</div>
-			</div>
-
-			<div className="container">
-				<div className="event-left">
-					<img src={timeIcon} alt="clock icon" />
-				</div>
-
-				<div className="event-right">
-					<div className="container">
-						<Input
-							type={InputTypes.Date}
-							inputPlaceholder={""}
-							inputValue={eventDate}
-							onValueChange={setEventDate}
-						/>
-						<Input
-							type={InputTypes.Time}
-							inputPlaceholder={""}
-							inputValue={formatTimestampToTimeString(eventTime.startTime)}
-							onValueChange={(value: string) => {
-								onEventTimeChange({
-									...eventTime,
-									startTime: convertInputToDate(eventDate, value),
-								});
-							}}
-						/>
-						<Input
-							type={InputTypes.Time}
-							inputPlaceholder={""}
-							inputValue={formatTimestampToTimeString(eventTime.endTime)}
-							onValueChange={(value: string) => {
-								onEventTimeChange({
-									...eventTime,
-									endTime: convertInputToDate(eventDate, value),
-								});
-							}}
-						/>
-					</div>
-					<InputValidator
-						errorMessage={TIME_VALIDATION_ERROR_MESSAGE}
-						isValid={isEventTimeValid}
+					<Input
+						type={InputTypes.Time}
+						inputPlaceholder={""}
+						inputValue={formatTimestampToTimeString(eventTime.endTime)}
+						onValueChange={(value: string) => {
+							onEventTimeChange({
+								...eventTime,
+								endTime: convertInputToDate(eventDate, value),
+							});
+						}}
 					/>
 				</div>
-			</div>
+				<InputValidator
+					errorMessage={TIME_VALIDATION_ERROR_MESSAGE}
+					isValid={isEventTimeValid}
+				/>
+			</FormBlock>
 
-			<div className="container event-description">
-				<div className="event-left">
-					<img src={noteIcon} alt="notebook icon" />
-				</div>
-
-				<div className="event-right">
+			<FormBlock icon={<img src={noteIcon} alt="notebook icon" />}>
+				<div className="event-description">
 					<textarea
+						ref={descriptionRef}
 						data-key="description"
 						id="event-description"
 						className="event-input event-textarea"
 						placeholder="Description"
 					></textarea>
 				</div>
-			</div>
+			</FormBlock>
 
 			<div className="container event-controls">
 				<button
@@ -182,6 +165,7 @@ const EventFormSimple = ({
 									startTime: eventTime.startTime,
 									endTime: eventTime.endTime,
 									title,
+									description: descriptionRef.current?.value,
 								})
 							);
 							hideModal();
