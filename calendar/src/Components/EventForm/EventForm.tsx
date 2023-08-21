@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { FormData } from "../../Utils/database";
 import "./event.css";
 
@@ -19,32 +19,6 @@ const convertInputToDate = (dateString: string, timeString: string): number => {
 	});
 	return Date.parse(`${dateString} ${timeString}`);
 };
-
-// const collectFormData = (inputs: (HTMLInputElement | null)[]): FormData => {
-// 	const inputData: any = {};
-
-// 	inputs.forEach((input) => {
-// 		const key = input?.dataset.key;
-// 		if (key) {
-// 			const value = input.value;
-// 			inputData[key] = value;
-// 		}
-// 	});
-
-// 	inputData.startTime = convertInputToDate(
-// 		inputData.eventDate,
-// 		inputData.startTime
-// 	);
-// 	inputData.endTime = convertInputToDate(
-// 		inputData.endDate || inputData.eventDate,
-// 		inputData.endTime
-// 	);
-
-// 	console.log(inputData);
-// 	const formData = new FormData(inputData);
-
-// 	return formData;
-// };
 
 export interface EventFormProps {
 	hideModal: Function;
@@ -168,7 +142,6 @@ const EventFormSimple = ({
 					<InputValidator
 						errorMessage={TIME_VALIDATION_ERROR_MESSAGE}
 						isValid={isEventTimeValid}
-						// isValid={eventTime.startTime <= eventTime.endTime}
 					/>
 				</div>
 			</div>
