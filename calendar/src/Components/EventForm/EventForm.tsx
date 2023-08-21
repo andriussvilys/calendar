@@ -20,31 +20,31 @@ const convertInputToDate = (dateString: string, timeString: string): number => {
 	return Date.parse(`${dateString} ${timeString}`);
 };
 
-const collectFormData = (inputs: (HTMLInputElement | null)[]): FormData => {
-	const inputData: any = {};
+// const collectFormData = (inputs: (HTMLInputElement | null)[]): FormData => {
+// 	const inputData: any = {};
 
-	inputs.forEach((input) => {
-		const key = input?.dataset.key;
-		if (key) {
-			const value = input.value;
-			inputData[key] = value;
-		}
-	});
+// 	inputs.forEach((input) => {
+// 		const key = input?.dataset.key;
+// 		if (key) {
+// 			const value = input.value;
+// 			inputData[key] = value;
+// 		}
+// 	});
 
-	inputData.startTime = convertInputToDate(
-		inputData.eventDate,
-		inputData.startTime
-	);
-	inputData.endTime = convertInputToDate(
-		inputData.endDate || inputData.eventDate,
-		inputData.endTime
-	);
+// 	inputData.startTime = convertInputToDate(
+// 		inputData.eventDate,
+// 		inputData.startTime
+// 	);
+// 	inputData.endTime = convertInputToDate(
+// 		inputData.endDate || inputData.eventDate,
+// 		inputData.endTime
+// 	);
 
-	console.log(inputData);
-	const formData = new FormData(inputData);
+// 	console.log(inputData);
+// 	const formData = new FormData(inputData);
 
-	return formData;
-};
+// 	return formData;
+// };
 
 export interface EventFormProps {
 	hideModal: Function;
@@ -56,20 +56,6 @@ interface EventTime {
 	startTime: number;
 	endTime: number;
 }
-
-const isStartTimeBigger = (
-	dateInput: string,
-	startTimeInput: string,
-	endTimeInput: string
-): boolean => {
-	const startTimestamp = convertInputToDate(dateInput, startTimeInput);
-	const endTimestamp = convertInputToDate(dateInput, endTimeInput);
-	if (startTimestamp > endTimestamp) {
-		return true;
-	} else {
-		return false;
-	}
-};
 
 const formatTimestampToDateString = (timestamp: number): string => {
 	return new Date(timestamp).toLocaleDateString("lt-LT", {
@@ -93,13 +79,14 @@ const EventFormSimple = ({
 	const [title, setTitle] = useState<string>("");
 	const [isTitleValid, setIsTitleValid] = useState<boolean>(true);
 
+	const validateTitle = (title: string): boolean => {
+		const isValid = title.length > 0;
+		setIsTitleValid(isValid);
+		return isValid;
+	};
 	const onTitleInputChange = (value: string): void => {
 		setTitle(value);
-		if (value.length > 0) {
-			setIsTitleValid(true);
-		} else {
-			setIsTitleValid(false);
-		}
+		validateTitle(value);
 	};
 
 	const [eventDate, setEventDate] = useState<string>(
@@ -111,18 +98,18 @@ const EventFormSimple = ({
 		endTime: timestamp,
 	});
 
-	const onEventTimeChange = (value: EventTime) => {
-		setEventTime({ ...eventTime, ...value });
-	};
+	const [isEventTimeValid, setIsEventTimeValid] = useState<boolean>(true);
 
-	useEffect(() => {
-		console.log(eventTime);
-		console.log({
-			start: new Date(eventTime.startTime),
-			end: new Date(eventTime.endTime),
-		});
-		console.log(eventTime.startTime <= eventTime.endTime);
-	}, [eventTime]);
+	const validateEventTime = (eventTime: EventTime) => {
+		const isValid = eventTime.startTime <= eventTime.endTime;
+		setIsEventTimeValid(isValid);
+		return isValid;
+	};
+	const onEventTimeChange = (value: EventTime): void => {
+		const newState = { ...eventTime, ...value };
+		setEventTime(newState);
+		validateEventTime(newState);
+	};
 
 	return (
 		<form className="event-container">
@@ -180,7 +167,8 @@ const EventFormSimple = ({
 					</div>
 					<InputValidator
 						errorMessage={TIME_VALIDATION_ERROR_MESSAGE}
-						isValid={eventTime.startTime <= eventTime.endTime}
+						isValid={isEventTimeValid}
+						// isValid={eventTime.startTime <= eventTime.endTime}
 					/>
 				</div>
 			</div>
@@ -215,9 +203,16 @@ const EventFormSimple = ({
 					type="submit"
 					onClick={(e) => {
 						e.preventDefault();
-						// if (validateTimeInput()) {
-						// 	console.log(collectFormData(inputs));
-						// }
+						if (validateTitle(title) && validateEventTime(eventTime)) {
+							saveToLocalStorage(
+								new FormData({
+									startTime: eventTime.startTime,
+									endTime: eventTime.endTime,
+									title,
+								})
+							);
+							hideModal();
+						}
 					}}
 				>
 					Save

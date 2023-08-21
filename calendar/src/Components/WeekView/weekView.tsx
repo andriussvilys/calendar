@@ -15,7 +15,6 @@ import { DateFormatter } from "../../Utils/dateFormatter";
 import "./weekView.css";
 import deleteIcon from "../../images/delete_FILL0_wght400_GRAD0_opsz48.svg";
 import closeIcon from "../../images/close_FILL0_wght400_GRAD0_opsz48.svg";
-import { Fragment } from "react";
 import EventForm, { EventFormProps } from "../EventForm/EventForm";
 
 export const TIMESLOT_DURATION = 15;
@@ -91,8 +90,8 @@ const EventBubble = ({
 
 	const columnWidth = 100 / (timeslotEvents.length + 1);
 	const offset = index * columnWidth;
-	// const widthReduction = (Math.max(rightSiblingCount, 1) - 1) * columnWidth;
-	const widthReduction = 0;
+	const widthReduction = (Math.max(rightSiblingCount, 1) - 1) * columnWidth;
+	// const widthReduction = 0;
 	const width = 100 - offset - widthReduction;
 
 	const style = {
@@ -154,7 +153,7 @@ const TimeSlot = ({
 				className="timeslot-innerContainer"
 				data-timestamp={timeslotTimestamp}
 			>
-				<div className="eventBubbleContainer" style={style}>
+				<div className="eventBubbleContainer">
 					{sorted.map((event, index) => {
 						return (
 							<EventBubble
