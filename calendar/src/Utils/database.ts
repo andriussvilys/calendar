@@ -3,14 +3,7 @@ import { MILISECOND_HOUR, getDayStart } from "./dateManipulation";
 import { TIMESLOT_DURATION } from "../Components/WeekView/weekView";
 import { v4 as uuidv4 } from "uuid";
 
-export const filterEventsByTimestamp = (timestamp: number): FormData[] => {
-	const events = getEvents();
-	return events.filter(
-		(event: FormData) => getEventCellTimestamp(event) === timestamp
-	);
-};
-
-export const findEventById = (eventId: string): FormData | null => {
+const findEventById = (eventId: string): FormData | null => {
 	const events = getEvents();
 	const result = events.find((event: FormData) => {
 		return event.id === eventId;
@@ -48,12 +41,6 @@ export const getEventTimeslot = (event: FormData): number => {
 export const getEventCellTimestamp = (event: FormData): number => {
 	return new Date(event.startTime).setMinutes(0).valueOf();
 };
-export const getEventStartDate = (event: FormData): number => {
-	return getDayStart(event.startTime);
-};
-export const getEventEndDate = (event: FormData): number => {
-	return getDayStart(event.endTime);
-};
 
 export const getEvents = (): FormData[] => {
 	const eventsString = localStorage.getItem("events");
@@ -63,26 +50,6 @@ export const getEvents = (): FormData[] => {
 		return events;
 	}
 	return [];
-};
-
-export const saveFormData = (formData: FormData): FormData[] => {
-	const events: FormData[] = [...getEvents(), formData];
-	setStorage("events", events);
-	return events;
-};
-
-export const removeFormData = (eventId: string): void => {
-	const event = findEventById(eventId);
-	if (event) {
-		const events = getEvents();
-		const updatedEvents = events.filter((event) => event.id !== eventId);
-		setStorage("events", updatedEvents);
-		// storageState.setState(event);
-	}
-};
-
-const setStorage = (key: string, value: FormData[]): void => {
-	localStorage.setItem(key, JSON.stringify(value));
 };
 
 export const saveEvent = (event: FormData) => {
