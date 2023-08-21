@@ -1,259 +1,230 @@
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { FormData } from "../../Utils/database";
 import "./event.css";
 
 import timeIcon from "../../images/schedule_FILL0_wght400_GRAD0_opsz48.svg";
 import noteIcon from "../../images/notes_FILL0_wght400_GRAD0_opsz48.svg";
+import Input, { InputTypes } from "./Input";
+import InputValidator from "./InputValidator";
 
 const TIME_VALIDATION_ERROR_MESSAGE = "Event cannot end before it starts.";
 const TITLE_VALIDATION_ERROR_MESSAGE = "Please enter a title.";
 
 const convertInputToDate = (dateString: string, timeString: string): number => {
-  return Date.parse(`${dateString} ${timeString}`);
+	console.log({
+		dateString,
+		timeString,
+		date: new Date(`${dateString} ${timeString}`),
+		parsed: Date.parse(`${dateString} ${timeString}`),
+	});
+	return Date.parse(`${dateString} ${timeString}`);
 };
 
 const collectFormData = (inputs: (HTMLInputElement | null)[]): FormData => {
-  const inputData: any = {};
+	const inputData: any = {};
 
-  inputs.forEach((input) => {
-    const key = input?.dataset.key;
-    if (key) {
-      const value = input.value;
-      inputData[key] = value;
-    }
-  });
+	inputs.forEach((input) => {
+		const key = input?.dataset.key;
+		if (key) {
+			const value = input.value;
+			inputData[key] = value;
+		}
+	});
 
-  inputData.startTime = convertInputToDate(
-    inputData.startDate,
-    inputData.startTime,
-  );
-  inputData.endTime = convertInputToDate(
-    inputData.endDate || inputData.startDate,
-    inputData.endTime,
-  );
+	inputData.startTime = convertInputToDate(
+		inputData.eventDate,
+		inputData.startTime
+	);
+	inputData.endTime = convertInputToDate(
+		inputData.endDate || inputData.eventDate,
+		inputData.endTime
+	);
 
-  console.log(inputData);
-  const formData = new FormData(inputData);
+	console.log(inputData);
+	const formData = new FormData(inputData);
 
-  return formData;
-};
-
-const isStartTimeBigger = (
-  dateInput: string,
-  startTimeInput: string,
-  endTimeInput: string,
-): boolean => {
-  const startTimestamp = convertInputToDate(dateInput, startTimeInput);
-  const endTimestamp = convertInputToDate(dateInput, endTimeInput);
-  if (startTimestamp > endTimestamp) {
-    return true;
-  } else {
-    return false;
-  }
-};
-
-const toggleErrorMessageElement = (
-  errorMessageContainer: Element | null,
-  failCondition: boolean,
-  errorMessage: string,
-): boolean => {
-  const errorMessageText = errorMessageContainer?.querySelector(
-    "span",
-  ) as HTMLSpanElement;
-
-  errorMessageText.innerHTML = errorMessage;
-
-  if (failCondition) {
-    if (!errorMessageContainer?.classList.contains("invalidInput")) {
-      errorMessageContainer?.classList.add("invalidInput");
-    }
-    return false;
-  } else {
-    if (errorMessageContainer?.classList.contains("invalidInput")) {
-      errorMessageContainer?.classList.remove("invalidInput");
-    }
-    return true;
-  }
+	return formData;
 };
 
 export interface EventFormProps {
-  hideModal: Function;
-  saveToLocalStorage: Function;
-  timestamp: number;
+	hideModal: Function;
+	saveToLocalStorage: Function;
+	timestamp: number;
 }
 
+interface EventTime {
+	startTime: number;
+	endTime: number;
+}
+
+const isStartTimeBigger = (
+	dateInput: string,
+	startTimeInput: string,
+	endTimeInput: string
+): boolean => {
+	const startTimestamp = convertInputToDate(dateInput, startTimeInput);
+	const endTimestamp = convertInputToDate(dateInput, endTimeInput);
+	if (startTimestamp > endTimestamp) {
+		return true;
+	} else {
+		return false;
+	}
+};
+
+const formatTimestampToDateString = (timestamp: number): string => {
+	return new Date(timestamp).toLocaleDateString("lt-LT", {
+		year: "numeric",
+		month: "numeric",
+		day: "numeric",
+	});
+};
+
+const formatTimestampToTimeString = (timestamp: number): string => {
+	return new Date(timestamp).toTimeString().slice(0, 5);
+};
+
 const EventFormSimple = ({
-  hideModal,
-  saveToLocalStorage,
-  timestamp,
+	hideModal,
+	saveToLocalStorage,
+	timestamp,
 }: EventFormProps) => {
-  const titleInputRef = useRef<HTMLInputElement>(null);
-  const dateInputRef = useRef<HTMLInputElement>(null);
-  const startTimeInputRef = useRef<HTMLInputElement>(null);
-  const endTimeInputRef = useRef<HTMLInputElement>(null);
-  const inputs = [
-    titleInputRef.current,
-    dateInputRef.current,
-    startTimeInputRef.current,
-    endTimeInputRef.current,
-  ];
-  const timeValidationRef = useRef<HTMLDivElement>(null);
-  const titleValidationRef = useRef<HTMLDivElement>(null);
+	console.log({ timestamp });
 
-  const date = new Date(timestamp);
-  const time = date.toTimeString().slice(0, 5);
-  const YMDdate = date.toLocaleDateString("lt-LT", {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-  });
-  const [startDate, setStartDate] = useState<string>(YMDdate);
-  const [startTime, setStartTime] = useState<string>(time);
-  const [endTime, setEndTime] = useState<string>(time);
-  const [title, setTitle] = useState<string>("");
+	const [title, setTitle] = useState<string>("");
+	const [isTitleValid, setIsTitleValid] = useState<boolean>(true);
 
-  const validateTimeInput = (): boolean => {
-    return toggleErrorMessageElement(
-      timeValidationRef.current,
-      isStartTimeBigger(startDate, startTime, endTime),
-      TIME_VALIDATION_ERROR_MESSAGE,
-    );
-  };
+	const onTitleInputChange = (value: string): void => {
+		setTitle(value);
+		if (value.length > 0) {
+			setIsTitleValid(true);
+		} else {
+			setIsTitleValid(false);
+		}
+	};
 
-  const validateTitleInput = (value: string): boolean => {
-    return toggleErrorMessageElement(
-      titleValidationRef.current,
-      value.length === 0,
-      TITLE_VALIDATION_ERROR_MESSAGE,
-    );
-  };
+	const [eventDate, setEventDate] = useState<string>(
+		formatTimestampToDateString(timestamp)
+	);
 
-  const onTitleInputChange = (value: string): void => {
-    setTitle(value);
-    validateTitleInput(value);
-  };
+	const [eventTime, setEventTime] = useState({
+		startTime: timestamp,
+		endTime: timestamp,
+	});
 
-  useEffect(() => {
-    validateTimeInput();
-  }, [startTime, endTime]);
+	const onEventTimeChange = (value: EventTime) => {
+		setEventTime({ ...eventTime, ...value });
+	};
 
-  //use 'lt-LT' as locale to correctly form date as YYYY-MM-DD
-  return (
-    <form id="eventForm" className="event-container">
-      <div className="container event-title">
-        <div className="event-left"></div>
-        <div className="event-right container">
-          <div className="eventInputContainer container">
-            <input
-              ref={titleInputRef}
-              data-key="title"
-              id="event-title"
-              className="event-input event-titleInput"
-              type="text"
-              placeholder="Add title"
-              required
-              value={title}
-              onChange={(e) => {
-                onTitleInputChange(e.target.value);
-              }}
-            />
-          </div>
-          <div className="validationMessage" ref={titleValidationRef}>
-            <span className="validationMessageText">PLACEHOLDER</span>
-          </div>
-        </div>
-      </div>
+	useEffect(() => {
+		console.log(eventTime);
+		console.log({
+			start: new Date(eventTime.startTime),
+			end: new Date(eventTime.endTime),
+		});
+		console.log(eventTime.startTime <= eventTime.endTime);
+	}, [eventTime]);
 
-      <div className="container event-timeAndDate">
-        <div className="event-left">
-          <img src={timeIcon} alt="clock icon" />
-        </div>
+	return (
+		<form className="event-container">
+			<div className="container">
+				<div className="event-left"></div>
+				<div className="event-right">
+					<Input
+						type={InputTypes.Text}
+						inputPlaceholder={"Add title"}
+						inputValue={title}
+						onValueChange={onTitleInputChange}
+					/>
+					<InputValidator
+						errorMessage={TITLE_VALIDATION_ERROR_MESSAGE}
+						isValid={isTitleValid}
+					/>
+				</div>
+			</div>
 
-        <div className="event-right container">
-          <div className="eventInputContainer container">
-            <input
-              ref={dateInputRef}
-              data-key="startDate"
-              id="event-date"
-              className="event-input"
-              type="date"
-              value={startDate}
-              onChange={(e) => {
-                setStartDate(e.target.value);
-              }}
-            />
-            <div className="event-time">
-              <input
-                ref={startTimeInputRef}
-                data-key="startTime"
-                id="event-startTime"
-                className="event-input event-time-input"
-                type="time"
-                value={startTime}
-                onChange={(e) => {
-                  setStartTime(e.target.value);
-                }}
-              />
-              <span>—</span>
-              <input
-                ref={endTimeInputRef}
-                data-key="endTime"
-                id="event-endTime"
-                className="event-input event-time-input"
-                type="time"
-                value={endTime}
-                onChange={(e) => {
-                  setEndTime(e.target.value);
-                }}
-              />
-            </div>
-          </div>
-          <div className="validationMessage" ref={timeValidationRef}>
-            <span className="validationMessageText">PLACEHOLDER</span>
-          </div>
-        </div>
-      </div>
+			<div className="container">
+				<div className="event-left">
+					<img src={timeIcon} alt="clock icon" />
+				</div>
 
-      <div className="container event-description">
-        <div className="event-left">
-          <img src={noteIcon} alt="notebook icon" />
-        </div>
+				<div className="event-right">
+					<div className="container">
+						<Input
+							type={InputTypes.Date}
+							inputPlaceholder={""}
+							inputValue={eventDate}
+							onValueChange={setEventDate}
+						/>
+						<Input
+							type={InputTypes.Time}
+							inputPlaceholder={""}
+							inputValue={formatTimestampToTimeString(eventTime.startTime)}
+							onValueChange={(value: string) => {
+								onEventTimeChange({
+									...eventTime,
+									startTime: convertInputToDate(eventDate, value),
+								});
+							}}
+						/>
+						<Input
+							type={InputTypes.Time}
+							inputPlaceholder={""}
+							inputValue={formatTimestampToTimeString(eventTime.endTime)}
+							onValueChange={(value: string) => {
+								onEventTimeChange({
+									...eventTime,
+									endTime: convertInputToDate(eventDate, value),
+								});
+							}}
+						/>
+					</div>
+					<InputValidator
+						errorMessage={TIME_VALIDATION_ERROR_MESSAGE}
+						isValid={eventTime.startTime <= eventTime.endTime}
+					/>
+				</div>
+			</div>
 
-        <div className="event-right">
-          <textarea
-            data-key="description"
-            id="event-description"
-            className="event-input event-textarea"
-            placeholder="Description"
-          ></textarea>
-        </div>
-      </div>
+			<div className="container event-description">
+				<div className="event-left">
+					<img src={noteIcon} alt="notebook icon" />
+				</div>
 
-      <div className="container event-controls">
-        <button
-          className="button button_secondary button-cancel"
-          type="reset"
-          onClick={() => {
-            hideModal();
-          }}
-        >
-          Cancel
-        </button>
-        <button
-          className="button button_secondary button-save"
-          type="submit"
-          onClick={(e) => {
-            e.preventDefault();
-            if (validateTimeInput()) {
-              console.log(collectFormData(inputs));
-            }
-          }}
-        >
-          Save
-        </button>
-      </div>
-    </form>
-  );
+				<div className="event-right">
+					<textarea
+						data-key="description"
+						id="event-description"
+						className="event-input event-textarea"
+						placeholder="Description"
+					></textarea>
+				</div>
+			</div>
+
+			<div className="container event-controls">
+				<button
+					className="button button_secondary button-cancel"
+					type="reset"
+					onClick={() => {
+						hideModal();
+					}}
+				>
+					Cancel
+				</button>
+				<button
+					className="button button_secondary button-save"
+					type="submit"
+					onClick={(e) => {
+						e.preventDefault();
+						// if (validateTimeInput()) {
+						// 	console.log(collectFormData(inputs));
+						// }
+					}}
+				>
+					Save
+				</button>
+			</div>
+		</form>
+	);
 };
 
 export default EventFormSimple;
