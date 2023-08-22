@@ -1,5 +1,3 @@
-import { Fragment } from "react";
-
 export enum InputTypes {
 	Text = "text",
 	Date = "date",

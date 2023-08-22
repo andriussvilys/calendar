@@ -1,4 +1,4 @@
-import { useReducer, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { FormData } from "../../Utils/database";
 import "./event.css";
 
@@ -154,6 +154,7 @@ const EventFormSimple = ({
 				>
 					Cancel
 				</button>
+
 				<button
 					className="button button_secondary button-save"
 					type="submit"

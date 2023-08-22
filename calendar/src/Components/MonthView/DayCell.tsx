@@ -1,5 +1,5 @@
-import { DateFormatter, createDateFormatter } from "../../Utils/dateFormatter";
-import { LocaleType, getToday, isSameDate } from "../../Utils/dateManipulation";
+import { DateFormatter } from "../../Utils/dateFormatter";
+import { getToday, isSameDate } from "../../Utils/dateManipulation";
 
 interface DayCellProps {
 	dateFormatter: DateFormatter;

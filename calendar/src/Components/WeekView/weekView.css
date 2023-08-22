@@ -6,22 +6,30 @@
 	overflow: hidden;
 	width: 100%;
 	height: 100%;
-	/* padding-top: 1em;
-    padding-right: 1em; */
 	margin: 0 1em 1em 1em;
 	flex: 1;
 	position: relative;
 	display: flex;
 }
 
-.weekView-main {
+.weekView-main-container {
 	display: grid;
-	grid-template-columns: 3em repeat(7, 1fr);
+	grid-template-columns: 3em 1fr;
+	grid-template-rows: 8em 1fr;
 	overflow: scroll;
 	height: 100%;
-	position: absolute;
 	width: 100%;
 	padding-right: 12px;
+	position: relative;
+}
+
+.weekView-main {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	display: grid;
+	grid-template-columns: 3em repeat(7, 1fr);
+	z-index: 0;
 }
 
 .weekView-column {
@@ -51,6 +59,7 @@
 .eventCell_header {
 	min-height: 1.5em;
 	width: 100%;
+	height: 100%;
 }
 .hour {
 	display: flex;
@@ -136,9 +145,14 @@
 	animation-fill-mode: forwards;
 }
 
-.slideIn_ltr .header-cell,
-.slideIn_rtl .header-cell {
-	background: none;
+.slide .hour {
+	display: none;
+}
+.slide .day-border {
+	border: none;
+}
+.slide .header-cell {
+	background-color: transparent;
 }
 
 .dayCell {
