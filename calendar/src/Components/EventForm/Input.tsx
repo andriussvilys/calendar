@@ -6,8 +6,8 @@ export enum InputTypes {
 export interface InputProps {
 	type: InputTypes;
 	inputPlaceholder: string;
-	inputValue: any;
-	onValueChange: Function;
+	inputValue: string;
+	onValueChange: (value: string) => void;
 }
 const Input = ({
 	type,

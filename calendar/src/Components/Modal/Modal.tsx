@@ -7,7 +7,7 @@ const displayNone = "display-none";
 
 interface ModalProps extends PropsWithChildren {
 	isVisible: Boolean;
-	setModalVisibility: Function;
+	setModalVisibility: (value: boolean) => void;
 }
 
 const Modal = ({ children, isVisible, setModalVisibility }: ModalProps) => {

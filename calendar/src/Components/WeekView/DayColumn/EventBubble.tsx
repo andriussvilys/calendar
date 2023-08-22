@@ -7,16 +7,16 @@ interface EventBubbleProps {
 	timeslotEvents: FormData[];
 	index: number;
 	dateFormatter: DateFormatter;
-	onModalBodyChange: Function;
-	hideModal: Function;
-	removeFromLocalStorage: Function;
+	openModal: (children: JSX.Element) => void;
+	hideModal: () => void;
+	removeFromLocalStorage: (eventId: string) => void;
 }
 
 const EventBubble = ({
 	timeslotEvents,
 	index,
 	dateFormatter,
-	onModalBodyChange,
+	openModal,
 	hideModal,
 	removeFromLocalStorage,
 }: EventBubbleProps) => {
@@ -49,7 +49,7 @@ const EventBubble = ({
 			data-event-id={event.id}
 			style={style}
 			onClick={() =>
-				onModalBodyChange(
+				openModal(
 					<EventCard
 						event={event}
 						dateFormatter={dateFormatter}

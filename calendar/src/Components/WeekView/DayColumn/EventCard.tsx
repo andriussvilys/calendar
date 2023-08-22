@@ -6,8 +6,8 @@ import { FormData } from "../../../Utils/database";
 interface EventCardProps {
 	event: FormData;
 	dateFormatter: DateFormatter;
-	hideModal: Function;
-	removeFromLocalStorage: Function;
+	hideModal: () => void;
+	removeFromLocalStorage: (eventId: string) => void;
 }
 const EventCard = ({
 	event,

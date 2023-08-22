@@ -4,7 +4,7 @@ import { getToday, isSameDate } from "../../Utils/dateManipulation";
 interface DayCellProps {
 	dateFormatter: DateFormatter;
 	date: Date;
-	onDateChange: Function;
+	onDateChange: (newDate: Date) => void;
 	selectedDate: Date;
 }
 
@@ -33,7 +33,7 @@ const DayCell = ({
 
 const onMonthButtonClick = (
 	eventTarget: HTMLElement,
-	onDateChange: Function
+	onDateChange: (newDate: Date) => void
 ) => {
 	const timestamp = eventTarget?.dataset?.timestamp;
 	if (timestamp) {

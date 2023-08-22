@@ -1,10 +1,11 @@
 import { TIMESLOT_DURATION } from "../WeekView/DayColumn/Timeslot";
 import EventForm from "./EventForm";
+import { FormData } from "../../Utils/database";
 
 interface CreateEventButtonProps {
-	openModal: Function;
-	hideModal: Function;
-	saveToLocalStorage: Function;
+	openModal: (children: JSX.Element) => void;
+	hideModal: () => void;
+	saveToLocalStorage: (event: FormData) => void;
 }
 
 export const roundTimestampToTimeslotMinutes = (timestamp: number) => {

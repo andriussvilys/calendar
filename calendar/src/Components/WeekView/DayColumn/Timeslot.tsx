@@ -11,9 +11,9 @@ interface TimeSlotProps {
 	date: Date;
 	cellTimeslots: FormData[][];
 	index: number;
-	onModalBodyChange: Function;
-	hideModal: Function;
-	removeFromLocalStorage: Function;
+	openModal: (children: JSX.Element) => void;
+	hideModal: () => void;
+	removeFromLocalStorage: (eventId: string) => void;
 }
 
 const Timeslot = ({
@@ -21,7 +21,7 @@ const Timeslot = ({
 	dateFormatter,
 	cellTimeslots,
 	index,
-	onModalBodyChange,
+	openModal,
 	hideModal,
 	removeFromLocalStorage,
 }: TimeSlotProps) => {
@@ -63,7 +63,7 @@ const Timeslot = ({
 								timeslotEvents={sorted}
 								index={index}
 								dateFormatter={dateFormatter}
-								onModalBodyChange={onModalBodyChange}
+								openModal={openModal}
 								hideModal={hideModal}
 								removeFromLocalStorage={removeFromLocalStorage}
 							/>

@@ -7,10 +7,7 @@ import "./weekView.css";
 import EventForm, { EventFormProps } from "../EventForm/EventForm";
 import HourColumn from "./HourColumn/HourColumn";
 import DayColumn from "./DayColumn/DayColumn";
-import SwappingContainer from "../SwappingContainer/SwappingContainer";
 import { useEffect, useRef, useState } from "react";
-import { direction } from "../SwappingContainer/SwappingContainer";
-import { relative } from "path";
 
 const getDirection = (prevDate: number, currentDate: number): number => {
 	const temp = currentDate - prevDate;
@@ -31,9 +28,9 @@ const getAnimationName = (direction: number): string => {
 
 const handleWeekViewClick = (
 	event: any,
-	openModal: Function,
-	hideModal: Function,
-	saveToLocalStorage: Function
+	openModal: (children: JSX.Element) => void,
+	hideModal: () => void,
+	saveToLocalStorage: (event: FormData) => void
 ) => {
 	const eventTarget = event.nativeEvent.target as HTMLElement;
 	console.log(eventTarget);
@@ -58,8 +55,8 @@ interface WeekViewProps extends EventFormProps {
 	selectedDate: Date;
 	dateFormatter: DateFormatter;
 	events: FormData[];
-	openModal: Function;
-	removeFromLocalStorage: Function;
+	openModal: (children: JSX.Element) => void;
+	removeFromLocalStorage: (eventId: string) => void;
 }
 const WeekView = ({
 	selectedDate,
@@ -132,7 +129,7 @@ const WeekView = ({
 								date={date}
 								dateFormatter={dateFormatter}
 								events={events}
-								onModalBodyChange={openModal}
+								openModal={openModal}
 								hideModal={hideModal}
 								removeFromLocalStorage={removeFromLocalStorage}
 							/>
@@ -151,7 +148,7 @@ const WeekView = ({
 							date={date}
 							dateFormatter={dateFormatter}
 							events={events}
-							onModalBodyChange={openModal}
+							openModal={openModal}
 							hideModal={hideModal}
 							removeFromLocalStorage={removeFromLocalStorage}
 						/>

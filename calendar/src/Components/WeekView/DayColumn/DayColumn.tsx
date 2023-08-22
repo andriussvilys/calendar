@@ -6,7 +6,7 @@ const DayColumn = ({
 	date,
 	dateFormatter,
 	events,
-	onModalBodyChange,
+	openModal,
 	hideModal,
 	removeFromLocalStorage,
 }: DayCellProps) => {
@@ -24,7 +24,7 @@ const DayColumn = ({
 						date={dayCellDate}
 						dateFormatter={dateFormatter}
 						events={events}
-						onModalBodyChange={onModalBodyChange}
+						openModal={openModal}
 						hideModal={hideModal}
 						removeFromLocalStorage={removeFromLocalStorage}
 					/>

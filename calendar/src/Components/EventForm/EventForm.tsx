@@ -16,8 +16,8 @@ const convertInputToDate = (dateString: string, timeString: string): number => {
 };
 
 export interface EventFormProps {
-	hideModal: Function;
-	saveToLocalStorage: Function;
+	hideModal: () => void;
+	saveToLocalStorage: (event: FormData) => void;
 	timestamp: number;
 }
 
