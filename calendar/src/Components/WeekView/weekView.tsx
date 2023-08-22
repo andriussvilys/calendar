@@ -1,4 +1,4 @@
-import { getWeekDates } from "../../Utils/dateManipulation";
+import { getWeekDates, isSameDate } from "../../Utils/dateManipulation";
 import { FormData } from "../../Utils/database";
 import { DateFormatter } from "../../Utils/dateFormatter";
 
@@ -83,23 +83,28 @@ const WeekView = ({
 		? getDirection(prevDate.current, selectedDate.valueOf())
 		: 0;
 	const animationName = getAnimationName(direction);
+
 	useEffect(() => {
-		if (!mounted.current) {
-			mounted.current = 1;
+		if (!mounted.current || mounted.current < 2) {
+			// mounted.current = 1;
+			++mounted.current;
 			return;
 		}
-		++mounted.current;
 		prevDate.current = currentDate.current;
 		currentDate.current = selectedDate.valueOf();
-		const nextDates = getWeekDates(selectedDate);
-		if (nextDates[0] === currentWeekDates[0]) {
-			return;
+		if (
+			!isSameDate(new Date(prevDate.current), new Date(currentDate.current))
+		) {
+			const nextDates = getWeekDates(selectedDate);
+			if (nextDates[0] === currentWeekDates[0]) {
+				return;
+			}
+			setNextWeekDates(nextDates);
+			setTimeout(() => {
+				setCurrentDates([...nextDates]);
+				setNextWeekDates([]);
+			}, 200);
 		}
-		setNextWeekDates(nextDates);
-		setTimeout(() => {
-			setCurrentDates([...nextDates]);
-			setNextWeekDates([]);
-		}, 200);
 	}, [selectedDate]);
 
 	useEffect(() => {
@@ -114,7 +119,9 @@ const WeekView = ({
 				handleWeekViewClick(e, openModal, hideModal, saveToLocalStorage);
 			}}
 		>
-			{nextWeekDates.length && mounted.current > 2 ? (
+			{nextWeekDates.length &&
+			mounted.current > 1 &&
+			prevDate.current !== selectedDate.valueOf() ? (
 				<div key={"next"} className={`weekView-main slide ${animationName}`}>
 					<HourColumn dateFormatter={dateFormatter} />
 
