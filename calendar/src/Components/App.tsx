@@ -11,7 +11,7 @@ import CreateEventButton from "./EventForm/CreateEventButton";
 
 function App() {
 	const [modalBody, setModalBody] = useState<JSX.Element>(<Fragment />);
-	const [isModalVisible, setIsModalVisible] = useState<Boolean>(false);
+	const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 	const [dateFormatter, setDateFormatter] = useState<DateFormatter>(
 		createDateFormatter(LocaleType.US)
 	);
@@ -24,11 +24,13 @@ function App() {
 	const onSelectedDateChange = (newDate: Date) => {
 		setSelectedDate(newDate);
 	};
+
 	const saveToLocalStorage = (event: FormData) => {
 		const newState = [...events, event];
 		setEvents(newState);
 		saveEvent(event);
 	};
+
 	const removeFromLocalStorage = (eventId: string) => {
 		setEvents(events.filter((storedEvent) => storedEvent.id !== eventId));
 		deleteEvent(eventId);
@@ -51,11 +53,7 @@ function App() {
 			/>
 			<main className="main">
 				<aside className="container sideBar">
-					<CreateEventButton
-						openModal={openModal}
-						hideModal={hideModal}
-						saveToLocalStorage={saveToLocalStorage}
-					/>
+					<CreateEventButton saveToLocalStorage={saveToLocalStorage} />
 					<MonthView
 						dateFormatter={dateFormatter}
 						selectedDate={selectedDate}

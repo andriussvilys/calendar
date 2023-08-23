@@ -1,3 +1,5 @@
+import { TIMESLOT_DURATION } from "../Components/WeekView/DayColumn/Timeslot";
+
 export const WEEKDAYS = 7;
 export const HOUR_COUNT = 24;
 export const MILISECOND_HOUR = 60 * 60 * 1000;
@@ -57,6 +59,12 @@ export const getDayStart = (timestamp: number): number => {
 	day.setMilliseconds(0);
 
 	return day.valueOf();
+};
+
+export const convertTimestampToTimeslotIndex = (timestamp: number) => {
+	const minutes = new Date(timestamp).getMinutes();
+	const timeslot = Math.floor(minutes / TIMESLOT_DURATION);
+	return new Date(timestamp).setMinutes(timeslot * TIMESLOT_DURATION);
 };
 
 export default {

@@ -1,45 +1,40 @@
-import { TIMESLOT_DURATION } from "../WeekView/DayColumn/Timeslot";
 import EventForm from "./EventForm";
 import { FormData } from "../../Utils/database";
+import { convertTimestampToTimeslotIndex } from "../../Utils/dateManipulation";
+import { Fragment, useState } from "react";
+import Modal from "../Modal/Modal";
+import useModal from "../Modal/useModal";
 
 interface CreateEventButtonProps {
-	openModal: (children: JSX.Element) => void;
-	hideModal: () => void;
 	saveToLocalStorage: (event: FormData) => void;
 }
 
-export const roundTimestampToTimeslotMinutes = (timestamp: number) => {
-	const minutes = new Date(timestamp).getMinutes();
-	const timeslot = Math.floor(minutes / TIMESLOT_DURATION);
-	return new Date(timestamp).setMinutes(timeslot * TIMESLOT_DURATION);
-};
+const CreateEventButton = ({ saveToLocalStorage }: CreateEventButtonProps) => {
+	const [isModalVisible, setModal] = useModal(false);
 
-const CreateEventButton = ({
-	hideModal,
-	openModal,
-	saveToLocalStorage,
-}: CreateEventButtonProps) => {
-	const handleOnClick = () => {
-		const eventForm = (
-			<EventForm
-				key={Date.now().valueOf()}
-				hideModal={hideModal}
-				saveToLocalStorage={saveToLocalStorage}
-				timestamp={roundTimestampToTimeslotMinutes(new Date().valueOf())}
-			/>
-		);
-		openModal(eventForm);
-	};
+	const eventForm = (
+		<EventForm
+			key={Date.now().valueOf()}
+			hideModal={() => setModal(false)}
+			saveToLocalStorage={saveToLocalStorage}
+			timestamp={convertTimestampToTimeslotIndex(new Date().valueOf())}
+		/>
+	);
 
 	return (
-		<button
-			className="button button-primary create"
-			onClick={() => {
-				handleOnClick();
-			}}
-		>
-			Create Event
-		</button>
+		<Fragment>
+			<button
+				className="button button-primary create"
+				onClick={() => {
+					setModal(true);
+				}}
+			>
+				Create Event
+			</button>
+			<Modal isVisible={isModalVisible} setModalVisibility={setModal}>
+				{eventForm}
+			</Modal>
+		</Fragment>
 	);
 };
 

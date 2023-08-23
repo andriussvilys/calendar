@@ -10,18 +10,16 @@ export interface DayCellProps {
 	date: Date;
 	dateFormatter: DateFormatter;
 	events: FormData[];
-	openModal: (children: JSX.Element) => void;
-	hideModal: () => void;
 	removeFromLocalStorage: (eventId: string) => void;
+	saveToLocalStorage: (event: FormData) => void;
 }
 
 const DayCell = ({
 	date,
 	dateFormatter,
 	events,
-	openModal,
-	hideModal,
 	removeFromLocalStorage,
+	saveToLocalStorage,
 }: DayCellProps) => {
 	const timestamp = date.valueOf();
 	const filteredEvents = events.filter(
@@ -43,9 +41,8 @@ const DayCell = ({
 						index={index}
 						date={date}
 						dateFormatter={dateFormatter}
-						openModal={openModal}
-						hideModal={hideModal}
 						removeFromLocalStorage={removeFromLocalStorage}
+						saveToLocalStorage={saveToLocalStorage}
 					/>
 				);
 			})}

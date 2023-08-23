@@ -1,14 +1,16 @@
+import { Fragment, useState } from "react";
 import { FormData, getEventDuration } from "../../../Utils/database";
 import { DateFormatter } from "../../../Utils/dateFormatter";
+import { isSameDate } from "../../../Utils/dateManipulation";
 
 import EventCard from "./EventCard";
+import Modal from "../../Modal/Modal";
+import useModal from "../../Modal/useModal";
 
 interface EventBubbleProps {
 	timeslotEvents: FormData[];
 	index: number;
 	dateFormatter: DateFormatter;
-	openModal: (children: JSX.Element) => void;
-	hideModal: () => void;
 	removeFromLocalStorage: (eventId: string) => void;
 }
 
@@ -16,8 +18,6 @@ const EventBubble = ({
 	timeslotEvents,
 	index,
 	dateFormatter,
-	openModal,
-	hideModal,
 	removeFromLocalStorage,
 }: EventBubbleProps) => {
 	const rightSiblingCount = timeslotEvents.slice(
@@ -43,25 +43,29 @@ const EventBubble = ({
 		event.startTime,
 		event.endTime
 	);
+
+	const [isModalVisible, setModal] = useModal(false);
+
 	return (
-		<div
-			className="eventBubble"
-			data-event-id={event.id}
-			style={style}
-			onClick={() =>
-				openModal(
-					<EventCard
-						event={event}
-						dateFormatter={dateFormatter}
-						hideModal={hideModal}
-						removeFromLocalStorage={removeFromLocalStorage}
-					/>
-				)
-			}
-		>
-			<span className="eventBubble-title">{event.title}</span>
-			<span>{eventTime}</span>
-		</div>
+		<Fragment>
+			<div
+				className="eventBubble"
+				data-event-id={event.id}
+				style={style}
+				onClick={() => setModal(true)}
+			>
+				<span className="eventBubble-title">{event.title}</span>
+				<span>{eventTime}</span>
+			</div>
+			<Modal isVisible={isModalVisible} setModalVisibility={setModal}>
+				<EventCard
+					event={event}
+					dateFormatter={dateFormatter}
+					hideModal={() => setModal(false)}
+					removeFromLocalStorage={removeFromLocalStorage}
+				/>
+			</Modal>
+		</Fragment>
 	);
 };
 

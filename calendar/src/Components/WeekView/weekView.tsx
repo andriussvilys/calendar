@@ -2,12 +2,10 @@ import { getWeekDates, isSameDate } from "../../Utils/dateManipulation";
 import { FormData } from "../../Utils/database";
 import { DateFormatter } from "../../Utils/dateFormatter";
 
-import "./weekView.css";
-
-import EventForm, { EventFormProps } from "../EventForm/EventForm";
-import HourColumn from "./HourColumn/HourColumn";
-import DayColumn from "./DayColumn/DayColumn";
 import { useEffect, useRef, useState } from "react";
+import WeekViewContent from "./WeekViewContent";
+import "./weekView.css";
+import { EventFormProps } from "../EventForm/EventForm";
 
 const getDirection = (prevDate: number, currentDate: number): number => {
 	const temp = currentDate - prevDate;
@@ -26,31 +24,6 @@ const getAnimationName = (direction: number): string => {
 	}
 };
 
-const handleWeekViewClick = (
-	event: any,
-	openModal: (children: JSX.Element) => void,
-	hideModal: () => void,
-	saveToLocalStorage: (event: FormData) => void
-) => {
-	const eventTarget = event.nativeEvent.target as HTMLElement;
-	console.log(eventTarget);
-	const eventTargetDataset = eventTarget.dataset;
-	if (eventTargetDataset.timestamp) {
-		const timestamp: number = Number.parseInt(
-			event.nativeEvent.target.dataset.timestamp
-		);
-		const eventForm = (
-			<EventForm
-				key={Date.now().valueOf()}
-				hideModal={hideModal}
-				saveToLocalStorage={saveToLocalStorage}
-				timestamp={timestamp}
-			/>
-		);
-		openModal(eventForm);
-	}
-};
-
 interface WeekViewProps extends EventFormProps {
 	selectedDate: Date;
 	dateFormatter: DateFormatter;
@@ -62,12 +35,9 @@ const WeekView = ({
 	selectedDate,
 	dateFormatter,
 	events,
-	openModal,
-	hideModal,
 	saveToLocalStorage,
 	removeFromLocalStorage,
 }: WeekViewProps) => {
-	const mounted = useRef<number>(0);
 	const [nextWeekDates, setNextWeekDates] = useState<Date[]>([]);
 	const [currentWeekDates, setCurrentDates] = useState<Date[]>(
 		getWeekDates(selectedDate)
@@ -79,12 +49,10 @@ const WeekView = ({
 	const direction = prevDate.current
 		? getDirection(prevDate.current, selectedDate.valueOf())
 		: 0;
+
 	const animationName = getAnimationName(direction);
+
 	useEffect(() => {
-		if (!mounted.current || mounted.current < 2) {
-			++mounted.current;
-			return;
-		}
 		prevDate.current = currentDate.current;
 		currentDate.current = selectedDate.valueOf();
 		if (
@@ -107,50 +75,26 @@ const WeekView = ({
 	}, [selectedDate]);
 
 	return (
-		<div
-			ref={container}
-			className="weekView-main-container"
-			onClick={(e) => {
-				handleWeekViewClick(e, openModal, hideModal, saveToLocalStorage);
-			}}
-		>
-			{nextWeekDates.length && mounted.current > 1 ? (
-				<div key={"next"} className={`weekView-main slide ${animationName}`}>
-					<HourColumn dateFormatter={dateFormatter} />
-
-					{nextWeekDates.map((date) => {
-						return (
-							<DayColumn
-								key={date.valueOf()}
-								date={date}
-								dateFormatter={dateFormatter}
-								events={events}
-								openModal={openModal}
-								hideModal={hideModal}
-								removeFromLocalStorage={removeFromLocalStorage}
-							/>
-						);
-					})}
-				</div>
+		<div ref={container} className="weekView-main-container">
+			{nextWeekDates.length ? (
+				<WeekViewContent
+					animationName={animationName}
+					dates={nextWeekDates}
+					dateFormatter={dateFormatter}
+					events={events}
+					removeFromLocalStorage={removeFromLocalStorage}
+					saveToLocalStorage={saveToLocalStorage}
+				/>
 			) : null}
 
-			<div className={`weekView-main`} key={"current"}>
-				<HourColumn dateFormatter={dateFormatter} />
-
-				{currentWeekDates.map((date) => {
-					return (
-						<DayColumn
-							key={date.valueOf()}
-							date={date}
-							dateFormatter={dateFormatter}
-							events={events}
-							openModal={openModal}
-							hideModal={hideModal}
-							removeFromLocalStorage={removeFromLocalStorage}
-						/>
-					);
-				})}
-			</div>
+			<WeekViewContent
+				animationName={""}
+				dates={currentWeekDates}
+				dateFormatter={dateFormatter}
+				events={events}
+				removeFromLocalStorage={removeFromLocalStorage}
+				saveToLocalStorage={saveToLocalStorage}
+			/>
 		</div>
 	);
 };

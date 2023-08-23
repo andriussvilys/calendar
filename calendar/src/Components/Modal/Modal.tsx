@@ -1,4 +1,10 @@
-import { useRef, PropsWithChildren, useEffect } from "react";
+import {
+	useRef,
+	PropsWithChildren,
+	useEffect,
+	Fragment,
+	useState,
+} from "react";
 import "./modal.css";
 
 const slideInAnimation = "slideIn_ltr";
@@ -6,41 +12,47 @@ const slideOutAnimation = "slideOut_rtl";
 const displayNone = "display-none";
 
 interface ModalProps extends PropsWithChildren {
-	isVisible: Boolean;
+	isVisible: boolean;
 	setModalVisibility: (value: boolean) => void;
 }
 
 const Modal = ({ children, isVisible, setModalVisibility }: ModalProps) => {
+	const [toBeRendered, setToBeRendered] = useState<boolean>(isVisible);
+
 	const modalContainer = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
 		if (!isVisible) {
 			setTimeout(() => {
-				modalContainer.current?.classList.add(displayNone);
+				setToBeRendered(false);
 			}, 400);
 		} else {
+			setToBeRendered(true);
 			modalContainer.current?.classList.remove(displayNone);
 		}
 	}, [isVisible]);
 
 	return (
-		<div
-			ref={modalContainer}
-			id="eventCardModal"
-			className={`modalContainer container display-none`}
-			onClick={(e) => {
-				setModalVisibility(false);
-			}}
-		>
-			<div
-				className={`container modalInnerContainer ${
-					isVisible ? slideInAnimation : slideOutAnimation
-				}`}
-				onClick={(e) => e.stopPropagation()}
-			>
-				{children}
-			</div>
-		</div>
+		<Fragment>
+			{toBeRendered ? (
+				<div
+					ref={modalContainer}
+					className={`modalContainer container`}
+					onClick={(e) => {
+						setModalVisibility(false);
+					}}
+				>
+					<div
+						className={`container modalInnerContainer ${
+							isVisible ? slideInAnimation : slideOutAnimation
+						}`}
+						onClick={(e) => e.stopPropagation()}
+					>
+						{children}
+					</div>
+				</div>
+			) : null}
+		</Fragment>
 	);
 };
 

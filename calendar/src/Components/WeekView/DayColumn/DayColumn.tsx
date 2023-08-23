@@ -1,14 +1,14 @@
 import DayColumnHeader from "./DayColumnHeader";
 import DayCell, { DayCellProps } from "./DayCell";
 import { HOUR_COUNT } from "../../../Utils/dateManipulation";
+import { useEffect } from "react";
 
 const DayColumn = ({
 	date,
 	dateFormatter,
 	events,
-	openModal,
-	hideModal,
 	removeFromLocalStorage,
+	saveToLocalStorage,
 }: DayCellProps) => {
 	return (
 		<div className="weekView-column">
@@ -24,9 +24,8 @@ const DayColumn = ({
 						date={dayCellDate}
 						dateFormatter={dateFormatter}
 						events={events}
-						openModal={openModal}
-						hideModal={hideModal}
 						removeFromLocalStorage={removeFromLocalStorage}
+						saveToLocalStorage={saveToLocalStorage}
 					/>
 				);
 			})}
