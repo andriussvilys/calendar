@@ -4,11 +4,13 @@ import { Header } from "./Header/header";
 import "./main.css";
 import MonthView from "./MonthView/MonthView";
 import { DateFormatter, createDateFormatter } from "../Utils/dateFormatter";
-import { FormData, deleteEvent, getEvents, saveEvent } from "../Utils/database";
+import { FormData, getEvents } from "../Utils/database";
 import WeekView from "./WeekView/WeekView";
 import CreateEventButton from "./EventForm/CreateEventButton";
 
-window.addEventListener("storage", (e) => console.log(e));
+window.addEventListener("storage", (e) => {
+	console.log(e.newValue);
+});
 
 function App() {
 	const [dateFormatter, setDateFormatter] = useState<DateFormatter>(
@@ -24,16 +26,15 @@ function App() {
 		setSelectedDate(newDate);
 	};
 
-	const saveToLocalStorage = (event: FormData) => {
-		const newState = [...events, event];
-		setEvents(newState);
-		saveEvent(event);
-	};
+	const saveToLocalStorage = (event: FormData) => {};
 
-	const removeFromLocalStorage = (eventId: string) => {
-		setEvents(events.filter((storedEvent) => storedEvent.id !== eventId));
-		deleteEvent(eventId);
-	};
+	const removeFromLocalStorage = (eventId: string) => {};
+
+	window.addEventListener("storage", (e) => {
+		if (e.newValue) {
+			setEvents(JSON.parse(e.newValue));
+		}
+	});
 
 	return (
 		<Fragment>

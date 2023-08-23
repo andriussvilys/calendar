@@ -1,7 +1,7 @@
 import deleteIcon from "../../../images/delete_FILL0_wght400_GRAD0_opsz48.svg";
 import closeIcon from "../../../images/close_FILL0_wght400_GRAD0_opsz48.svg";
 import { DateFormatter } from "../../../Utils/dateFormatter";
-import { FormData } from "../../../Utils/database";
+import { FormData, deleteEvent } from "../../../Utils/database";
 
 interface EventCardProps {
 	event: FormData;
@@ -27,7 +27,7 @@ const EventCard = ({
 				<button
 					className="button button_round eventCard-button"
 					onClick={() => {
-						removeFromLocalStorage(event.id);
+						deleteEvent(event.id);
 						hideModal();
 					}}
 				>

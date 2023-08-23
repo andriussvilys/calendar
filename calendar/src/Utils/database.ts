@@ -56,6 +56,12 @@ export const getEvents = (): FormData[] => {
 export const saveEvent = (event: FormData) => {
 	const events = getEvents();
 	localStorage.setItem("events", JSON.stringify([...events, event]));
+	dispatchEvent(
+		new StorageEvent("storage", {
+			key: event.id,
+			newValue: localStorage.getItem("events"),
+		})
+	);
 };
 
 export const deleteEvent = (eventId: string) => {
@@ -64,5 +70,10 @@ export const deleteEvent = (eventId: string) => {
 		const events = getEvents();
 		const updatedEvents = events.filter((event) => event.id !== eventId);
 		localStorage.setItem("events", JSON.stringify(updatedEvents));
+		dispatchEvent(
+			new StorageEvent("storage", {
+				newValue: localStorage.getItem("events"),
+			})
+		);
 	}
 };

@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { FormData } from "../../Utils/database";
+import { FormData, saveEvent } from "../../Utils/database";
 import "./event.css";
 
 import timeIcon from "../../images/schedule_FILL0_wght400_GRAD0_opsz48.svg";
@@ -161,7 +161,7 @@ const EventFormSimple = ({
 					onClick={(e) => {
 						e.preventDefault();
 						if (validateTitle(title) && validateEventTime(eventTime)) {
-							saveToLocalStorage(
+							saveEvent(
 								new FormData({
 									startTime: eventTime.startTime,
 									endTime: eventTime.endTime,
