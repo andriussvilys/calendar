@@ -80,10 +80,8 @@ const WeekView = ({
 		? getDirection(prevDate.current, selectedDate.valueOf())
 		: 0;
 	const animationName = getAnimationName(direction);
-
 	useEffect(() => {
 		if (!mounted.current || mounted.current < 2) {
-			// mounted.current = 1;
 			++mounted.current;
 			return;
 		}
@@ -116,9 +114,7 @@ const WeekView = ({
 				handleWeekViewClick(e, openModal, hideModal, saveToLocalStorage);
 			}}
 		>
-			{nextWeekDates.length &&
-			mounted.current > 1 &&
-			prevDate.current !== selectedDate.valueOf() ? (
+			{nextWeekDates.length && mounted.current > 1 ? (
 				<div key={"next"} className={`weekView-main slide ${animationName}`}>
 					<HourColumn dateFormatter={dateFormatter} />
 

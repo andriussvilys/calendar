@@ -148,9 +148,6 @@
 .slide .hour {
 	display: none;
 }
-.slide .day-border {
-	border: none;
-}
 .slide .header-cell {
 	background-color: transparent;
 }
