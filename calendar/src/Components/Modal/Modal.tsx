@@ -37,7 +37,7 @@ const Modal = ({ children, isVisible, setModalVisibility }: ModalProps) => {
 			{toBeRendered ? (
 				<div
 					ref={modalContainer}
-					className={`modalContainer container`}
+					className={`modalContainer`}
 					onClick={(e) => {
 						setModalVisibility(false);
 					}}

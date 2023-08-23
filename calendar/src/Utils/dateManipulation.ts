@@ -61,7 +61,7 @@ export const getDayStart = (timestamp: number): number => {
 	return day.valueOf();
 };
 
-export const convertTimestampToTimeslotIndex = (timestamp: number) => {
+export const roundTimestampToTimeslot = (timestamp: number) => {
 	const minutes = new Date(timestamp).getMinutes();
 	const timeslot = Math.floor(minutes / TIMESLOT_DURATION);
 	return new Date(timestamp).setMinutes(timeslot * TIMESLOT_DURATION);

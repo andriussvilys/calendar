@@ -30,11 +30,6 @@ const SwappingContainer = ({ children, direction }: SwappingContainerProps) => {
 
 	useEffect(() => {
 		if (directionAnimation[direction]) {
-			console.log({ direction, animName: directionAnimation[direction] });
-			// slider.current?.classList.add(directionAnimation[direction]);
-			// setTimeout(() => {
-			// 	slider.current?.classList.remove(directionAnimation[direction]);
-			// }, 400);
 		}
 	}, [children]);
 

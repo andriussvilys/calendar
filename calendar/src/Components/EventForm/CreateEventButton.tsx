@@ -1,6 +1,6 @@
 import EventForm from "./EventForm";
-import { FormData } from "../../Utils/database";
-import { convertTimestampToTimeslotIndex } from "../../Utils/dateManipulation";
+import { FormData, roundTimestampToHours } from "../../Utils/database";
+import { roundTimestampToTimeslot } from "../../Utils/dateManipulation";
 import { Fragment } from "react";
 import Modal from "../Modal/Modal";
 import useModal from "../Modal/useModal";
@@ -17,7 +17,7 @@ const CreateEventButton = ({ saveToLocalStorage }: CreateEventButtonProps) => {
 			key={Date.now().valueOf()}
 			hideModal={() => setModal(false)}
 			saveToLocalStorage={saveToLocalStorage}
-			timestamp={convertTimestampToTimeslotIndex(new Date().valueOf())}
+			timestamp={roundTimestampToTimeslot(new Date().valueOf())}
 		/>
 	);
 

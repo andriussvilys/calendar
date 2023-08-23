@@ -1,11 +1,11 @@
 import { Fragment } from "react";
-import { FormData, getEventDuration } from "../../../Utils/database";
+import { FormData } from "../../../Utils/database";
 import { DateFormatter } from "../../../Utils/dateFormatter";
 import EventForm from "../../EventForm/EventForm";
 import useModal from "../../Modal/useModal";
 
-import EventBubble from "./EventBubble";
 import Modal from "../../Modal/Modal";
+import EventBubbleContainer from "./EventBubbleContainer";
 
 export const TIMESLOT_DURATION = 15;
 const EVENTBUBBLE_OFFSET = 25;
@@ -31,16 +31,6 @@ const Timeslot = ({
 		.setMinutes(index * TIMESLOT_DURATION)
 		.valueOf();
 
-	const timeslot: FormData[] = cellTimeslots[index];
-	const sorted = timeslot.sort(
-		(a, b) => getEventDuration(b) - getEventDuration(a)
-	);
-	const prevTimeslotSize = cellTimeslots
-		.slice(0, index)
-		.reduce((acc, prevArray) => {
-			return Math.max(acc, prevArray.length);
-		}, 0);
-
 	const [isVisible, setModal] = useModal(false);
 
 	return (
@@ -53,26 +43,13 @@ const Timeslot = ({
 				}}
 			>
 				<div className="timeslot-innerContainer">
-					<div
-						className="eventBubbleContainer"
-						style={{
-							left: `${prevTimeslotSize * 20}%`,
-							width:
-								timeslot.length > 0 ? `${100 - prevTimeslotSize * 20}%` : 0,
-						}}
-					>
-						{sorted.map((event, index) => {
-							return (
-								<EventBubble
-									key={event.id}
-									timeslotEvents={sorted}
-									index={index}
-									dateFormatter={dateFormatter}
-									removeFromLocalStorage={removeFromLocalStorage}
-								/>
-							);
-						})}
-					</div>
+					<EventBubbleContainer
+						dayCellEvents={cellTimeslots}
+						timeslotEvents={cellTimeslots[index]}
+						timeslotIndex={index}
+						dateFormatter={dateFormatter}
+						removeFromLocalStorage={removeFromLocalStorage}
+					/>
 				</div>
 			</div>
 			<Modal isVisible={isVisible} setModalVisibility={setModal}>

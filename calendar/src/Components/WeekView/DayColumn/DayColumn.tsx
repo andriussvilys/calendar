@@ -1,7 +1,6 @@
 import DayColumnHeader from "./DayColumnHeader";
 import DayCell, { DayCellProps } from "./DayCell";
 import { HOUR_COUNT } from "../../../Utils/dateManipulation";
-import { useEffect } from "react";
 
 const DayColumn = ({
 	date,

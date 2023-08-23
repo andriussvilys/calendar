@@ -37,8 +37,10 @@ export const getEventTimeslot = (event: FormData): number => {
 	return Math.floor(startDate.getMinutes() / TIMESLOT_DURATION);
 };
 
-export const getEventCellTimestamp = (event: FormData): number => {
-	return new Date(event.startTime).setMinutes(0).valueOf();
+export const roundTimestampToHours = (event: FormData): number => {
+	return new Date(
+		new Date(new Date(event.startTime).setMinutes(0)).setSeconds(0)
+	).setMilliseconds(0);
 };
 
 export const getEvents = (): FormData[] => {

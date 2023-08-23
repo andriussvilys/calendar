@@ -6,6 +6,8 @@
 	justify-content: center;
 	top: 0;
 	left: 0;
+	display: flex;
+	align-items: center;
 }
 .modalInnerContainer {
 	border: 2px solid black;

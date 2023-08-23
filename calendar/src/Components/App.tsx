@@ -8,6 +8,8 @@ import { FormData, deleteEvent, getEvents, saveEvent } from "../Utils/database";
 import WeekView from "./WeekView/WeekView";
 import CreateEventButton from "./EventForm/CreateEventButton";
 
+window.addEventListener("storage", (e) => console.log(e));
+
 function App() {
 	const [dateFormatter, setDateFormatter] = useState<DateFormatter>(
 		createDateFormatter(LocaleType.US)

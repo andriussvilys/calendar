@@ -1,7 +1,6 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { FormData, getEventDuration } from "../../../Utils/database";
 import { DateFormatter } from "../../../Utils/dateFormatter";
-import { isSameDate } from "../../../Utils/dateManipulation";
 
 import EventCard from "./EventCard";
 import Modal from "../../Modal/Modal";
@@ -52,7 +51,10 @@ const EventBubble = ({
 				className="eventBubble"
 				data-event-id={event.id}
 				style={style}
-				onClick={() => setModal(true)}
+				onClick={(e) => {
+					e.stopPropagation();
+					setModal(true);
+				}}
 			>
 				<span className="eventBubble-title">{event.title}</span>
 				<span>{eventTime}</span>

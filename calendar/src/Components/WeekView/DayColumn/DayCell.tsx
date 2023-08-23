@@ -1,5 +1,5 @@
 import {
-	getEventCellTimestamp,
+	roundTimestampToHours,
 	getEventTimeslot,
 } from "../../../Utils/database";
 import { DateFormatter } from "../../../Utils/dateFormatter";
@@ -14,6 +14,7 @@ export interface DayCellProps {
 	saveToLocalStorage: (event: FormData) => void;
 }
 
+//DayCell represents 1 hour period in a day
 const DayCell = ({
 	date,
 	dateFormatter,
@@ -22,9 +23,10 @@ const DayCell = ({
 	saveToLocalStorage,
 }: DayCellProps) => {
 	const timestamp = date.valueOf();
-	const filteredEvents = events.filter(
-		(event) => getEventCellTimestamp(event) == timestamp
-	);
+	//filter events that are on the same hour as this DayCell
+	const filteredEvents = events.filter((event) => {
+		return roundTimestampToHours(event) === timestamp;
+	});
 	const timeSlots: FormData[][] = [[], [], [], []];
 
 	filteredEvents.forEach((eventData) => {
