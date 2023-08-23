@@ -1,7 +1,7 @@
 import EventForm from "./EventForm";
 import { FormData } from "../../Utils/database";
 import { convertTimestampToTimeslotIndex } from "../../Utils/dateManipulation";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import Modal from "../Modal/Modal";
 import useModal from "../Modal/useModal";
 
