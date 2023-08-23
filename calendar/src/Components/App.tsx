@@ -73,11 +73,6 @@ function App() {
 					/>
 				</section>
 			</main>
-			<Modal
-				children={modalBody}
-				isVisible={isModalVisible}
-				setModalVisibility={setIsModalVisible}
-			/>
 		</Fragment>
 	);
 }
