@@ -48,6 +48,7 @@ const MonthView = ({
 				<MonthYearLabel
 					dateFormatter={dateFormatter}
 					selectedDate={selectedDate}
+					classList={""}
 				/>
 				<ArrowControls
 					onForwardArrowClick={() =>

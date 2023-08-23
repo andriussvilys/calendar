@@ -51,6 +51,7 @@ export const Header = ({
 				<MonthYearLabel
 					dateFormatter={dateFormatter}
 					selectedDate={selectedDate}
+					classList={"headerMonthYearLabel"}
 				/>
 			</div>
 

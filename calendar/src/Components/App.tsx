@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import { LocaleType } from "../Utils/dateManipulation";
-import { Header } from "./Header/header";
+import { Header } from "./Header/Header";
 import "./main.css";
 import MonthView from "./MonthView/MonthView";
 import { DateFormatter, createDateFormatter } from "../Utils/dateFormatter";
