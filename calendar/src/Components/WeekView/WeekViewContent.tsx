@@ -28,7 +28,7 @@ const WeekViewContent = ({
 			{dates.map((date) => {
 				return (
 					<DayColumn
-						key={date.valueOf()}
+						key={`${date.valueOf()}${new Date().valueOf()}`}
 						date={date}
 						dateFormatter={dateFormatter}
 						events={events}

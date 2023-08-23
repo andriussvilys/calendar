@@ -35,6 +35,8 @@ const WeekView = ({ selectedDate, dateFormatter, events }: WeekViewProps) => {
 		getWeekDates(selectedDate)
 	);
 
+	const prevTimeout = useRef<NodeJS.Timeout | null>(null);
+
 	const currentDate = useRef<number>(Date.now().valueOf());
 	const prevDate = useRef<number>(Date.now().valueOf());
 	const container = useRef<HTMLDivElement>(null);
@@ -50,12 +52,16 @@ const WeekView = ({ selectedDate, dateFormatter, events }: WeekViewProps) => {
 		if (
 			!isSameDate(new Date(prevDate.current), new Date(currentDate.current))
 		) {
+			if (prevTimeout.current) {
+				clearTimeout(prevTimeout.current);
+			}
+
 			const nextDates = getWeekDates(selectedDate);
 			if (nextDates[0] === currentWeekDates[0]) {
 				return;
 			}
 			setNextWeekDates(nextDates);
-			setTimeout(() => {
+			prevTimeout.current = setTimeout(() => {
 				setCurrentDates([...nextDates]);
 				setNextWeekDates([]);
 			}, 200);
