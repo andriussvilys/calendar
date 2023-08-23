@@ -24,20 +24,12 @@ const getAnimationName = (direction: number): string => {
 	}
 };
 
-interface WeekViewProps extends EventFormProps {
+interface WeekViewProps {
 	selectedDate: Date;
 	dateFormatter: DateFormatter;
 	events: FormData[];
-	openModal: (children: JSX.Element) => void;
-	removeFromLocalStorage: (eventId: string) => void;
 }
-const WeekView = ({
-	selectedDate,
-	dateFormatter,
-	events,
-	saveToLocalStorage,
-	removeFromLocalStorage,
-}: WeekViewProps) => {
+const WeekView = ({ selectedDate, dateFormatter, events }: WeekViewProps) => {
 	const [nextWeekDates, setNextWeekDates] = useState<Date[]>([]);
 	const [currentWeekDates, setCurrentDates] = useState<Date[]>(
 		getWeekDates(selectedDate)
@@ -82,8 +74,6 @@ const WeekView = ({
 					dates={nextWeekDates}
 					dateFormatter={dateFormatter}
 					events={events}
-					removeFromLocalStorage={removeFromLocalStorage}
-					saveToLocalStorage={saveToLocalStorage}
 				/>
 			) : null}
 
@@ -92,8 +82,6 @@ const WeekView = ({
 				dates={currentWeekDates}
 				dateFormatter={dateFormatter}
 				events={events}
-				removeFromLocalStorage={removeFromLocalStorage}
-				saveToLocalStorage={saveToLocalStorage}
 			/>
 		</div>
 	);

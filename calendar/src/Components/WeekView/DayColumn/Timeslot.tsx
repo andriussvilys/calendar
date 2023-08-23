@@ -15,8 +15,6 @@ interface TimeSlotProps {
 	date: Date;
 	cellTimeslots: FormData[][];
 	index: number;
-	removeFromLocalStorage: (eventId: string) => void;
-	saveToLocalStorage: (event: FormData) => void;
 }
 
 const Timeslot = ({
@@ -24,8 +22,6 @@ const Timeslot = ({
 	dateFormatter,
 	cellTimeslots,
 	index,
-	removeFromLocalStorage,
-	saveToLocalStorage,
 }: TimeSlotProps) => {
 	const timeslotTimestamp = date
 		.setMinutes(index * TIMESLOT_DURATION)
@@ -48,7 +44,6 @@ const Timeslot = ({
 						timeslotEvents={cellTimeslots[index]}
 						timeslotIndex={index}
 						dateFormatter={dateFormatter}
-						removeFromLocalStorage={removeFromLocalStorage}
 					/>
 				</div>
 			</div>
@@ -56,7 +51,6 @@ const Timeslot = ({
 				<EventForm
 					key={Date.now().valueOf()}
 					hideModal={() => setModal(false)}
-					saveToLocalStorage={saveToLocalStorage}
 					timestamp={timeslotTimestamp}
 				/>
 			</Modal>

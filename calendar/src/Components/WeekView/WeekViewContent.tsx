@@ -8,8 +8,6 @@ interface WeekViewContentProps {
 	dates: Date[];
 	dateFormatter: DateFormatter;
 	events: FormData[];
-	removeFromLocalStorage: (eventId: string) => void;
-	saveToLocalStorage: (event: FormData) => void;
 }
 
 const WeekViewContent = ({
@@ -17,8 +15,6 @@ const WeekViewContent = ({
 	dates,
 	dateFormatter,
 	events,
-	removeFromLocalStorage,
-	saveToLocalStorage,
 }: WeekViewContentProps) => {
 	return (
 		<div
@@ -36,8 +32,6 @@ const WeekViewContent = ({
 						date={date}
 						dateFormatter={dateFormatter}
 						events={events}
-						removeFromLocalStorage={removeFromLocalStorage}
-						saveToLocalStorage={saveToLocalStorage}
 					/>
 				);
 			})}

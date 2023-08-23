@@ -10,18 +10,10 @@ export interface DayCellProps {
 	date: Date;
 	dateFormatter: DateFormatter;
 	events: FormData[];
-	removeFromLocalStorage: (eventId: string) => void;
-	saveToLocalStorage: (event: FormData) => void;
 }
 
 //DayCell represents 1 hour period in a day
-const DayCell = ({
-	date,
-	dateFormatter,
-	events,
-	removeFromLocalStorage,
-	saveToLocalStorage,
-}: DayCellProps) => {
+const DayCell = ({ date, dateFormatter, events }: DayCellProps) => {
 	const timestamp = date.valueOf();
 	//filter events that are on the same hour as this DayCell
 	const filteredEvents = events.filter((event) => {
@@ -43,8 +35,6 @@ const DayCell = ({
 						index={index}
 						date={date}
 						dateFormatter={dateFormatter}
-						removeFromLocalStorage={removeFromLocalStorage}
-						saveToLocalStorage={saveToLocalStorage}
 					/>
 				);
 			})}

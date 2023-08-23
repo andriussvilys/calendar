@@ -10,7 +10,6 @@ interface EventBubbleContainerProps {
 	timeslotEvents: FormData[];
 	timeslotIndex: number;
 	dateFormatter: DateFormatter;
-	removeFromLocalStorage: (evenId: string) => void;
 }
 
 const EventBubbleContainer = ({
@@ -18,7 +17,6 @@ const EventBubbleContainer = ({
 	timeslotEvents,
 	timeslotIndex,
 	dateFormatter,
-	removeFromLocalStorage,
 }: EventBubbleContainerProps) => {
 	const sorted = timeslotEvents.sort(
 		(a, b) => getEventDuration(b) - getEventDuration(a)
@@ -49,7 +47,6 @@ const EventBubbleContainer = ({
 						timeslotEvents={sorted}
 						index={index}
 						dateFormatter={dateFormatter}
-						removeFromLocalStorage={removeFromLocalStorage}
 					/>
 				);
 			})}

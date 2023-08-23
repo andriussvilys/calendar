@@ -17,7 +17,6 @@ const convertInputToDate = (dateString: string, timeString: string): number => {
 
 export interface EventFormProps {
 	hideModal: () => void;
-	saveToLocalStorage: (event: FormData) => void;
 	timestamp: number;
 }
 
@@ -38,11 +37,7 @@ const formatTimestampToTimeString = (timestamp: number): string => {
 	return new Date(timestamp).toTimeString().slice(0, 5);
 };
 
-const EventFormSimple = ({
-	hideModal,
-	saveToLocalStorage,
-	timestamp,
-}: EventFormProps) => {
+const EventFormSimple = ({ hideModal, timestamp }: EventFormProps) => {
 	const [title, setTitle] = useState<string>("");
 	const [isTitleValid, setIsTitleValid] = useState<boolean>(true);
 

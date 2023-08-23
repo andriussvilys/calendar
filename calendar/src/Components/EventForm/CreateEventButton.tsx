@@ -5,18 +5,13 @@ import { Fragment } from "react";
 import Modal from "../Modal/Modal";
 import useModal from "../Modal/useModal";
 
-interface CreateEventButtonProps {
-	saveToLocalStorage: (event: FormData) => void;
-}
-
-const CreateEventButton = ({ saveToLocalStorage }: CreateEventButtonProps) => {
+const CreateEventButton = ({}) => {
 	const [isModalVisible, setModal] = useModal(false);
 
 	const eventForm = (
 		<EventForm
 			key={Date.now().valueOf()}
 			hideModal={() => setModal(false)}
-			saveToLocalStorage={saveToLocalStorage}
 			timestamp={roundTimestampToTimeslot(new Date().valueOf())}
 		/>
 	);

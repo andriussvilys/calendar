@@ -7,14 +7,8 @@ interface EventCardProps {
 	event: FormData;
 	dateFormatter: DateFormatter;
 	hideModal: () => void;
-	removeFromLocalStorage: (eventId: string) => void;
 }
-const EventCard = ({
-	event,
-	dateFormatter,
-	hideModal,
-	removeFromLocalStorage,
-}: EventCardProps) => {
+const EventCard = ({ event, dateFormatter, hideModal }: EventCardProps) => {
 	const dateString = dateFormatter.getEventDate(new Date(event.startTime));
 
 	const eventTimeRange = dateFormatter.getEventHourRange(

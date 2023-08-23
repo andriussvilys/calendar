@@ -8,10 +8,6 @@ import { FormData, getEvents } from "../Utils/database";
 import WeekView from "./WeekView/WeekView";
 import CreateEventButton from "./EventForm/CreateEventButton";
 
-window.addEventListener("storage", (e) => {
-	console.log(e.newValue);
-});
-
 function App() {
 	const [dateFormatter, setDateFormatter] = useState<DateFormatter>(
 		createDateFormatter(LocaleType.US)
@@ -25,10 +21,6 @@ function App() {
 	const onSelectedDateChange = (newDate: Date) => {
 		setSelectedDate(newDate);
 	};
-
-	const saveToLocalStorage = (event: FormData) => {};
-
-	const removeFromLocalStorage = (eventId: string) => {};
 
 	window.addEventListener("storage", (e) => {
 		if (e.newValue) {
@@ -46,7 +38,7 @@ function App() {
 			/>
 			<main className="main">
 				<aside className="container sideBar">
-					<CreateEventButton saveToLocalStorage={saveToLocalStorage} />
+					<CreateEventButton />
 					<MonthView
 						dateFormatter={dateFormatter}
 						selectedDate={selectedDate}
@@ -58,11 +50,6 @@ function App() {
 						selectedDate={selectedDate}
 						dateFormatter={dateFormatter}
 						events={events}
-						openModal={() => {}}
-						hideModal={() => {}}
-						saveToLocalStorage={saveToLocalStorage}
-						removeFromLocalStorage={removeFromLocalStorage}
-						timestamp={0}
 					/>
 				</section>
 			</main>

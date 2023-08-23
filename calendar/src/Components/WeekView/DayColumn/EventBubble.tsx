@@ -10,14 +10,12 @@ interface EventBubbleProps {
 	timeslotEvents: FormData[];
 	index: number;
 	dateFormatter: DateFormatter;
-	removeFromLocalStorage: (eventId: string) => void;
 }
 
 const EventBubble = ({
 	timeslotEvents,
 	index,
 	dateFormatter,
-	removeFromLocalStorage,
 }: EventBubbleProps) => {
 	const rightSiblingCount = timeslotEvents.slice(
 		index,
@@ -64,7 +62,6 @@ const EventBubble = ({
 					event={event}
 					dateFormatter={dateFormatter}
 					hideModal={() => setModal(false)}
-					removeFromLocalStorage={removeFromLocalStorage}
 				/>
 			</Modal>
 		</Fragment>

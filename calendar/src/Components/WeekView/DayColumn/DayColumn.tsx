@@ -2,13 +2,7 @@ import DayColumnHeader from "./DayColumnHeader";
 import DayCell, { DayCellProps } from "./DayCell";
 import { HOUR_COUNT } from "../../../Utils/dateManipulation";
 
-const DayColumn = ({
-	date,
-	dateFormatter,
-	events,
-	removeFromLocalStorage,
-	saveToLocalStorage,
-}: DayCellProps) => {
+const DayColumn = ({ date, dateFormatter, events }: DayCellProps) => {
 	return (
 		<div className="weekView-column">
 			<DayColumnHeader date={date} dateFormatter={dateFormatter} />
@@ -23,8 +17,6 @@ const DayColumn = ({
 						date={dayCellDate}
 						dateFormatter={dateFormatter}
 						events={events}
-						removeFromLocalStorage={removeFromLocalStorage}
-						saveToLocalStorage={saveToLocalStorage}
 					/>
 				);
 			})}
