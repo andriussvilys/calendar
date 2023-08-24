@@ -8,7 +8,6 @@ const CreateEventButton = ({}) => {
 			id: ModalContentTypes.EVENT_FORM,
 			data: Date.now().valueOf(),
 		});
-		modalContext.setModalVisibility(true);
 	};
 
 	return (

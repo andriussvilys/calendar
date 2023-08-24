@@ -51,7 +51,6 @@ const EventBubble = ({
 					id: ModalContentTypes.EVENT_CARD,
 					data: { event, dateFormatter },
 				});
-				modalContext.setModalVisibility(true);
 			}}
 		>
 			<span className="eventBubble-title">{event.title}</span>
