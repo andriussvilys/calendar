@@ -1,34 +1,33 @@
 import EventForm from "./EventForm";
-import { FormData, roundTimestampToHours } from "../../Utils/database";
 import { roundTimestampToTimeslot } from "../../Utils/dateManipulation";
-import { Fragment } from "react";
-import Modal from "../Modal/Modal";
-import useModal from "../Modal/useModal";
+import { Fragment, useContext } from "react";
+import { ModalContext } from "../Modal/ModalContext";
 
 const CreateEventButton = ({}) => {
-	const [isModalVisible, setModal] = useModal(false);
-
 	const eventForm = (
 		<EventForm
 			key={Date.now().valueOf()}
-			hideModal={() => setModal(false)}
+			hideModal={() => modalContext.setModalVisibility(false)}
 			timestamp={roundTimestampToTimeslot(new Date().valueOf())}
 		/>
 	);
+
+	const modalContext = useContext(ModalContext);
+	const setModalProps = () => {
+		modalContext.setModalChildren(eventForm);
+		modalContext.setModalVisibility(true);
+	};
 
 	return (
 		<Fragment>
 			<button
 				className="button button-primary create"
 				onClick={() => {
-					setModal(true);
+					setModalProps();
 				}}
 			>
 				Create Event
 			</button>
-			<Modal isVisible={isModalVisible} setModalVisibility={setModal}>
-				{eventForm}
-			</Modal>
 		</Fragment>
 	);
 };

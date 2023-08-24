@@ -1,10 +1,11 @@
-import { Fragment } from "react";
+import { Fragment, useContext } from "react";
 import { FormData, getEventDuration } from "../../../Utils/database";
 import { DateFormatter } from "../../../Utils/dateFormatter";
 
 import EventCard from "./EventCard";
 import Modal from "../../Modal/Modal";
 import useModal from "../../Modal/useModal";
+import { ModalContext } from "../../Modal/ModalContext";
 
 interface EventBubbleProps {
 	timeslotEvents: FormData[];
@@ -41,30 +42,30 @@ const EventBubble = ({
 		event.endTime
 	);
 
-	const [isModalVisible, setModal] = useModal(false);
+	const eventCard = (
+		<EventCard
+			event={event}
+			dateFormatter={dateFormatter}
+			hideModal={() => modalContext.setModalVisibility(false)}
+		/>
+	);
+
+	const modalContext = useContext(ModalContext);
 
 	return (
-		<Fragment>
-			<div
-				className="eventBubble"
-				data-event-id={event.id}
-				style={style}
-				onClick={(e) => {
-					e.stopPropagation();
-					setModal(true);
-				}}
-			>
-				<span className="eventBubble-title">{event.title}</span>
-				<span>{eventTime}</span>
-			</div>
-			<Modal isVisible={isModalVisible} setModalVisibility={setModal}>
-				<EventCard
-					event={event}
-					dateFormatter={dateFormatter}
-					hideModal={() => setModal(false)}
-				/>
-			</Modal>
-		</Fragment>
+		<div
+			className="eventBubble"
+			data-event-id={event.id}
+			style={style}
+			onClick={(e) => {
+				e.stopPropagation();
+				modalContext.setModalChildren(eventCard);
+				modalContext.setModalVisibility(true);
+			}}
+		>
+			<span className="eventBubble-title">{event.title}</span>
+			<span>{eventTime}</span>
+		</div>
 	);
 };
 

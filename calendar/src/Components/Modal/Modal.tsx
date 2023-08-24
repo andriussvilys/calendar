@@ -11,7 +11,7 @@ const slideInAnimation = "slideIn_ltr";
 const slideOutAnimation = "slideOut_rtl";
 const displayNone = "display-none";
 
-interface ModalProps extends PropsWithChildren {
+export interface ModalProps extends PropsWithChildren {
 	isVisible: boolean;
 	setModalVisibility: (value: boolean) => void;
 }

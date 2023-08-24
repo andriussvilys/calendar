@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useContext } from "react";
 import { FormData } from "../../../Utils/database";
 import { DateFormatter } from "../../../Utils/dateFormatter";
 import EventForm from "../../EventForm/EventForm";
@@ -6,6 +6,7 @@ import useModal from "../../Modal/useModal";
 
 import Modal from "../../Modal/Modal";
 import EventBubbleContainer from "./EventBubbleContainer";
+import { ModalContext } from "../../Modal/ModalContext";
 
 export const TIMESLOT_DURATION = 15;
 const EVENTBUBBLE_OFFSET = 25;
@@ -27,7 +28,15 @@ const Timeslot = ({
 		.setMinutes(index * TIMESLOT_DURATION)
 		.valueOf();
 
-	const [isVisible, setModal] = useModal(false);
+	// const [isVisible, setModal] = useModal(false);
+	const modalContext = useContext(ModalContext);
+	const eventForm = (
+		<EventForm
+			key={Date.now().valueOf()}
+			hideModal={() => modalContext.setModalVisibility(false)}
+			timestamp={timeslotTimestamp}
+		/>
+	);
 
 	return (
 		<Fragment>
@@ -35,7 +44,8 @@ const Timeslot = ({
 				className="timeslot"
 				style={{ top: `${index * EVENTBUBBLE_OFFSET}%` }}
 				onClick={() => {
-					setModal(true);
+					modalContext.setModalChildren(eventForm);
+					modalContext.setModalVisibility(true);
 				}}
 			>
 				<div className="timeslot-innerContainer">
@@ -47,13 +57,6 @@ const Timeslot = ({
 					/>
 				</div>
 			</div>
-			<Modal isVisible={isVisible} setModalVisibility={setModal}>
-				<EventForm
-					key={Date.now().valueOf()}
-					hideModal={() => setModal(false)}
-					timestamp={timeslotTimestamp}
-				/>
-			</Modal>
 		</Fragment>
 	);
 };
