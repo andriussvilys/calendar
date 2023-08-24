@@ -1,11 +1,7 @@
-import { Fragment, useContext } from "react";
+import { useContext } from "react";
 import { FormData, getEventDuration } from "../../../Utils/database";
 import { DateFormatter } from "../../../Utils/dateFormatter";
-
-import EventCard from "./EventCard";
-import Modal from "../../Modal/Modal";
-import useModal from "../../Modal/useModal";
-import { ModalContext } from "../../Modal/ModalContext";
+import { ModalContentTypes, ModalContext } from "../../Modal/ModalContext";
 
 interface EventBubbleProps {
 	timeslotEvents: FormData[];
@@ -42,14 +38,6 @@ const EventBubble = ({
 		event.endTime
 	);
 
-	const eventCard = (
-		<EventCard
-			event={event}
-			dateFormatter={dateFormatter}
-			hideModal={() => modalContext.setModalVisibility(false)}
-		/>
-	);
-
 	const modalContext = useContext(ModalContext);
 
 	return (
@@ -59,7 +47,10 @@ const EventBubble = ({
 			style={style}
 			onClick={(e) => {
 				e.stopPropagation();
-				modalContext.setModalChildren(eventCard);
+				modalContext.openModal({
+					id: ModalContentTypes.EVENT_CARD,
+					data: { event, dateFormatter },
+				});
 				modalContext.setModalVisibility(true);
 			}}
 		>

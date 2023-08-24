@@ -5,36 +5,75 @@ import {
 	createContext,
 	useState,
 } from "react";
-import Modal, { ModalProps } from "./Modal";
+import Modal from "./Modal";
 import { FormData } from "../../Utils/database";
+import EventForm from "../EventForm/EventForm";
+import { roundTimestampToTimeslot } from "../../Utils/dateManipulation";
+import EventCard from "../WeekView/DayColumn/EventCard";
+import { DateFormatter } from "../../Utils/dateFormatter";
 
-type NewType = FormData;
-
-interface OpenModalProps {
-	id: string;
-	data: FormData | Date;
+export enum ModalContentTypes {
+	EVENT_FORM = "EVENT_FORM",
+	EVENT_CARD = "EVENT_CARD",
 }
 
+type OpenEventFormType = {
+	id: ModalContentTypes.EVENT_FORM;
+	data: number;
+};
+
+type OpenEventCardType = {
+	id: ModalContentTypes.EVENT_CARD;
+	data: { event: FormData; dateFormatter: DateFormatter };
+};
+
+type OpenModalActionType = OpenEventCardType | OpenEventFormType;
+
 interface ModalContextProps {
-	setModalChildren: (children: ReactNode | null) => void;
+	openModal: ({ id, data }: OpenModalActionType) => void;
 	setModalVisibility: (value: boolean) => void;
 }
 
 const modalContextProps: ModalContextProps = {
 	setModalVisibility: () => {},
-	setModalChildren: () => {},
+	openModal: () => {},
 };
 export const ModalContext = createContext(modalContextProps);
 
 export const ModalContextProvider = ({ children }: PropsWithChildren) => {
 	const [isModalVisible, setIsVisible] = useState<boolean>(false);
-	const [modalChildren, setChildren] = useState<ReactNode | null>(null);
+	const [modalChildren, setModalChildren] = useState<ReactNode>(null);
+
+	const openModal = (action: OpenModalActionType) => {
+		setIsVisible(true);
+		setModalChildren(renderContent(action));
+	};
 
 	const setModalVisibility = (value: boolean): void => {
 		setIsVisible(value);
 	};
-	const setModalChildren = (value: ReactNode | null): void => {
-		setChildren(value);
+
+	const renderContent = (action: OpenModalActionType) => {
+		switch (action.id) {
+			case ModalContentTypes.EVENT_FORM: {
+				return (
+					<EventForm
+						hideModal={() => setModalVisibility(false)}
+						timestamp={roundTimestampToTimeslot(action.data)}
+					/>
+				);
+				break;
+			}
+			case ModalContentTypes.EVENT_CARD: {
+				return (
+					<EventCard
+						event={action.data.event}
+						dateFormatter={action.data.dateFormatter}
+						hideModal={() => setModalVisibility(false)}
+					/>
+				);
+			}
+		}
 	};
 
 	return (
@@ -42,7 +81,7 @@ export const ModalContextProvider = ({ children }: PropsWithChildren) => {
 			<ModalContext.Provider
 				value={{
 					setModalVisibility,
-					setModalChildren,
+					openModal,
 				}}
 			>
 				{children}
