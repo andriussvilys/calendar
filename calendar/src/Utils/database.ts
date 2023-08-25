@@ -2,9 +2,9 @@ import { TIMESLOT_DURATION } from "../Components/WeekView/DayColumn/Timeslot";
 import { MILISECOND_HOUR } from "./dateManipulation";
 import { v4 as uuidv4 } from "uuid";
 
-const findEventById = (eventId: string): FormData | null => {
+const findEventById = (eventId: string): EventData | null => {
 	const events = getEvents();
-	const result = events.find((event: FormData) => {
+	const result = events.find((event: EventData) => {
 		return event.id === eventId;
 	});
 	if (!result) {
@@ -13,7 +13,7 @@ const findEventById = (eventId: string): FormData | null => {
 	return result;
 };
 
-export class FormData {
+export class EventData {
 	id: string;
 	title: string;
 	description: string;
@@ -28,32 +28,34 @@ export class FormData {
 	}
 }
 
-export const getEventDuration = (event: FormData): number => {
+export const getEventDuration = (event: EventData): number => {
 	return Math.ceil((event.endTime - event.startTime) / (MILISECOND_HOUR / 4));
 };
 
-export const getEventTimeslot = (event: FormData): number => {
+export const getEventTimeslot = (event: EventData): number => {
 	const startDate = new Date(event.startTime);
 	return Math.floor(startDate.getMinutes() / TIMESLOT_DURATION);
 };
 
-export const roundTimestampToHours = (event: FormData): number => {
+export const roundTimestampToHours = (event: EventData): number => {
 	return new Date(
 		new Date(new Date(event.startTime).setMinutes(0)).setSeconds(0)
 	).setMilliseconds(0);
 };
 
-export const getEvents = (): FormData[] => {
+export const getEvents = (): EventData[] => {
 	const eventsString = localStorage.getItem("events");
 	if (eventsString) {
 		const parsedEvents: object[] = JSON.parse(eventsString);
-		const events: FormData[] = parsedEvents.map((event) => new FormData(event));
+		const events: EventData[] = parsedEvents.map(
+			(event) => new EventData(event)
+		);
 		return events;
 	}
 	return [];
 };
 
-export const saveEvent = (event: FormData) => {
+export const saveEvent = (event: EventData) => {
 	const events = getEvents();
 	localStorage.setItem("events", JSON.stringify([...events, event]));
 	dispatchEvent(

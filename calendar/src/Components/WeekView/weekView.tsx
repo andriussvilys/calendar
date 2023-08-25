@@ -1,5 +1,5 @@
 import { getWeekDates, isSameDate } from "../../Utils/dateManipulation";
-import { FormData } from "../../Utils/database";
+import { EventData } from "../../Utils/database";
 import { DateFormatter } from "../../Utils/dateFormatter";
 
 import { useEffect, useRef, useState } from "react";
@@ -27,7 +27,7 @@ const getAnimationName = (direction: number): string => {
 interface WeekViewProps {
 	selectedDate: Date;
 	dateFormatter: DateFormatter;
-	events: FormData[];
+	events: EventData[];
 }
 const WeekView = ({ selectedDate, dateFormatter, events }: WeekViewProps) => {
 	const [nextWeekDates, setNextWeekDates] = useState<Date[]>([]);

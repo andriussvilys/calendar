@@ -1,13 +1,13 @@
 import { getEventDuration } from "../../../Utils/database";
-import { FormData } from "../../../Utils/database";
+import { EventData } from "../../../Utils/database";
 import { DateFormatter } from "../../../Utils/dateFormatter";
 import EventBubble from "./EventBubble";
 
 const OFFSET_INCREMENT = 20;
 
 interface EventBubbleContainerProps {
-	dayCellEvents: FormData[][];
-	timeslotEvents: FormData[];
+	dayCellEvents: EventData[][];
+	timeslotEvents: EventData[];
 	timeslotIndex: number;
 	dateFormatter: DateFormatter;
 }

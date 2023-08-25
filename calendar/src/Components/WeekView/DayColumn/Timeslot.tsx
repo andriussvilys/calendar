@@ -1,5 +1,5 @@
 import { Fragment, useContext } from "react";
-import { FormData } from "../../../Utils/database";
+import { EventData } from "../../../Utils/database";
 import { DateFormatter } from "../../../Utils/dateFormatter";
 import EventBubbleContainer from "./EventBubbleContainer";
 import { ModalContentTypes, ModalContext } from "../../Modal/ModalContext";
@@ -10,7 +10,7 @@ const EVENTBUBBLE_OFFSET = 25;
 interface TimeSlotProps {
 	dateFormatter: DateFormatter;
 	date: Date;
-	cellTimeslots: FormData[][];
+	cellTimeslots: EventData[][];
 	index: number;
 }
 

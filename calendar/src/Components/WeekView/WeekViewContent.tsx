@@ -1,13 +1,13 @@
 import { DateFormatter } from "../../Utils/dateFormatter";
 import DayColumn from "./DayColumn/DayColumn";
 import HourColumn from "./HourColumn/HourColumn";
-import { FormData } from "../../Utils/database";
+import { EventData } from "../../Utils/database";
 
 interface WeekViewContentProps {
 	animationName: string;
 	dates: Date[];
 	dateFormatter: DateFormatter;
-	events: FormData[];
+	events: EventData[];
 }
 
 const WeekViewContent = ({

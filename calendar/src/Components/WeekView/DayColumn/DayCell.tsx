@@ -3,13 +3,13 @@ import {
 	getEventTimeslot,
 } from "../../../Utils/database";
 import { DateFormatter } from "../../../Utils/dateFormatter";
-import { FormData } from "../../../Utils/database";
+import { EventData } from "../../../Utils/database";
 import Timeslot from "./Timeslot";
 
 export interface DayCellProps {
 	date: Date;
 	dateFormatter: DateFormatter;
-	events: FormData[];
+	events: EventData[];
 }
 
 //DayCell represents 1 hour period in a day
@@ -19,7 +19,7 @@ const DayCell = ({ date, dateFormatter, events }: DayCellProps) => {
 	const filteredEvents = events.filter((event) => {
 		return roundTimestampToHours(event) === timestamp;
 	});
-	const timeSlots: FormData[][] = [[], [], [], []];
+	const timeSlots: EventData[][] = [[], [], [], []];
 
 	filteredEvents.forEach((eventData) => {
 		const timeslotIndex = getEventTimeslot(eventData);

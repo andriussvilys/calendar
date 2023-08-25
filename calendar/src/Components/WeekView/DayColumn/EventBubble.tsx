@@ -1,10 +1,10 @@
 import { useContext } from "react";
-import { FormData, getEventDuration } from "../../../Utils/database";
+import { EventData, getEventDuration } from "../../../Utils/database";
 import { DateFormatter } from "../../../Utils/dateFormatter";
 import { ModalContentTypes, ModalContext } from "../../Modal/ModalContext";
 
 interface EventBubbleProps {
-	timeslotEvents: FormData[];
+	timeslotEvents: EventData[];
 	index: number;
 	dateFormatter: DateFormatter;
 }
@@ -19,7 +19,7 @@ const EventBubble = ({
 		timeslotEvents.length
 	).length;
 
-	const event: FormData = timeslotEvents[index];
+	const event: EventData = timeslotEvents[index];
 
 	const columnWidth = 100 / (timeslotEvents.length + 1);
 	const offset = index * columnWidth;

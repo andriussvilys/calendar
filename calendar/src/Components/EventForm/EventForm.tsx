@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { FormData, saveEvent } from "../../Utils/database";
+import { EventData, saveEvent } from "../../Utils/database";
 import "./event.css";
 
 import timeIcon from "../../images/schedule_FILL0_wght400_GRAD0_opsz48.svg";
@@ -25,7 +25,7 @@ interface EventTime {
 	endTime: number;
 }
 
-const formatTimestampToDateString = (timestamp: number): string => {
+export const formatTimestampToDateString = (timestamp: number): string => {
 	return new Date(timestamp).toLocaleDateString("lt-LT", {
 		year: "numeric",
 		month: "numeric",
@@ -157,7 +157,7 @@ const EventFormSimple = ({ hideModal, timestamp }: EventFormProps) => {
 						e.preventDefault();
 						if (validateTitle(title) && validateEventTime(eventTime)) {
 							saveEvent(
-								new FormData({
+								new EventData({
 									startTime: eventTime.startTime,
 									endTime: eventTime.endTime,
 									title,

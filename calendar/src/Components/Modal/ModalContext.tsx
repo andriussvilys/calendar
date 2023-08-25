@@ -6,7 +6,7 @@ import {
 	useState,
 } from "react";
 import Modal from "./Modal";
-import { FormData } from "../../Utils/database";
+import { EventData } from "../../Utils/database";
 import EventForm from "../EventForm/EventForm";
 import { roundTimestampToTimeslot } from "../../Utils/dateManipulation";
 import EventCard from "../WeekView/DayColumn/EventCard";
@@ -24,7 +24,7 @@ type OpenEventFormType = {
 
 type OpenEventCardType = {
 	id: ModalContentTypes.EVENT_CARD;
-	data: { event: FormData; dateFormatter: DateFormatter };
+	data: { event: EventData; dateFormatter: DateFormatter };
 };
 
 type OpenModalActionType = OpenEventCardType | OpenEventFormType;

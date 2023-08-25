@@ -4,7 +4,7 @@ import { Header } from "./Header/Header";
 import "./main.css";
 import MonthView from "./MonthView/MonthView";
 import { DateFormatter, createDateFormatter } from "../Utils/dateFormatter";
-import { FormData, getEvents } from "../Utils/database";
+import { EventData, getEvents } from "../Utils/database";
 import WeekView from "./WeekView/WeekView";
 import CreateEventButton from "./EventForm/CreateEventButton";
 import { ModalContextProvider } from "./Modal/ModalContext";
@@ -14,7 +14,7 @@ function App() {
 		createDateFormatter(LocaleType.US)
 	);
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-	const [events, setEvents] = useState<FormData[]>(getEvents());
+	const [events, setEvents] = useState<EventData[]>(getEvents());
 
 	const onLocaleChange = (newLocale: LocaleType) => {
 		setDateFormatter(createDateFormatter(newLocale));
