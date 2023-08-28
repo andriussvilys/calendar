@@ -1,0 +1,10 @@
+.swappingContainer {
+	width: 100%;
+	height: 100%;
+	position: relative;
+}
+.slider {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}

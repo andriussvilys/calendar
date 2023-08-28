@@ -1,0 +1,26 @@
+.header {
+	height: 4em;
+	border-bottom: 1px solid var(--grey_light);
+	justify-content: space-between;
+	flex-shrink: 0;
+}
+
+.logo {
+	margin: 0 4em 0 2em;
+}
+.today {
+	border: 1px solid var(--grey_light) !important;
+	font-size: 1.1em;
+	margin-right: 1em;
+}
+
+.localeSelectorContainer {
+	justify-self: flex-end;
+	margin-right: 3em;
+}
+.localeSelector {
+	border: none;
+}
+.headerMonthYearLabel {
+	margin-left: 1em;
+}
