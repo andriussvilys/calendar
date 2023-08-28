@@ -1,26 +1,44 @@
-import * as React from "react";
-import { render, screen, getByRole } from "@testing-library/react";
-import Input, { InputTypes } from "../EventForm/Input";
+import { Fragment } from "react";
+import { fireEvent, render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import EventFormSimple, {
+	EventFormInputs,
+	formatTimestampToTimeString,
+} from "../EventForm/EventForm";
 
 test("nothing", () => {
 	expect(true).toBe(true);
 });
 
-describe("Input", () => {
-	it("should render HTML input element", () => {
-		const timestamp = Date.now().toString();
+describe("Form", () => {
+	it("should render HTML input element", async () => {
+		const user = userEvent.setup();
 		render(
-			<Input
-				type={InputTypes.Time}
-				inputPlaceholder={"Input"}
-				inputValue={timestamp}
-				onValueChange={(e) => {}}
-			/>
+			<Fragment>
+				<EventFormSimple hideModal={() => {}} timestamp={Date.now()} />
+			</Fragment>
 		);
+		expect(screen.getByTestId(EventFormInputs.TITLE)).toBeInTheDocument();
 
-		screen.debug();
-		// expect(screen.getByPlaceholderText("Input")).not.toBeInTheDocument();
-		expect(screen.getByPlaceholderText("Input")).toBeInTheDocument();
-		expect(screen.getByPlaceholderText("Input")).toHaveValue(timestamp);
+		await user.type(screen.getByTestId(EventFormInputs.TITLE), "L");
+
+		expect(screen.getByTestId(EventFormInputs.TITLE)).toHaveValue("L");
+	});
+
+	it("should change time input value", async () => {
+		const timestamp = Date.now();
+		let formattedTimestamp = formatTimestampToTimeString(timestamp);
+
+		render(<EventFormSimple hideModal={() => {}} timestamp={Date.now()} />);
+
+		expect(screen.getByTestId(EventFormInputs.START_TIME)).toBeInTheDocument();
+
+		fireEvent.change(screen.getByTestId(EventFormInputs.START_TIME), {
+			target: { value: formattedTimestamp },
+		});
+
+		expect(screen.getByTestId(EventFormInputs.START_TIME)).toHaveValue(
+			formattedTimestamp
+		);
 	});
 });

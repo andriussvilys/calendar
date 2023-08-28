@@ -4,12 +4,14 @@ export enum InputTypes {
 	Time = "time",
 }
 export interface InputProps {
+	testid: string;
 	type: InputTypes;
 	inputPlaceholder: string;
 	inputValue: string;
 	onValueChange: (value: string) => void;
 }
 const Input = ({
+	testid,
 	type,
 	inputPlaceholder,
 	inputValue,
@@ -17,6 +19,7 @@ const Input = ({
 }: InputProps) => {
 	return (
 		<input
+			data-testid={testid}
 			className="event-input"
 			type={type}
 			placeholder={inputPlaceholder}

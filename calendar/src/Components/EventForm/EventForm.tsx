@@ -33,23 +33,29 @@ export const formatTimestampToDateString = (timestamp: number): string => {
 	});
 };
 
-const formatTimestampToTimeString = (timestamp: number): string => {
+export const formatTimestampToTimeString = (timestamp: number): string => {
 	return new Date(timestamp).toTimeString().slice(0, 5);
 };
 
+const validateTitle = (title: string): boolean => {
+	const isValid = title.length > 0;
+	return isValid;
+};
+const validateEventTime = (eventTime: EventTime) => {
+	const isValid = eventTime.startTime <= eventTime.endTime;
+	return isValid;
+};
+
+export enum EventFormInputs {
+	TITLE = "titleInput",
+	START_DATE = "startDateInput",
+	START_TIME = "startTimeInput",
+	END_TIME = "endTimeInput",
+	DESCRIPTION = "descriptionInput",
+}
+
 const EventFormSimple = ({ hideModal, timestamp }: EventFormProps) => {
 	const [title, setTitle] = useState<string>("");
-	const [isTitleValid, setIsTitleValid] = useState<boolean>(true);
-
-	const validateTitle = (title: string): boolean => {
-		const isValid = title.length > 0;
-		setIsTitleValid(isValid);
-		return isValid;
-	};
-	const onTitleInputChange = (value: string): void => {
-		setTitle(value);
-		validateTitle(value);
-	};
 
 	const [eventDate, setEventDate] = useState<string>(
 		formatTimestampToDateString(timestamp)
@@ -60,17 +66,13 @@ const EventFormSimple = ({ hideModal, timestamp }: EventFormProps) => {
 		endTime: timestamp,
 	});
 
-	const [isEventTimeValid, setIsEventTimeValid] = useState<boolean>(true);
-
-	const validateEventTime = (eventTime: EventTime) => {
-		const isValid = eventTime.startTime <= eventTime.endTime;
-		setIsEventTimeValid(isValid);
-		return isValid;
+	const onTitleInputChange = (value: string): void => {
+		setTitle(value);
 	};
+
 	const onEventTimeChange = (value: EventTime): void => {
 		const newState = { ...eventTime, ...value };
 		setEventTime(newState);
-		validateEventTime(newState);
 	};
 
 	const descriptionRef = useRef<HTMLTextAreaElement>(null);
@@ -79,6 +81,7 @@ const EventFormSimple = ({ hideModal, timestamp }: EventFormProps) => {
 		<form className="event-container">
 			<FormBlock icon={null}>
 				<Input
+					testid={EventFormInputs.TITLE}
 					type={InputTypes.Text}
 					inputPlaceholder={"Add title"}
 					inputValue={title}
@@ -86,23 +89,26 @@ const EventFormSimple = ({ hideModal, timestamp }: EventFormProps) => {
 				/>
 				<InputValidator
 					errorMessage={TITLE_VALIDATION_ERROR_MESSAGE}
-					isValid={isTitleValid}
+					isValid={validateTitle(title)}
 				/>
 			</FormBlock>
 
 			<FormBlock icon={<img src={timeIcon} alt="clock icon" />}>
 				<div className="container">
 					<Input
+						testid={EventFormInputs.START_DATE}
 						type={InputTypes.Date}
 						inputPlaceholder={""}
 						inputValue={eventDate}
 						onValueChange={setEventDate}
 					/>
 					<Input
+						testid={EventFormInputs.START_TIME}
 						type={InputTypes.Time}
 						inputPlaceholder={""}
 						inputValue={formatTimestampToTimeString(eventTime.startTime)}
 						onValueChange={(value: string) => {
+							console.log(value);
 							onEventTimeChange({
 								...eventTime,
 								startTime: convertInputToDate(eventDate, value),
@@ -110,6 +116,7 @@ const EventFormSimple = ({ hideModal, timestamp }: EventFormProps) => {
 						}}
 					/>
 					<Input
+						testid={EventFormInputs.END_TIME}
 						type={InputTypes.Time}
 						inputPlaceholder={""}
 						inputValue={formatTimestampToTimeString(eventTime.endTime)}
@@ -123,13 +130,14 @@ const EventFormSimple = ({ hideModal, timestamp }: EventFormProps) => {
 				</div>
 				<InputValidator
 					errorMessage={TIME_VALIDATION_ERROR_MESSAGE}
-					isValid={isEventTimeValid}
+					isValid={validateEventTime(eventTime)}
 				/>
 			</FormBlock>
 
 			<FormBlock icon={<img src={noteIcon} alt="notebook icon" />}>
 				<div className="event-description">
 					<textarea
+						data-testid={EventFormInputs.DESCRIPTION}
 						ref={descriptionRef}
 						data-key="description"
 						id="event-description"
