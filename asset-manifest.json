@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/calendar/static/css/main.f0d4110a.css",
+    "main.js": "/calendar/static/js/main.f239b13a.js",
+    "static/js/787.f4b9e84d.chunk.js": "/calendar/static/js/787.f4b9e84d.chunk.js",
+    "index.html": "/calendar/index.html",
+    "static/media/schedule_FILL0_wght400_GRAD0_opsz48.svg": "/calendar/static/media/schedule_FILL0_wght400_GRAD0_opsz48.31bea82cf12d5e1f665eceac60112ded.svg",
+    "static/media/delete_FILL0_wght400_GRAD0_opsz48.svg": "/calendar/static/media/delete_FILL0_wght400_GRAD0_opsz48.eac1a29b0fcadff53187f5785f9353f0.svg",
+    "static/media/close_FILL0_wght400_GRAD0_opsz48.svg": "/calendar/static/media/close_FILL0_wght400_GRAD0_opsz48.f9e1fd884e38ced99e021f1ac47b347d.svg",
+    "static/media/notes_FILL0_wght400_GRAD0_opsz48.svg": "/calendar/static/media/notes_FILL0_wght400_GRAD0_opsz48.aff87027b23c373aabbff9978f1205e7.svg",
+    "static/media/chevron_left_FILL0_wght400_GRAD0_opsz48.svg": "/calendar/static/media/chevron_left_FILL0_wght400_GRAD0_opsz48.3a58c5da8019cc78bea54c49f8b9b7cb.svg",
+    "static/media/chevron_right_FILL0_wght400_GRAD0_opsz48.svg": "/calendar/static/media/chevron_right_FILL0_wght400_GRAD0_opsz48.c42bd81ee3bc7ccc9e3c470fac35f231.svg",
+    "main.f0d4110a.css.map": "/calendar/static/css/main.f0d4110a.css.map",
+    "main.f239b13a.js.map": "/calendar/static/js/main.f239b13a.js.map",
+    "787.f4b9e84d.chunk.js.map": "/calendar/static/js/787.f4b9e84d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f0d4110a.css",
+    "static/js/main.f239b13a.js"
+  ]
+}
