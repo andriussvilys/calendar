@@ -1,4 +1,5 @@
 import { LocaleType } from "../../Utils/dateManipulation";
+import "/node_modules/flag-icons/css/flag-icons.min.css";
 
 interface LocaleSelectProps {
 	onLocaleChange: (newLocale: LocaleType) => void;
@@ -17,9 +18,17 @@ const LocaleSelect = ({ onLocaleChange }: LocaleSelectProps) => {
 				id="localeSelector"
 				className="localeSelector"
 			>
-				<option value={LocaleType.US}>🇺🇸 US</option>
-				<option value={LocaleType.LT}>🇱🇹 LT</option>
-				<option value={LocaleType.AF}>✅ afghanistan</option>
+				<option value={LocaleType.US}>
+					<span>🇬🇧 ENG</span>
+				</option>
+
+				<option value={LocaleType.LT}>
+					<span>🇱🇹 LT</span>
+				</option>
+
+				<option value={LocaleType.AF}>
+					<span>🇦🇫 AF</span>
+				</option>
 			</select>
 		</div>
 	);
