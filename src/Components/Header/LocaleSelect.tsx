@@ -17,9 +17,17 @@ const LocaleSelect = ({ onLocaleChange }: LocaleSelectProps) => {
 				id="localeSelector"
 				className="localeSelector"
 			>
-				<option value={LocaleType.US}>🇺🇸 US</option>
-				<option value={LocaleType.LT}>🇱🇹 LT</option>
-				<option value={LocaleType.AF}>✅ afghanistan</option>
+				<option value={LocaleType.US}>
+					<span>🇬🇧 ENG</span>
+				</option>
+
+				<option value={LocaleType.LT}>
+					<span>🇱🇹 LT</span>
+				</option>
+
+				<option value={LocaleType.AF}>
+					<span>🇦🇫 AF</span>
+				</option>
 			</select>
 		</div>
 	);
