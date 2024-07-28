@@ -1,5 +1,4 @@
 import { LocaleType } from "../../Utils/dateManipulation";
-import "/node_modules/flag-icons/css/flag-icons.min.css";
 
 interface LocaleSelectProps {
 	onLocaleChange: (newLocale: LocaleType) => void;
