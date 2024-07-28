@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { LocaleType } from "../Utils/dateManipulation";
-import { Header } from "./Header/Header";
 import "./main.css";
 import MonthView from "./MonthView/MonthView";
 import { DateFormatter, createDateFormatter } from "../Utils/dateFormatter";
 import { EventData, getEvents } from "../Utils/database";
-import WeekView from "./WeekView/WeekView";
 import CreateEventButton from "./EventForm/CreateEventButton";
 import { ModalContextProvider } from "./Modal/ModalContext";
+import { Header } from "./Header/header";
+import WeekView from "./WeekView/weekView";
 
 function App() {
 	const [dateFormatter, setDateFormatter] = useState<DateFormatter>(
