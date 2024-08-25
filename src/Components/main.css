@@ -34,15 +34,11 @@ body,
 html {
   color: var(--grey_dark);
   font-size: 15px;
-  overflow: hidden;
 }
 
 body {
-  display: flex;
-  flex-direction: column;
   text-rendering: geometricPrecision;
   -webkit-font-smoothing: antialiased;
-  position: relative;
 }
 
 .button {
@@ -76,8 +72,24 @@ body {
   background-color: var(--grey_medium);
 }
 
+.wrapper{
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  overflow-x:auto;
+  overflow-y:hidden;
+}
+.divider{
+  position: fixed;
+  width: 1000%;
+  left:-10%;
+	border-bottom: 1px solid var(--grey_light);
+  height: 4em;
+}
+
 .main {
-  overflow: hidden;
   display: flex;
   flex: 1;
   height: 100%;

@@ -31,29 +31,32 @@ function App() {
 
 	return (
 		<ModalContextProvider>
-			<Header
-				dateFormatter={dateFormatter}
-				selectedDate={selectedDate}
-				onLocaleChange={onLocaleChange}
-				onSelectedDateChange={onSelectedDateChange}
-			/>
-			<main className="main">
-				<aside className="container sideBar">
-					<CreateEventButton />
-					<MonthView
-						dateFormatter={dateFormatter}
-						selectedDate={selectedDate}
-						onDateChange={onSelectedDateChange}
-					/>
-				</aside>
-				<section className="weekView-wrapper">
-					<WeekView
-						selectedDate={selectedDate}
-						dateFormatter={dateFormatter}
-						events={events}
-					/>
-				</section>
-			</main>
+			<div className="wrapper">
+			<div className="divider"></div>
+				<Header
+					dateFormatter={dateFormatter}
+					selectedDate={selectedDate}
+					onLocaleChange={onLocaleChange}
+					onSelectedDateChange={onSelectedDateChange}
+				/>
+				<main className="main">
+					<aside className="container sideBar">
+						<CreateEventButton />
+						<MonthView
+							dateFormatter={dateFormatter}
+							selectedDate={selectedDate}
+							onDateChange={onSelectedDateChange}
+						/>
+					</aside>
+					<section className="weekView-wrapper">
+						<WeekView
+							selectedDate={selectedDate}
+							dateFormatter={dateFormatter}
+							events={events}
+						/>
+					</section>
+				</main>
+			</div>
 		</ModalContextProvider>
 	);
 }

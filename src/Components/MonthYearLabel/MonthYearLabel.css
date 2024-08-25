@@ -2,3 +2,6 @@
   color: var(--grey_dark);
   font-size: 1.4em;
 }
+.monthYearLabel span{
+  white-space: nowrap;
+}

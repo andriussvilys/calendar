@@ -1,6 +1,5 @@
 .header {
 	height: 4em;
-	border-bottom: 1px solid var(--grey_light);
 	justify-content: space-between;
 	flex-shrink: 0;
 }
@@ -16,9 +15,8 @@
 
 .localeSelectorContainer {
 	justify-self: flex-end;
-	margin-right: 3em;
+	margin: 0 3em;
 	border-radius: 4px;
-	overflow: hidden;
 	border: 1px solid var(--grey_light);
 }
 .localeSelector {
