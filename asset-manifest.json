@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/calendar/static/css/main.59c0a7a2.css",
+    "main.css": "/calendar/static/css/main.40832987.css",
     "main.js": "/calendar/static/js/main.ebcebebc.js",
     "static/js/787.f4b9e84d.chunk.js": "/calendar/static/js/787.f4b9e84d.chunk.js",
     "index.html": "/calendar/index.html",
@@ -10,12 +10,12 @@
     "static/media/notes_FILL0_wght400_GRAD0_opsz48.svg": "/calendar/static/media/notes_FILL0_wght400_GRAD0_opsz48.aff87027b23c373aabbff9978f1205e7.svg",
     "static/media/chevron_left_FILL0_wght400_GRAD0_opsz48.svg": "/calendar/static/media/chevron_left_FILL0_wght400_GRAD0_opsz48.3a58c5da8019cc78bea54c49f8b9b7cb.svg",
     "static/media/chevron_right_FILL0_wght400_GRAD0_opsz48.svg": "/calendar/static/media/chevron_right_FILL0_wght400_GRAD0_opsz48.c42bd81ee3bc7ccc9e3c470fac35f231.svg",
-    "main.59c0a7a2.css.map": "/calendar/static/css/main.59c0a7a2.css.map",
+    "main.40832987.css.map": "/calendar/static/css/main.40832987.css.map",
     "main.ebcebebc.js.map": "/calendar/static/js/main.ebcebebc.js.map",
     "787.f4b9e84d.chunk.js.map": "/calendar/static/js/787.f4b9e84d.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.59c0a7a2.css",
+    "static/css/main.40832987.css",
     "static/js/main.ebcebebc.js"
   ]
 }
