@@ -1,6 +1,7 @@
 {
 	"name": "calendar",
 	"version": "0.1.0",
+	"homepage": "https://andriussvilys.github.io/calendar",
 	"private": true,
 	"dependencies": {
 		"@testing-library/jest-dom": "^5.17.0",
@@ -10,6 +11,7 @@
 		"@types/node": "^16.18.40",
 		"@types/react": "^18.2.20",
 		"@types/react-dom": "^18.2.7",
+		"gh-pages": "^6.1.1",
 		"prettier": "^3.0.2",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
@@ -23,7 +25,9 @@
 		"lint:fix": "prettier . --write",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
-		"eject": "react-scripts eject"
+		"eject": "react-scripts eject",
+		"predeploy" : "npm run build",
+		"deploy" : "gh-pages -d build"
 	},
 	"eslintConfig": {
 		"extends": [
