@@ -176,6 +176,19 @@
 	overflow: visible;
 	width: 100%;
 }
+.timeslot::after{
+	content: "";
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: var(--grey_light);
+	top:0;
+	opacity: 0;
+	transition: opacity 0.2s ease-in;
+}
+.timeslot:hover::after{
+	opacity: 0.4;
+}
 
 .eventBubble {
 	padding: 0.05em 0.4em;
